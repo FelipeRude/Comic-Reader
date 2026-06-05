@@ -7,17 +7,15 @@
           Installieren
         </button>
         <button class="dashboard__settings" aria-label="Einstellungen" @click="showSettings = true">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-        </svg>
+          <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
         </button>
       </div>
     </header>
 
     <button class="dashboard__add" :disabled="importing" @click="triggerFilePicker">
+      <img src="/UI-Icons/Add-Sign-Bold Streamline Freehand.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
       <span v-if="importing">Importiere…</span>
-      <span v-else>+ Neuen Comic hinzufügen</span>
+      <span v-else>Neuen Comic hinzufügen</span>
     </button>
     <input
       ref="fileInput"
@@ -39,7 +37,9 @@
     </section>
 
     <div v-else-if="!loading" class="dashboard__empty">
-      <p class="dashboard__empty-icon">📚</p>
+      <div class="dashboard__empty-icon">
+        <img src="/UI-Icons/Book-Flip-Page Streamline Freehand.svg" class="icon" width="48" height="48" alt="" aria-hidden="true" />
+      </div>
       <p class="dashboard__empty-text">Noch keine Comics.</p>
       <p class="dashboard__empty-hint">Füge dein erstes hinzu.</p>
     </div>
@@ -221,12 +221,20 @@ onMounted(loadLibrary)
 
   &__settings {
     color: var(--text-secondary);
+
+    .icon {
+      filter: var(--icon-filter);
+    }
   }
 
   &__add {
     width: 100%;
     padding: 0.9rem;
     margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     font-size: 0.95rem;
     font-weight: 700;
     color: #fff;
@@ -236,6 +244,10 @@ onMounted(loadLibrary)
 
     &:active {
       opacity: 0.8;
+    }
+
+    .icon {
+      filter: invert(1);
     }
 
     &:disabled {
@@ -255,7 +267,13 @@ onMounted(loadLibrary)
     text-align: center;
 
     &-icon {
-      font-size: 3rem;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+
+      .icon {
+        filter: var(--icon-filter);
+      }
     }
 
     &-text {

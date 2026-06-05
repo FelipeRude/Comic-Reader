@@ -9,31 +9,22 @@
     <div class="reader__stage" ref="stageEl" />
 
     <button class="reader__back" :class="{ 'is-hidden': !controlsVisible }" aria-label="Zurück" @click="$emit('back')">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5" />
-        <path d="M12 19l-7-7 7-7" />
-      </svg>
+      <img src="/UI-Icons/Navigation-Page-Right Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
     <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" aria-label="Debug-Overlay" @touchstart.stop @touchend.stop @click="toggleDebug">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-        <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
-      </svg>
+      <img src="/UI-Icons/Dashboard-Layout Streamline Freehand.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
     </button>
 
     <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" aria-label="Einstellungen" @touchstart.stop @touchend.stop @click="showSettings = true">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-      </svg>
+      <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
     <SettingsModal v-if="showSettings" @close="showSettings = false" />
 
     <div class="reader__zones" :class="{ 'is-hidden': !controlsVisible }">
-      <div class="reader__zone reader__zone--left"><span class="reader__chevron">‹</span></div>
-      <div class="reader__zone reader__zone--right"><span class="reader__chevron">›</span></div>
+      <div class="reader__zone reader__zone--left"><img src="/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg" class="icon reader__chevron" alt="" aria-hidden="true" /></div>
+      <div class="reader__zone reader__zone--right"><img src="/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg" class="icon reader__chevron" alt="" aria-hidden="true" /></div>
     </div>
 
     <div class="reader__hud" :class="{ 'is-hidden': !hudVisible }" @touchstart.stop @touchend.stop @click="showPageJump = true">
@@ -574,9 +565,14 @@ onBeforeUnmount(() => {
   }
 
   &__chevron {
-    font-size: 2.5rem;
-    line-height: 1;
-    color: rgba(255, 255, 255, 0.9);
+    width: 32px;
+    height: 32px;
+    opacity: 0.9;
+    filter: invert(1);
+  }
+
+  &__zone--left &__chevron {
+    transform: scaleX(-1);
   }
 
   &__hud {
@@ -595,6 +591,15 @@ onBeforeUnmount(() => {
     backdrop-filter: blur(4px);
     transition: opacity 0.3s;
     cursor: pointer;
+  }
+
+  .icon {
+    display: block;
+    filter: invert(1);
+  }
+
+  &__debug-btn.is-active .icon {
+    filter: none;
   }
 
   .is-hidden {

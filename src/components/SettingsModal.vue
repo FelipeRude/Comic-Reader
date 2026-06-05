@@ -4,10 +4,7 @@
       <header class="settings__header">
         <h2 class="settings__title">Einstellungen</h2>
         <button class="settings__close" aria-label="Schließen" @click="$emit('close')">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="6" y1="6" x2="18" y2="18" />
-            <line x1="18" y1="6" x2="6" y2="18" />
-          </svg>
+          <img src="/UI-Icons/Keyboard-Asterisk-2 Streamline Freehand.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
 
@@ -33,37 +30,6 @@
         >
           Instantan
         </button>
-      </div>
-
-      <!-- Kachelerkennung -->
-      <div class="settings__row settings__row--pad">
-        <div class="settings__label">
-          <span class="settings__label-title">Kachelerkennung</span>
-          <span class="settings__label-hint">Wirkt erst nach Neuverarbeitung des Comics</span>
-        </div>
-      </div>
-      <div class="settings__detect">
-        <div class="settings__detect-row">
-          <label class="settings__detect-label">Mindest-Gutter</label>
-          <div class="settings__pad-field">
-            <input class="settings__pad-input" type="number" inputmode="numeric" min="1" max="20" step="1" v-model.number="localGutterPx" @change="saveDetect('gutterPx', localGutterPx)" />
-            <span class="settings__pad-unit">px</span>
-          </div>
-        </div>
-        <div class="settings__detect-row">
-          <label class="settings__detect-label">Mindestbreite Panel</label>
-          <div class="settings__pad-field">
-            <input class="settings__pad-input" type="number" inputmode="decimal" min="1" max="50" step="0.5" v-model.number="localRatioW" @change="saveDetect('ratioW', localRatioW)" />
-            <span class="settings__pad-unit">%</span>
-          </div>
-        </div>
-        <div class="settings__detect-row">
-          <label class="settings__detect-label">Mindesthöhe Panel</label>
-          <div class="settings__pad-field">
-            <input class="settings__pad-input" type="number" inputmode="decimal" min="1" max="50" step="0.5" v-model.number="localRatioH" @change="saveDetect('ratioH', localRatioH)" />
-            <span class="settings__pad-unit">%</span>
-          </div>
-        </div>
       </div>
 
       <!-- Zoom-Abstand -->
@@ -124,16 +90,12 @@ defineEmits(['close'])
 const {
   animation, setAnimation,
   paddingLeft, paddingTop, paddingRight, paddingBottom, PAD_DEFAULTS, setPaddingSide,
-  minGutterPx, minPanelRatioW, minPanelRatioH, setDetect,
 } = useSettings()
 
 const localLeft   = ref(0)
 const localTop    = ref(0)
 const localRight  = ref(0)
 const localBottom = ref(0)
-const localGutterPx = ref(3)
-const localRatioW   = ref(5)
-const localRatioH   = ref(5)
 
 function readSafeAreaPx(side) {
   const div = document.createElement('div')
@@ -158,18 +120,10 @@ onMounted(() => {
   localTop.value    = paddingTop.value    ?? (safeTop    > 0 ? safeTop    : PAD_DEFAULTS.top)
   localRight.value  = paddingRight.value  ?? (safeRight  > 0 ? safeRight  : PAD_DEFAULTS.right)
   localBottom.value = paddingBottom.value ?? (safeBottom > 0 ? safeBottom : PAD_DEFAULTS.bottom)
-
-  localGutterPx.value = minGutterPx.value
-  localRatioW.value   = Math.round(minPanelRatioW.value * 1000) / 10
-  localRatioH.value   = Math.round(minPanelRatioH.value * 1000) / 10
 })
 
 function save(side, value) {
   setPaddingSide(side, value)
-}
-
-function saveDetect(key, value) {
-  setDetect(key, value)
 }
 </script>
 
@@ -207,6 +161,10 @@ function saveDetect(key, value) {
 
   &__close {
     color: var(--text-secondary);
+
+    .icon {
+      filter: var(--icon-filter);
+    }
   }
 
   &__row {
@@ -252,26 +210,6 @@ function saveDetect(key, value) {
       color: #fff;
       background: var(--accent);
     }
-  }
-
-  &__detect {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 0.5rem;
-  }
-
-  &__detect-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-  }
-
-  &__detect-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-secondary);
   }
 
   // Kreuz-Layout für Padding-Eingaben

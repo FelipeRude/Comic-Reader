@@ -1,7 +1,9 @@
 <template>
   <div class="success" @click.self="$emit('close')">
     <div class="success__box" role="dialog" aria-modal="true">
-      <div class="success__icon">✓</div>
+      <div class="success__icon">
+        <img src="/UI-Icons/check.svg" class="icon" width="28" height="28" alt="" aria-hidden="true" />
+      </div>
       <h2 class="success__title">Erfolgreich!</h2>
       <p class="success__message">
         {{ pages }} {{ pages === 1 ? 'Seite' : 'Seiten' }} und
@@ -49,11 +51,12 @@ defineEmits(['close'])
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #fff;
     background: var(--accent);
     border-radius: 50%;
+
+    .icon {
+      filter: invert(1);
+    }
   }
 
   &__title {
