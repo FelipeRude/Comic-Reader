@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Read(//usr/local/bin/**)",
+      "Read(//home/clyo/.nvm/**)",
+      "Read(//usr/bin/**)",
+      "Bash(find /usr /opt /home/clyo -name \"node\" -type f 2>/dev/null | head -5; find /usr /opt /home/clyo -name \"npm\" -type f 2>/dev/null | head -5)",
+      "Bash(apt-get install *)",
+      "Bash(npm --version)",
+      "Bash(node /home/clyo/opt/claude-workspace/comic-reader/scripts/generate-icons.js)",
+      "Bash(npm run *)",
+      "Bash(./deploy_dev.sh)",
+      "Bash(grep -v \"DEPRECATION WARNING\\\\|legacy-js-api\\\\|sass-lang.com\\\\|^$\\\\|More info\")",
+      "Bash(python3 -)",
+      "Bash(./deploy_dev.sh dist *)",
+      "Bash(bash deploy_dev.sh)",
+      "Bash(gh --version)"
+    ]
+  }
+}
