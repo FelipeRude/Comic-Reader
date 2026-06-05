@@ -13,8 +13,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
       },
       manifest: {
-        name: 'Comic Reader',
-        short_name: 'Comics',
+        name: 'COMIC READER',
+        short_name: 'COMIC READER',
         description: 'Offline PWA Comic Reader mit Smart-Zoom Panel-Navigation',
         display: 'standalone',
         orientation: 'portrait',
@@ -23,12 +23,7 @@ export default defineConfig({
         theme_color: '#1a1a2e',
         icons: [
           {
-            src: 'icons/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'icons/icon-512.png',
+            src: 'img/icon.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
