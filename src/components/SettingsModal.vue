@@ -142,6 +142,8 @@ function save(side, value) {
     max-width: 480px;
     padding: 1.25rem 1.25rem 2rem;
     background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
+    border-bottom: none;
     border-radius: var(--radius-modal) var(--radius-modal) 0 0;
     box-shadow: var(--shadow-modal);
   }
@@ -194,6 +196,7 @@ function save(side, value) {
     gap: 0.5rem;
     padding: 0.25rem;
     background: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
   }
 
@@ -201,13 +204,12 @@ function save(side, value) {
     flex: 1;
     padding: 0.6rem;
     border-radius: calc(var(--radius-btn) - 2px);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 1.1rem;
     color: var(--text-secondary);
     transition: background 0.15s, color 0.15s;
 
     &--active {
-      color: #fff;
+      color: var(--accent-text);
       background: var(--accent);
     }
   }
@@ -270,6 +272,7 @@ function save(side, value) {
     gap: 0.25rem;
     padding: 0.3rem 0.5rem;
     background: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
   }
 

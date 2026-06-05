@@ -207,15 +207,17 @@ onMounted(loadLibrary)
 
   &__install {
     padding: 0.45rem 0.85rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1.1rem;
+    color: var(--accent-text);
     background: var(--accent);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    transition: opacity 0.15s;
+    box-shadow: 2px 2px 0 var(--border);
+    transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
-      opacity: 0.8;
+      transform: translate(2px, 2px);
+      box-shadow: none;
     }
   }
 
@@ -235,23 +237,25 @@ onMounted(loadLibrary)
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1.3rem;
+    color: var(--accent-text);
     background: var(--accent);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    transition: opacity 0.15s;
+    box-shadow: 3px 3px 0 var(--border);
+    transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
-      opacity: 0.8;
+      transform: translate(3px, 3px);
+      box-shadow: none;
     }
 
     .icon {
-      filter: invert(1);
+      filter: var(--accent-icon-filter);
     }
 
     &:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: default;
     }
   }
@@ -269,23 +273,24 @@ onMounted(loadLibrary)
     &-icon {
       display: flex;
       justify-content: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
 
       .icon {
         filter: var(--icon-filter);
+        width: 64px;
+        height: 64px;
       }
     }
 
     &-text {
-      margin-top: 1rem;
-      font-size: 1.05rem;
-      font-weight: 600;
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
       color: var(--text-primary);
     }
 
     &-hint {
       margin-top: 0.35rem;
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--text-muted);
     }
   }

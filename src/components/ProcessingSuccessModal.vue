@@ -40,6 +40,7 @@ defineEmits(['close'])
     padding: 2rem 1.5rem;
     text-align: center;
     background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
   }
@@ -76,15 +77,17 @@ defineEmits(['close'])
   &__btn {
     width: 100%;
     padding: 0.8rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1.3rem;
+    color: var(--accent-text);
     background: var(--accent);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    transition: opacity 0.15s;
+    box-shadow: 3px 3px 0 var(--border);
+    transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
-      opacity: 0.8;
+      transform: translate(3px, 3px);
+      box-shadow: none;
     }
   }
 }

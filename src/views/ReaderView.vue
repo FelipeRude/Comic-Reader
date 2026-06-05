@@ -480,10 +480,9 @@ onBeforeUnmount(() => {
     justify-content: center;
     width: 42px;
     height: 42px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    backdrop-filter: blur(4px);
+    background: #FFFEF0;
+    border: 2px solid #1A1A1A;
+    border-radius: var(--radius-btn);
     transition: opacity 0.3s;
   }
 
@@ -497,10 +496,9 @@ onBeforeUnmount(() => {
     justify-content: center;
     width: 42px;
     height: 42px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    backdrop-filter: blur(4px);
+    background: #FFFEF0;
+    border: 2px solid #1A1A1A;
+    border-radius: var(--radius-btn);
     transition: opacity 0.3s;
   }
 
@@ -514,15 +512,14 @@ onBeforeUnmount(() => {
     justify-content: center;
     width: 42px;
     height: 42px;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    backdrop-filter: blur(4px);
-    transition: opacity 0.3s, background 0.2s, color 0.2s;
+    background: #FFFEF0;
+    border: 2px solid #1A1A1A;
+    border-radius: var(--radius-btn);
+    transition: opacity 0.3s, background 0.2s, border-color 0.2s;
 
     &.is-active {
-      background: rgba(255, 200, 0, 0.85);
-      color: #000;
+      background: #1A1A1A;
+      border-color: #FFFEF0;
     }
   }
 
@@ -582,24 +579,23 @@ onBeforeUnmount(() => {
     transform: translateX(-50%);
     z-index: 2;
     padding: 0.4rem 0.9rem;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.85rem;
     white-space: nowrap;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 999px;
-    backdrop-filter: blur(4px);
+    color: #FFFEF0;
+    background: #1A1A1A;
+    border: 2px solid #FFFEF0;
+    border-radius: var(--radius-btn);
     transition: opacity 0.3s;
     cursor: pointer;
   }
 
   .icon {
     display: block;
-    filter: invert(1);
+    filter: none;
   }
 
   &__debug-btn.is-active .icon {
-    filter: none;
+    filter: invert(1);
   }
 
   .is-hidden {

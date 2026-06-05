@@ -1,24 +1,29 @@
 :root {
-  // Light Mode (Default)
-  --bg-primary:    #ffffff;
-  --bg-secondary:  #f4f4f6;
-  --bg-card:       #ffffff;
-  --bg-overlay:    rgba(0, 0, 0, 0.5);
+  --cream: #FFFEF0;
+  --ink:   #1A1A1A;
 
-  --text-primary:   #111111;
-  --text-secondary: #666666;
-  --text-muted:     #999999;
+  // Light Mode
+  --bg-primary:   var(--cream);
+  --bg-secondary: #F0EAD2;
+  --bg-card:      var(--cream);
+  --bg-overlay:   rgba(26, 26, 26, 0.65);
 
-  --accent:         #1a1a2e;
-  --accent-light:   #2d2d54;
-  --border:         #e0e0e0;
+  --text-primary:   var(--ink);
+  --text-secondary: #3C3830;
+  --text-muted:     #6C6458;
 
-  --shadow-card:    0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-modal:   0 8px 32px rgba(0, 0, 0, 0.18);
+  --accent:             var(--ink);
+  --accent-text:        var(--cream);
+  --accent-icon-filter: invert(1);
+  --border:             var(--ink);
+  --border-width:       2px;
 
-  --radius-card:   12px;
-  --radius-btn:     8px;
-  --radius-modal:  16px;
+  --shadow-card:  3px 3px 0 var(--ink);
+  --shadow-modal: 4px 4px 0 var(--ink);
+
+  --radius-card:  4px;
+  --radius-btn:   4px;
+  --radius-modal: 6px;
 
   --transition-speed: 400ms;
   --icon-filter: none;
@@ -26,21 +31,23 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary:    #0f0f17;
-    --bg-secondary:  #1a1a2e;
-    --bg-card:       #1e1e30;
-    --bg-overlay:    rgba(0, 0, 0, 0.7);
+    --bg-primary:   var(--ink);
+    --bg-secondary: #2C2820;
+    --bg-card:      #252018;
+    --bg-overlay:   rgba(0, 0, 0, 0.78);
 
-    --text-primary:   #f0f0f0;
-    --text-secondary: #a0a0b8;
-    --text-muted:     #606078;
+    --text-primary:   var(--cream);
+    --text-secondary: #C8C0A0;
+    --text-muted:     #8A8070;
 
-    --accent:         #6c63ff;
-    --accent-light:   #857dff;
-    --border:         #2e2e48;
+    --accent:             var(--cream);
+    --accent-text:        var(--ink);
+    --accent-icon-filter: none;
+    --border:             var(--cream);
 
-    --shadow-card:    0 2px 8px rgba(0, 0, 0, 0.4);
-    --shadow-modal:   0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-card:  3px 3px 0 var(--cream);
+    --shadow-modal: 4px 4px 0 var(--cream);
+
     --icon-filter: invert(1);
   }
 }

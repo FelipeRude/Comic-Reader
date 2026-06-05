@@ -73,6 +73,7 @@ onMounted(() => {
     margin-top: calc(3rem + env(safe-area-inset-top));
     padding: 1.25rem 1.25rem 2rem;
     background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
   }
@@ -110,18 +111,12 @@ onMounted(() => {
     width: 6rem;
     padding: 0.6rem 0.75rem;
     font-size: 1.5rem;
-    font-weight: 700;
     text-align: center;
     color: var(--text-primary);
     background: var(--bg-secondary);
-    border: 2px solid transparent;
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
     outline: none;
-    transition: border-color 0.15s;
-
-    &:focus {
-      border-color: var(--accent);
-    }
   }
 
   &__of {
@@ -134,15 +129,17 @@ onMounted(() => {
   &__confirm {
     width: 100%;
     padding: 0.9rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1.3rem;
+    color: var(--accent-text);
     background: var(--accent);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    transition: opacity 0.15s;
+    box-shadow: 3px 3px 0 var(--border);
+    transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
-      opacity: 0.8;
+      transform: translate(3px, 3px);
+      box-shadow: none;
     }
 
     &:disabled {

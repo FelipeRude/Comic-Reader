@@ -15,7 +15,8 @@ html {
 
 body {
   height: 100%;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Bangers', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0.04em;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   overscroll-behavior: none;

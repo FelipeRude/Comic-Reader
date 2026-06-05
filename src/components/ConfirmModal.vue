@@ -52,6 +52,7 @@ defineEmits(['confirm', 'cancel'])
     max-width: 360px;
     padding: 1.5rem;
     background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
   }
@@ -78,28 +79,32 @@ defineEmits(['confirm', 'cancel'])
 
   &__btn {
     padding: 0.6rem 1.1rem;
+    font-size: 1.2rem;
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: opacity 0.15s;
+    box-shadow: 2px 2px 0 var(--border);
+    transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
-      opacity: 0.7;
+      transform: translate(2px, 2px);
+      box-shadow: none;
     }
 
     &--ghost {
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
+      color: var(--text-primary);
+      background: var(--bg-card);
     }
 
     &--primary {
-      color: #fff;
+      color: var(--accent-text);
       background: var(--accent);
     }
 
     &--danger {
       color: #fff;
-      background: #d9362b;
+      background: #c0392b;
+      border-color: #c0392b;
+      box-shadow: 2px 2px 0 #8b0000;
     }
   }
 }

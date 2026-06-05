@@ -49,11 +49,13 @@ defineEmits(['open', 'delete'])
   border-radius: var(--radius-card);
   overflow: hidden;
   background: var(--bg-card);
+  border: var(--border-width) solid var(--border);
   box-shadow: var(--shadow-card);
-  transition: transform 0.15s;
+  transition: transform 0.08s, box-shadow 0.08s;
 
   &:active {
-    transform: scale(0.97);
+    transform: translate(3px, 3px);
+    box-shadow: none;
   }
 
   &__cover {
@@ -114,8 +116,7 @@ defineEmits(['open', 'delete'])
   }
 
   &__title {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1rem;
     color: var(--text-primary);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -124,7 +125,7 @@ defineEmits(['open', 'delete'])
 
   &__pages {
     margin-top: 0.15rem;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
   }
 }

@@ -41,6 +41,7 @@ const percent = computed(() =>
     padding: 2rem 1.5rem;
     text-align: center;
     background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
   }
