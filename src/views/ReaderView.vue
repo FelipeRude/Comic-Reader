@@ -13,7 +13,7 @@
     </button>
 
     <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" aria-label="Debug-Overlay" @touchstart.stop @touchend.stop @click="toggleDebug">
-      <img src="/UI-Icons/Dashboard-Layout Streamline Freehand.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
+      <img src="/UI-Icons/panel.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
     </button>
 
     <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" aria-label="Einstellungen" @touchstart.stop @touchend.stop @click="showSettings = true">
