@@ -5,7 +5,7 @@ Die App erkennt jedes Comic-Panel automatisch und springt beim Lesen von Bild zu
 
 ### [Live ausprobieren: comic-reader.felipe-rude.de](https://comic-reader.felipe-rude.de)
 
-*Am besten am Smartphone öffnen. Kein Comic zur Hand? Einfach das [Beispiel-Comic (PDF)](docs/sample-comic.pdf) herunterladen und importieren.*
+*Am besten am Smartphone öffnen.*
 
 ---
 
