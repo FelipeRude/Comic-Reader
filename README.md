@@ -3,7 +3,7 @@
 **Comics als PDF auf dem Handy lesen – ohne Zoomen, ohne Scrollen.**
 Die App erkennt jedes Comic-Panel automatisch und springt beim Lesen von Bild zu Bild.
 
-### ➜ [Live ausprobieren: comic-reader.felipe-rude.de](https://comic-reader.felipe-rude.de)
+### [Live ausprobieren: comic-reader.felipe-rude.de](https://comic-reader.felipe-rude.de)
 
 *Am besten am Smartphone öffnen. Kein Comic zur Hand? Einfach das [Beispiel-Comic (PDF)](docs/sample-comic.pdf) herunterladen und importieren.*
 
@@ -21,20 +21,24 @@ Alles läuft im Browser: **kein Backend, kein Account, 100 % offline** – insta
 
 ## Screenshots
 
-| Bibliothek | Panel-Analyse | Smart-Zoom | Erkannte Panels (Debug) |
-|:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/dashboard.png" width="200" alt="Dashboard mit Comic-Bibliothek"> | <img src="docs/screenshots/analysis.png" width="200" alt="Ergebnis der Panel-Erkennung"> | <img src="docs/screenshots/reader.png" width="200" alt="Reader zoomt auf ein Panel"> | <img src="docs/screenshots/panels.png" width="200" alt="Debug-Overlay zeigt erkannte Panels"> |
+| Bibliothek mit Lesestand | Reader-Einstellungen |
+|:---:|:---:|
+| <img src="docs/screenshots/library.png" width="320" alt="Bibliothek mit importiertem Comic und gespeichertem Lesestand"> | <img src="docs/screenshots/settings.png" width="320" alt="Einstellungen: Panel-Übergang und Zoom-Abstand"> |
+
+**Die Panel-Erkennung in Aktion** – jedes gefundene Panel bekommt eine Box und eine Lesereihenfolge, das aktive Panel ist markiert:
+
+<img src="docs/screenshots/panel-debug.png" width="700" alt="Debug-Ansicht: erkannte Panels mit Lesereihenfolge">
 
 ## Features
 
-- 📚 **Lokale Bibliothek** – Comics importieren, Cover-Vorschau, löschen, Speicher verwalten
-- 🔍 **Panel-Erkennung ohne schwere Libraries** – kein OpenCV: ein eigener Vanilla-JS-Algorithmus scannt die Seiten per Canvas-Pixeldaten nach Weißräumen (Gutter-Analyse) und berechnet daraus die Panel-Rechtecke
-- 🎯 **Smart-Zoom** – die volle Seite bleibt gerendert, nur der CSS-Viewport (`translate` + `scale`) fährt animiert von Panel zu Panel
-- 🤏 **Pinch-to-Zoom-Fallback** – jederzeit manuell zoomen und verschieben, danach übernimmt wieder der Smart-Zoom
-- 💾 **Lesestand-Speicherung** – die App merkt sich Seite und Panel und springt beim nächsten Öffnen genau dorthin zurück
-- 🧠 **RAM-schonend** – auch große PDFs (200 MB+) werden Seite für Seite analysiert, Ergebnisse landen sofort in der IndexedDB
-- 🌗 **Light & Dark Mode** – folgt automatisch der Systemeinstellung
-- 📱 **PWA** – installierbar auf dem Homescreen, komplett offline nutzbar
+- **Lokale Bibliothek** – Comics importieren, Cover-Vorschau, löschen, Speicher verwalten
+- **Panel-Erkennung ohne schwere Libraries** – kein OpenCV: ein eigener Vanilla-JS-Algorithmus scannt die Seiten per Canvas-Pixeldaten nach Weißräumen (Gutter-Analyse) und berechnet daraus die Panel-Rechtecke
+- **Smart-Zoom** – die volle Seite bleibt gerendert, nur der CSS-Viewport (`translate` + `scale`) fährt animiert von Panel zu Panel; Übergang und Zoom-Abstand sind einstellbar
+- **Pinch-to-Zoom-Fallback** – jederzeit manuell zoomen und verschieben, danach übernimmt wieder der Smart-Zoom
+- **Lesestand-Speicherung** – die App merkt sich Seite und Panel und springt beim nächsten Öffnen genau dorthin zurück
+- **RAM-schonend** – auch große PDFs (1.000+ Seiten) werden Seite für Seite analysiert, Ergebnisse landen sofort in der IndexedDB
+- **Light & Dark Mode** – folgt automatisch der Systemeinstellung
+- **PWA** – installierbar auf dem Homescreen, komplett offline nutzbar
 
 ## Technik
 
