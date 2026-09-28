@@ -31,7 +31,7 @@ command -v lftp >/dev/null || { echo "Fehler: lftp fehlt (brew install lftp)."; 
 
 echo "▶ Build ..."
 rm -rf dist
-npm run build --silent 2>&1 | grep -v -i "deprecat\|legacy-js-api\|sass-lang\|More info" || true
+DEPLOY_TARGET="$TARGET" npm run build --silent 2>&1 | grep -v -i "deprecat\|legacy-js-api\|sass-lang\|More info" || true
 [ -f dist/index.html ] || { echo "Fehler: Build fehlgeschlagen."; exit 1; }
 
 echo "▶ Upload dist/ → $HOST ${DRY:+(Dry-Run)} ..."
