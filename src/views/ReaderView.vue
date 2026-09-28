@@ -1,6 +1,7 @@
 <template>
   <div
     class="reader"
+    :class="notchSide && `reader--notch-${notchSide}`"
     ref="containerEl"
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
@@ -23,11 +24,11 @@
     <SettingsModal v-if="showSettings" @close="showSettings = false" />
 
     <div class="reader__zones" :class="{ 'is-hidden': !controlsVisible }">
-      <div class="reader__zone reader__zone--left"><img src="/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg" class="icon reader__chevron" alt="" aria-hidden="true" /></div>
-      <div class="reader__zone reader__zone--right"><img src="/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg" class="icon reader__chevron" alt="" aria-hidden="true" /></div>
+      <div class="reader__zone reader__zone--left"><span class="reader__chevron" aria-hidden="true" /></div>
+      <div class="reader__zone reader__zone--right"><span class="reader__chevron" aria-hidden="true" /></div>
     </div>
 
-    <div class="reader__hud" :class="{ 'is-hidden': !hudVisible }" @touchstart.stop @touchend.stop @click="showPageJump = true">
+    <div class="reader__hud" :class="{ 'is-hidden': !hudVisible || loading }" @touchstart.stop @touchend.stop @click="showPageJump = true">
       Panel {{ currentPanelIndex + 1 }}/{{ currentPanels.length }} – Seite {{ currentPage + 1 }}/{{ totalPages }}
     </div>
 
@@ -226,9 +227,13 @@ function drawDebugOverlay() {
   const canvas = overlayEl.value
   if (!canvas || !pageCanvas.value) return
 
+  // Feste CSS-Größe = Viewport, damit das Overlay nie gestreckt wird
+  // (iOS-PWA: innerHeight ≠ tatsächliche Höhe im Hochformat).
   const dpr = window.devicePixelRatio || 1
   canvas.width  = viewport.w * dpr
   canvas.height = viewport.h * dpr
+  canvas.style.width  = `${viewport.w}px`
+  canvas.style.height = `${viewport.h}px`
 
   const ctx = canvas.getContext('2d')
   ctx.scale(dpr, dpr)
@@ -261,7 +266,7 @@ function drawDebugOverlay() {
   })
 }
 
-watch([debugOverlay, zoomTransform, currentPanelIndex, currentPanels], () => {
+watch([debugOverlay, zoomTransform, currentPanelIndex, currentPanels, () => viewport.w, () => viewport.h], () => {
   if (debugOverlay.value) nextTick(drawDebugOverlay)
 })
 
@@ -435,13 +440,37 @@ function onKey(e) {
   else if (e.key === 'Escape') document.activeElement?.blur()
 }
 
+// Viewport = tatsächliche Größe des Reader-Containers. window.innerHeight
+// weicht auf iOS (Standalone, Hochformat) davon ab → Overlay verschoben.
 function onResize() {
-  viewport.w = window.innerWidth
-  viewport.h = window.innerHeight
+  const el = containerEl.value
+  viewport.w = el?.clientWidth  || window.innerWidth
+  viewport.h = el?.clientHeight || window.innerHeight
+  notchSide.value = detectNotchSide()
 }
 
+// Auf welcher Seite liegt die Notch im Querformat? (null = Hochformat)
+// window.orientation (iOS): 90 = gegen den Uhrzeigersinn gedreht → Notch links,
+// -90 = im Uhrzeigersinn → Notch rechts. Fallback: Screen Orientation API.
+const notchSide = ref(null)
+
+function detectNotchSide() {
+  let angle = typeof window.orientation === 'number'
+    ? window.orientation
+    : (screen.orientation?.angle === 270 ? -90 : screen.orientation?.angle)
+  if (angle === 90) return 'left'
+  if (angle === -90) return 'right'
+  return null
+}
+
+let resizeObserver = null
+
 onMounted(async () => {
+  onResize()
   window.addEventListener('resize', onResize)
+  window.addEventListener('orientationchange', onResize)
+  resizeObserver = new ResizeObserver(onResize)
+  resizeObserver.observe(containerEl.value)
   window.addEventListener('keydown', onKey)
   await init()
   pingControls()
@@ -449,7 +478,9 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
+  window.removeEventListener('orientationchange', onResize)
   window.removeEventListener('keydown', onKey)
+  resizeObserver?.disconnect()
   clearTimeout(controlsTimer)
   clearTimeout(hudTimer)
   destroy()
@@ -525,9 +556,8 @@ onBeforeUnmount(() => {
 
   &__debug-overlay {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
     pointer-events: none;
     z-index: 3;
   }
@@ -543,29 +573,63 @@ onBeforeUnmount(() => {
   }
 
   &__zone {
+    position: relative;
     display: flex;
     align-items: center;
     width: 20%;
     height: 100%;
 
+    // Schatten reicht über die Tap-Zone hinaus weiter ins Bild
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 175%;
+      z-index: -1;
+    }
+
     &--left {
       justify-content: flex-start;
       padding-left: 0.5rem;
-      background: linear-gradient(to right, rgba(0, 0, 0, 0.35), transparent);
+
+      &::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.3) 65%, transparent);
+      }
     }
 
     &--right {
       justify-content: flex-end;
       padding-right: 0.5rem;
-      background: linear-gradient(to left, rgba(0, 0, 0, 0.35), transparent);
+
+      &::before {
+        right: 0;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.3) 65%, transparent);
+      }
     }
+  }
+
+  // Notch nur auf einer Seite: iOS meldet safe-area-inset im Querformat
+  // links UND rechts, deshalb nur die tatsächliche Notch-Seite einrücken.
+  &--notch-left {
+    .reader__zone--left { padding-left: calc(0.5rem + env(safe-area-inset-left)); }
+    .reader__back { left: calc(0.75rem + env(safe-area-inset-left)); }
+  }
+
+  &--notch-right {
+    .reader__zone--right { padding-right: calc(0.5rem + env(safe-area-inset-right)); }
+    .reader__settings,
+    .reader__debug-btn { right: calc(0.75rem + env(safe-area-inset-right)); }
   }
 
   &__chevron {
     width: 32px;
     height: 32px;
-    opacity: 0.9;
-    filter: invert(1);
+    // SVG als Maske → exakt in Offwhite (--cream) eingefärbt
+    background-color: var(--cream);
+    -webkit-mask: url('/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg') center / contain no-repeat;
+    mask: url('/UI-Icons/Move-Rectangle-Left Streamline Freehand.svg') center / contain no-repeat;
   }
 
   &__zone--left &__chevron {
@@ -587,6 +651,17 @@ onBeforeUnmount(() => {
     border-radius: var(--radius-btn);
     transition: opacity 0.3s;
     cursor: pointer;
+
+    // Unsichtbare Hitbox: je eine halbe Kastenhöhe nach oben und unten
+    // → Tapfläche doppelt so hoch, Optik bleibt gleich.
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      bottom: -50%;
+      left: -0.5rem;
+      right: -0.5rem;
+    }
   }
 
   .icon {

@@ -2,3 +2,6 @@ node_modules/
 dist/
 .env
 *.local
+.env.deploy
+.DS_Store
+FTP-PASSWORT-FIX.md

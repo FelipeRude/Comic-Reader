@@ -8,6 +8,7 @@
         </button>
       </header>
 
+      <div class="pagejump__body">
       <div class="pagejump__field">
         <input
           ref="inputEl"
@@ -25,6 +26,7 @@
       <button class="pagejump__confirm" :disabled="!isValid" @click="confirm">
         Springen
       </button>
+      </div>
     </div>
   </div>
 </template>
@@ -145,6 +147,33 @@ onMounted(() => {
     &:disabled {
       opacity: 0.4;
       cursor: default;
+    }
+  }
+
+  // Querformat: Tastatur verdeckt die untere Hälfte → Button neben das Input
+  @media (orientation: landscape) and (max-height: 600px) {
+    &__box {
+      margin-top: calc(0.75rem + env(safe-area-inset-top));
+      padding: 1rem 1.25rem 1.25rem;
+    }
+
+    &__header {
+      margin-bottom: 1rem;
+    }
+
+    &__body {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    &__field {
+      margin-bottom: 0;
+    }
+
+    &__confirm {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
     }
   }
 }

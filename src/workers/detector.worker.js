@@ -2,8 +2,8 @@
  * Panel-Erkennung via Projection-Profile / Gutter-Analyse (reines Vanilla-JS).
  * Läuft im Worker-Thread, damit die UI nicht blockiert.
  *
- * Eingang  (postMessage): { imageData, pageIndex }
- * Ausgang  (postMessage): { pageIndex, panels: [{x,y,w,h}] }
+ * Eingang  (postMessage): { id, imageData, minGutterPx, minPanelRatioW, minPanelRatioH }
+ * Ausgang  (postMessage): { id, panels: [{x,y,w,h}] }
  */
 
 const WHITE_THRESHOLD = 240 // Durchschnitts-Helligkeit ab der eine Linie als Gutter (weiß) gilt
@@ -223,8 +223,8 @@ function detectPanels(data, width, height, minGutterPx, minPanelRatioW, minPanel
 }
 
 self.onmessage = (e) => {
-  const { imageData, pageIndex, minGutterPx = 3, minPanelRatioW = 0.25, minPanelRatioH = 0.167 } = e.data
+  const { id, imageData, minGutterPx = 3, minPanelRatioW = 0.25, minPanelRatioH = 0.167 } = e.data
   const { data, width, height } = imageData
   const panels = detectPanels(data, width, height, minGutterPx, minPanelRatioW, minPanelRatioH)
-  self.postMessage({ pageIndex, panels })
+  self.postMessage({ id, panels })
 }

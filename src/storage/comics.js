@@ -38,8 +38,8 @@ export async function getComic(id) {
 }
 
 /**
- * Löscht einen Comic per id. Panels und Fortschritt werden separat
- * über panels.js / progress.js entfernt (siehe Masterplan Phase 3.4).
+ * Löscht einen Comic per id. Der Fortschritt wird separat
+ * über progress.js entfernt.
  */
 export async function deleteComic(id) {
   const db = await getDB()

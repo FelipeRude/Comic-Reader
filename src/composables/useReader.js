@@ -1,7 +1,7 @@
 import { ref, shallowRef, computed } from 'vue'
 import { loadPdf, renderPageToCanvas } from '../pdf-loader.js'
 import { getComic } from '../storage/comics.js'
-import { getAllPanelsForComic } from '../storage/panels.js'
+import { detectPanels } from '../panel-detector.js'
 import { getProgress, saveProgress } from '../storage/progress.js'
 import { useSettings } from './useSettings.js'
 
@@ -23,6 +23,7 @@ export function useReader(comicId, viewport) {
   const loading = ref(true)
   const transitioning = ref(false)  // nur noch für init / jumpToPage
 
+  // Live erkannte Panels pro Seite – nur für diese Lesesitzung im Speicher.
   const pagesPanels = ref([])
   const manual = ref(null)
 
@@ -75,9 +76,15 @@ export function useReader(comicId, viewport) {
     if (c) c.width = 0
   }
 
+  // Rendert eine Seite und erkennt direkt darauf die Panels. Das Canvas wird
+  // erst zurückgegeben, wenn die Panels feststehen (wichtig für Seitenwechsel).
   async function renderPage(pageIndex) {
     if (pageIndex < 0 || pageIndex >= totalPages.value) return null
-    return renderPageToCanvas(pdf, pageIndex + 1, RENDER_MAX_WIDTH)
+    const canvas = await renderPageToCanvas(pdf, pageIndex + 1, RENDER_MAX_WIDTH)
+    if (!pagesPanels.value[pageIndex]) {
+      pagesPanels.value[pageIndex] = await detectPanels(canvas)
+    }
+    return canvas
   }
 
   function persist() {
@@ -138,6 +145,8 @@ export function useReader(comicId, viewport) {
     if (!pageCanvas.value) {
       transitioning.value = true
       pageCanvas.value = await renderPage(currentPage.value)
+      currentPanelIndex.value = (pagesPanels.value[currentPage.value]?.length || 1) - 1
+      persist()
       transitioning.value = false
     }
 
@@ -189,9 +198,6 @@ export function useReader(comicId, viewport) {
     totalPages.value = pdf.numPages
 
     pagesPanels.value = []
-    for (const entry of await getAllPanelsForComic(comicId)) {
-      pagesPanels.value[entry.pageIndex] = entry.panels
-    }
 
     const prog = await getProgress(comicId)
     currentPage.value = Math.min(prog?.pageIndex ?? 0, totalPages.value - 1)

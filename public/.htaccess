@@ -1,0 +1,7 @@
+# Einstiegsdateien nie aus dem HTTP-Cache laden → Updates kommen sofort an.
+# (Gehashte Dateien unter /assets/ dürfen normal gecacht werden.)
+<FilesMatch "^(index\.html|sw\.js|registerSW\.js|workbox-.*\.js|manifest\.webmanifest)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </IfModule>
+</FilesMatch>

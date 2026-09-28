@@ -77,6 +77,8 @@
           </div>
         </div>
       </div>
+
+      <p class="settings__version">Version vom {{ buildTime }}</p>
     </div>
   </div>
 </template>
@@ -86,6 +88,8 @@ import { ref, onMounted } from 'vue'
 import { useSettings } from '../composables/useSettings.js'
 
 defineEmits(['close'])
+
+const buildTime = __BUILD_TIME__
 
 const {
   animation, setAnimation,
@@ -140,6 +144,11 @@ function save(side, value) {
   &__box {
     width: 100%;
     max-width: 480px;
+    max-height: calc(100% - 0.75rem - env(safe-area-inset-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
     padding: 1.25rem 1.25rem 2rem;
     background: var(--bg-card);
     border: var(--border-width) solid var(--border);
@@ -153,6 +162,23 @@ function save(side, value) {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.25rem;
+  }
+
+  // Querformat: als zentrierte Karte mit Abstand oben/unten, Inhalt scrollbar
+  @media (orientation: landscape) and (max-height: 600px) {
+    align-items: center;
+    padding:
+      calc(0.75rem + env(safe-area-inset-top))
+      calc(0.75rem + env(safe-area-inset-right))
+      calc(0.75rem + env(safe-area-inset-bottom))
+      calc(0.75rem + env(safe-area-inset-left));
+
+    &__box {
+      max-height: 100%;
+      padding-bottom: 1.25rem;
+      border-bottom: var(--border-width) solid var(--border);
+      border-radius: var(--radius-modal);
+    }
   }
 
   &__title {
@@ -289,6 +315,13 @@ function save(side, value) {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button { -webkit-appearance: none; }
     -moz-appearance: textfield;
+  }
+
+  &__version {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--text-muted);
   }
 
   &__pad-unit {

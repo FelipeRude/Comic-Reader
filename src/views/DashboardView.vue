@@ -49,7 +49,7 @@
     <ConfirmModal
       v-if="comicToDelete"
       title="Comic löschen?"
-      :message="`„${comicToDelete.title}“ wird mit Lesestand und allen Panel-Daten unwiderruflich gelöscht.`"
+      :message="`„${comicToDelete.title}“ wird mit Lesestand unwiderruflich gelöscht.`"
       confirm-label="Löschen"
       danger
       @confirm="confirmDelete"
@@ -57,22 +57,13 @@
     />
 
     <ConfirmModal
-      v-if="quotaError || preprocQuota"
+      v-if="quotaError"
       title="Speicher voll"
       message="Nicht genügend Speicherplatz im Browser verfügbar. Bitte lösche alte Comics vom Dashboard, um Platz zu schaffen."
       confirm-label="Verstanden"
       :show-cancel="false"
       @confirm="dismissQuota"
       @cancel="dismissQuota"
-    />
-
-    <ProcessingOverlay v-if="running" :current="current" :total="total" />
-
-    <ProcessingSuccessModal
-      v-if="successInfo"
-      :pages="successInfo.pages"
-      :panels="successInfo.panels"
-      @close="onSuccessClose"
     />
   </main>
 </template>
@@ -82,27 +73,15 @@ import { ref, reactive, onMounted } from 'vue'
 import ComicCard from '../components/ComicCard.vue'
 import SettingsModal from '../components/SettingsModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
-import ProcessingOverlay from '../components/ProcessingOverlay.vue'
-import ProcessingSuccessModal from '../components/ProcessingSuccessModal.vue'
 import { useComicImport } from '../composables/useComicImport.js'
-import { usePreprocessor } from '../composables/usePreprocessor.js'
 import { useInstallPrompt } from '../composables/useInstallPrompt.js'
 import { getAllComics, deleteComic } from '../storage/comics.js'
 import { getProgress, deleteProgress } from '../storage/progress.js'
-import { deletePanelsForComic, getAllPanelsForComic } from '../storage/panels.js'
 
 const emit = defineEmits(['open'])
 
 const { canInstall, promptInstall } = useInstallPrompt()
 const { importing, quotaError, importFile } = useComicImport()
-const {
-  current,
-  total,
-  totalPanels,
-  running,
-  quotaError: preprocQuota,
-  process: preprocess,
-} = usePreprocessor()
 
 const comics = ref([])
 const progressMap = reactive({})
@@ -110,7 +89,6 @@ const loading = ref(true)
 const showSettings = ref(false)
 const comicToDelete = ref(null)
 const fileInput = ref(null)
-const successInfo = ref(null)
 
 async function loadLibrary() {
   loading.value = true
@@ -133,34 +111,13 @@ async function onFileSelected(event) {
   if (id != null) await loadLibrary()
 }
 
-async function onOpen(comic) {
-  // Bereits analysiert? → direkt zum Reader (Phase 5; vorerst Konsolenausgabe).
-  const existing = await getAllPanelsForComic(comic.id)
-  if (existing.length > 0) {
-    openReader(comic)
-    return
-  }
-
-  // Erstes Öffnen → einmalige Panel-Analyse, danach Erfolgsmeldung.
-  const ok = await preprocess(comic)
-  if (ok) {
-    successInfo.value = { comic, pages: total.value, panels: totalPanels.value }
-  }
-}
-
-function openReader(comic) {
+// Panels werden live im Reader erkannt → sofort öffnen.
+function onOpen(comic) {
   emit('open', comic.id)
-}
-
-function onSuccessClose() {
-  const comic = successInfo.value?.comic
-  successInfo.value = null
-  if (comic) openReader(comic)
 }
 
 function dismissQuota() {
   quotaError.value = false
-  preprocQuota.value = false
 }
 
 function askDelete(comic) {
@@ -172,7 +129,6 @@ async function confirmDelete() {
   comicToDelete.value = null
   await Promise.all([
     deleteComic(id),
-    deletePanelsForComic(id),
     deleteProgress(id),
   ])
   await loadLibrary()
