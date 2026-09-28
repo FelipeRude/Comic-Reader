@@ -10,7 +10,7 @@ const BUILD_TIME = new Date().toLocaleString('de-DE', {
 // Dev-Deploy bekommt ein eigenes Icon, damit sich beide PWAs am Homescreen unterscheiden
 // (DEPLOY_TARGET setzt scripts/deploy.sh).
 const ICON = process.env.DEPLOY_TARGET === 'dev'
-  ? { src: 'icons/icon_DEV.png', sizes: '1250x1250' }
+  ? { src: 'img/icon_DEV.png', sizes: '1250x1250' }
   : { src: 'img/icon.png', sizes: '512x512' }
 
 export default defineConfig({
