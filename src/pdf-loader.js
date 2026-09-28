@@ -3,6 +3,10 @@ import * as pdfjsLib from 'pdfjs-dist'
 // Worker liegt als statisches Asset in public/ (siehe Masterplan / vite.config PWA-Cache).
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
 
+// Klein halten: PDF.js liest beim Öffnen alle Seitenobjekte, die über die
+// ganze Datei verteilt liegen — pro Objekt wird nur ein Chunk geladen.
+const RANGE_CHUNK_SIZE = 64 * 1024
+
 /**
  * Öffnet ein PDF aus einem Blob oder ArrayBuffer und liefert das PDFDocumentProxy.
  * Die Seitenzahl steht danach unter `pdf.numPages`.
@@ -12,6 +16,35 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
 export async function loadPdf(source) {
   const data = source instanceof Blob ? await source.arrayBuffer() : source
   return pdfjsLib.getDocument({ data }).promise
+}
+
+/**
+ * Öffnet ein PDF aus einem (disk-gestützten) File, ohne es komplett in den
+ * RAM zu laden: PDF.js fordert per Range-Transport nur die Byte-Bereiche an,
+ * die es für die jeweils gerenderten Seiten braucht.
+ */
+export async function loadPdfFromFile(file) {
+  // Erster Chunk vorab (enthält den PDF-Header). Kleine Dateien liest PDF.js
+  // ohnehin am Stück → dann komplette Datei mitgeben und als fertig markieren.
+  const initialSize = file.size <= 2 * RANGE_CHUNK_SIZE ? file.size : RANGE_CHUNK_SIZE
+  const initialData = new Uint8Array(await file.slice(0, initialSize).arrayBuffer())
+  const complete = initialSize === file.size
+  const transport = new pdfjsLib.PDFDataRangeTransport(file.size, initialData, complete)
+  transport.requestDataRange = async (begin, end) => {
+    try {
+      const buf = await file.slice(begin, end).arrayBuffer()
+      transport.onDataRange(begin, new Uint8Array(buf))
+    } catch (err) {
+      console.error('PDF-Bereich konnte nicht gelesen werden:', err)
+    }
+  }
+  return pdfjsLib.getDocument({
+    range: transport,
+    length: file.size,
+    rangeChunkSize: RANGE_CHUNK_SIZE,
+    disableAutoFetch: true,
+    disableStream: true,
+  }).promise
 }
 
 /**

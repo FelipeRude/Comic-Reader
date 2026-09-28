@@ -36,6 +36,8 @@
       />
     </section>
 
+    <p v-else-if="migrating" class="dashboard__empty-hint">Bibliothek wird vorbereitet…</p>
+
     <div v-else-if="!loading" class="dashboard__empty">
       <div class="dashboard__empty-icon">
         <img src="/UI-Icons/Book-Flip-Page Streamline Freehand.svg" class="icon" width="48" height="48" alt="" aria-hidden="true" />
@@ -65,6 +67,16 @@
       @confirm="dismissQuota"
       @cancel="dismissQuota"
     />
+
+    <ConfirmModal
+      v-if="importError"
+      title="Import fehlgeschlagen"
+      :message="`Der Comic konnte nicht hinzugefügt werden. (${importError.message || importError})`"
+      confirm-label="Verstanden"
+      :show-cancel="false"
+      @confirm="importError = null"
+      @cancel="importError = null"
+    />
   </main>
 </template>
 
@@ -75,17 +87,18 @@ import SettingsModal from '../components/SettingsModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
 import { useComicImport } from '../composables/useComicImport.js'
 import { useInstallPrompt } from '../composables/useInstallPrompt.js'
-import { getAllComics, deleteComic } from '../storage/comics.js'
+import { getAllComics, deleteComic, migrateBlobsToOpfs } from '../storage/comics.js'
 import { getProgress, deleteProgress } from '../storage/progress.js'
 
 const emit = defineEmits(['open'])
 
 const { canInstall, promptInstall } = useInstallPrompt()
-const { importing, quotaError, importFile } = useComicImport()
+const { importing, quotaError, error: importError, importFile } = useComicImport()
 
 const comics = ref([])
 const progressMap = reactive({})
 const loading = ref(true)
+const migrating = ref(false)
 const showSettings = ref(false)
 const comicToDelete = ref(null)
 const fileInput = ref(null)
@@ -134,7 +147,17 @@ async function confirmDelete() {
   await loadLibrary()
 }
 
-onMounted(loadLibrary)
+// Alte Comics (PDF im IndexedDB-Record) einmalig ins OPFS verschieben,
+// bevor getAll() sonst alle PDFs auf einmal in den RAM lädt.
+onMounted(async () => {
+  migrating.value = true
+  try {
+    await migrateBlobsToOpfs()
+  } finally {
+    migrating.value = false
+  }
+  await loadLibrary()
+})
 </script>
 
 <style lang="scss" scoped>

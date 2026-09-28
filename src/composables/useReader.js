@@ -1,6 +1,7 @@
 import { ref, shallowRef, computed } from 'vue'
-import { loadPdf, renderPageToCanvas } from '../pdf-loader.js'
+import { loadPdf, loadPdfFromFile, renderPageToCanvas } from '../pdf-loader.js'
 import { getComic } from '../storage/comics.js'
+import { getComicFile } from '../storage/files.js'
 import { detectPanels } from '../panel-detector.js'
 import { getProgress, saveProgress } from '../storage/progress.js'
 import { useSettings } from './useSettings.js'
@@ -194,7 +195,10 @@ export function useReader(comicId, viewport) {
 
   async function init() {
     comic.value = await getComic(comicId)
-    pdf = await loadPdf(comic.value.blob)
+    // Fallback: Migration ins OPFS ist für diesen Comic noch nicht gelungen.
+    pdf = comic.value.fileName
+      ? await loadPdfFromFile(await getComicFile(comic.value.fileName))
+      : await loadPdf(comic.value.blob)
     totalPages.value = pdf.numPages
 
     pagesPanels.value = []

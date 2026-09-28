@@ -1,10 +1,11 @@
 import { ref } from 'vue'
-import { loadPdf, generateCover } from '../pdf-loader.js'
+import { loadPdfFromFile, generateCover } from '../pdf-loader.js'
 import { addComic } from '../storage/comics.js'
+import { saveComicFile, getComicFile, deleteComicFile, requestPersistence } from '../storage/files.js'
 import { QuotaError } from '../storage/errors.js'
 
 /**
- * Kapselt den Import-Flow: PDF-Datei → Cover + Metadaten → IndexedDB.
+ * Kapselt den Import-Flow: PDF-Datei → Kopie im OPFS → Cover + Metadaten → IndexedDB.
  * Reaktiver State für UI: importing, quotaError, error.
  */
 export function useComicImport() {
@@ -22,20 +23,22 @@ export function useComicImport() {
     quotaError.value = false
     error.value = null
 
+    let fileName = null
+    let pdf = null
     try {
-      // ArrayBuffer einmal lesen und speichern (File/Blob direkt in IndexedDB
-      // schlägt auf iOS/WebKit mit "Error preparing Blob/File data" fehl).
-      // PDF.js bekommt eine Kopie, da es den Buffer sonst detached.
-      const buffer = await file.arrayBuffer()
-      const pdf = await loadPdf(buffer.slice(0))
+      // Eigene Kopie im OPFS: unabhängig vom Original (Downloads o. ä.)
+      // und gestückelt geschrieben → auch 1000+-Seiten-PDFs nie komplett im RAM.
+      requestPersistence()
+      const saved = await saveComicFile(file)
+      fileName = saved.fileName
+      pdf = await loadPdfFromFile(await getComicFile(fileName))
       const pageCount = pdf.numPages
       const coverDataUrl = await generateCover(pdf)
       const title = file.name.replace(/\.pdf$/i, '')
 
-      const id = await addComic({ title, blob: buffer, coverDataUrl, pageCount })
-      pdf.destroy()
-      return id
+      return await addComic({ title, fileName, size: saved.size, coverDataUrl, pageCount })
     } catch (err) {
+      await deleteComicFile(fileName)
       if (err instanceof QuotaError) {
         quotaError.value = true
       } else {
@@ -44,6 +47,7 @@ export function useComicImport() {
       }
       return null
     } finally {
+      pdf?.destroy()
       importing.value = false
     }
   }
