@@ -144,6 +144,7 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 }
 
 .lang-switch {
-  display: flex; gap: 1rem; list-style: none; padding: 0; margin: 1rem 0 0;
+  display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 1rem 0 0;
+  a, [aria-current] { display: inline-block; padding: 0.5rem 0.5rem; }
   [aria-current] { font-weight: 700; }
 }
