@@ -1,0 +1,20 @@
+{
+  "translationKey": "home",
+  "updated": "2026-10-02",
+  "meta": {
+    "title": "PDF Comic Reader – Read Comics Panel by Panel | PanelZoom",
+    "description": "Read PDF comics on your phone without pinching and scrolling. Automatic panel detection, guided view for your own files. Free, private, offline.",
+    "ogTitle": "Read PDF comics on your phone, panel by panel"
+  },
+  "hero": {
+    "h1": "Read PDF comics on your phone, panel by panel",
+    "lead": "PanelZoom detects the panels in your PDF comics and takes you from one to the next with a single tap. No pinching, no scrolling, and your place is always saved.",
+    "cta": "Open free in your browser",
+    "trust": ["No account", "No uploads", "Works offline", "Free"]
+  },
+  "features": [
+    { "title": "Automatic panel detection", "text": "The app finds the panels on every page and moves through them in order." },
+    { "title": "Progress saved per panel", "text": "Pick up exactly where you left off, even days later." },
+    { "title": "Your comics stay on your device", "text": "Everything is stored locally in your browser. Nothing is uploaded." }
+  ]
+}

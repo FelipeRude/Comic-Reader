@@ -1,0 +1,20 @@
+{
+  "translationKey": "home",
+  "updated": "2026-10-02",
+  "meta": {
+    "title": "Comics auf dem Handy lesen – PDF Comic Reader | PanelZoom",
+    "description": "PDF-Comics am Smartphone lesen, ohne Zoomen: Die App erkennt jedes Panel und springt automatisch weiter. Kostenlos, ohne Anmeldung, offline.",
+    "ogTitle": "Comics auf dem Handy lesen – Panel für Panel"
+  },
+  "hero": {
+    "h1": "Comics als PDF auf dem Handy lesen – Panel für Panel",
+    "lead": "PanelZoom erkennt die Panels deiner PDF-Comics und führt dich mit einem Tipp von Bild zu Bild. Kein Zoomen, kein Scrollen, und der Lesestand bleibt erhalten.",
+    "cta": "Jetzt kostenlos im Browser öffnen",
+    "trust": ["Kein Account", "Keine Uploads", "Offline", "Kostenlos"]
+  },
+  "features": [
+    { "title": "Automatische Panel-Erkennung", "text": "Die App findet die Panels jeder Seite und fährt sie nacheinander an." },
+    { "title": "Lesestand pro Panel", "text": "Du machst genau dort weiter, wo du aufgehört hast, auch nach Tagen." },
+    { "title": "Deine Comics bleiben bei dir", "text": "Alles wird lokal im Browser gespeichert. Nichts wird hochgeladen." }
+  ]
+}

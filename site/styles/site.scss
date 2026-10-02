@@ -1,0 +1,149 @@
+// Styles der Landing Pages. Farben und Comic-Look wie in der App (src/styles/_variables.scss).
+
+@font-face {
+  font-family: 'Bangers';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bangers-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Bangers';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bangers-latin-ext-400-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  --cream: #FFFEF0;
+  --ink: #1A1A1A;
+  --bg: var(--cream);
+  --bg-alt: #F0EAD2;
+  --text: var(--ink);
+  --muted: #5C554A;
+  --border: var(--ink);
+  --shadow: 3px 3px 0 var(--ink);
+  --btn-bg: var(--ink);
+  --btn-text: var(--cream);
+  --display: 'Bangers', system-ui, sans-serif;
+  --body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--ink);
+    --bg-alt: #2C2820;
+    --text: var(--cream);
+    --muted: #C8C0A0;
+    --border: var(--cream);
+    --shadow: 3px 3px 0 var(--cream);
+    --btn-bg: var(--cream);
+    --btn-text: var(--ink);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font: 1.0625rem/1.6 var(--body);
+  background: var(--bg);
+  color: var(--text);
+}
+
+a { color: inherit; }
+
+h1, h2, h3, .brand, .btn {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); margin: 0 0 1rem; }
+h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
+
+.wrap { width: min(100% - 2rem, 62rem); margin-inline: auto; }
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  &:focus { left: 1rem; top: 1rem; background: var(--bg); padding: 0.5rem; z-index: 10; }
+}
+
+.site-header {
+  border-bottom: 2px solid var(--border);
+  &__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.75rem; }
+}
+
+.brand { font-size: 1.8rem; text-decoration: none; }
+
+.site-nav { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  font-size: 1.35rem;
+  text-decoration: none;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s;
+  &:hover { transform: translate(-1px, -1px); }
+  &:active { transform: translate(2px, 2px); box-shadow: none; }
+  &--small { padding: 0.35rem 0.9rem; font-size: 1.1rem; }
+}
+
+.hero { padding-block: clamp(2.5rem, 8vw, 5rem); }
+
+.lead { font-size: 1.2rem; max-width: 40rem; color: var(--muted); }
+
+.trust {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem;
+  list-style: none; padding: 0; margin: 1.5rem 0 0;
+  font-weight: 600;
+  li::before { content: '✓ '; }
+}
+
+.features { padding-block: 2rem 4rem; background: var(--bg-alt); border-block: 2px solid var(--border); }
+
+.features__grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+
+.card {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  p { margin: 0; }
+}
+
+.prose {
+  padding-block: 2.5rem 4rem;
+  max-width: 44rem;
+  img { max-width: 100%; height: auto; }
+}
+
+.breadcrumbs, .meta { font-size: 0.95rem; color: var(--muted); }
+
+.guide-list li { margin-bottom: 1rem; }
+
+.site-footer {
+  border-top: 2px solid var(--border);
+  padding-block: 2rem;
+  font-size: 0.95rem;
+  &__brand { font-family: var(--display); font-size: 1.4rem; margin: 0; }
+}
+
+.lang-switch {
+  display: flex; gap: 1rem; list-style: none; padding: 0; margin: 1rem 0 0;
+  [aria-current] { font-weight: 700; }
+}
