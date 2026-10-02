@@ -1,7 +1,7 @@
 import * as pdfjsLib from 'pdfjs-dist'
 
 // Worker liegt als statisches Asset in public/ (siehe Masterplan / vite.config PWA-Cache).
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
+pdfjsLib.GlobalWorkerOptions.workerSrc = `${import.meta.env.BASE_URL}pdf.worker.min.mjs`
 
 // Klein halten: PDF.js liest beim Öffnen alle Seitenobjekte, die über die
 // ganze Datei verteilt liegen — pro Objekt wird nur ein Chunk geladen.

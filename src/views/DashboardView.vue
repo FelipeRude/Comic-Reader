@@ -1,7 +1,7 @@
 <template>
   <main class="dashboard">
     <header class="dashboard__header">
-      <h1 class="dashboard__title">Comic Reader</h1>
+      <h1 class="dashboard__title">PanelZoom</h1>
       <div class="dashboard__actions">
         <button v-if="canInstall" class="dashboard__install" @click="promptInstall">
           Installieren

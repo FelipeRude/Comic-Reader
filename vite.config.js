@@ -13,7 +13,16 @@ const ICON = process.env.DEPLOY_TARGET === 'dev'
   ? { src: 'img/icon_DEV.png', sizes: '1250x1250' }
   : { src: 'img/icon.png', sizes: '512x512' }
 
+// Die App liegt unter /app/, Landing Pages unter /de/ und /en/ (docs/SEO-PLAN.md, 4.6 a).
+// Gebaut wird nach dist/app/, scripts/build-site.mjs schreibt danach den Rest von dist/.
+const BASE = '/app/'
+
 export default defineConfig({
+  base: BASE,
+  build: {
+    outDir: 'dist/app',
+    emptyOutDir: true,
+  },
   define: {
     __BUILD_TIME__: JSON.stringify(BUILD_TIME),
   },
@@ -21,11 +30,16 @@ export default defineConfig({
     vue(),
     {
       name: 'deploy-icon',
-      transformIndexHtml: (html) => html
-        .replaceAll('/img/icon.png', `/${ICON.src}`)
-        .replace('sizes="512x512"', `sizes="${ICON.sizes}"`),
+      // 'pre': vor Vites eigener Verarbeitung, damit der Pfad danach noch mit BASE versehen wird
+      transformIndexHtml: {
+        order: 'pre',
+        handler: (html) => html
+          .replaceAll('/img/icon.png', `/${ICON.src}`)
+          .replace('sizes="512x512"', `sizes="${ICON.sizes}"`),
+      },
     },
     VitePWA({
+      scope: BASE,
       registerType: 'autoUpdate',
       injectRegister: false, // Registrierung in src/pwa.js (mit Update-Checks)
       workbox: {
@@ -34,14 +48,19 @@ export default defineConfig({
         skipWaiting: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,mjs}'],
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
+        // SW-Scope ist ohnehin /app/; die Allowlist stellt zusätzlich sicher,
+        // dass Landing Pages nie aus dem App-Cache beantwortet werden.
+        navigateFallbackAllowlist: [/^\/app\//],
       },
       manifest: {
-        name: 'COMIC READER',
-        short_name: 'COMIC READER',
-        description: 'Offline PWA Comic Reader mit Smart-Zoom Panel-Navigation',
+        id: BASE,
+        name: 'PanelZoom',
+        short_name: 'PanelZoom',
+        description: 'Read PDF comics on your phone, panel by panel. Automatic panel detection, offline, no account.',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: BASE,
+        scope: BASE,
         background_color: '#ffffff',
         theme_color: '#1a1a2e',
         icons: [
