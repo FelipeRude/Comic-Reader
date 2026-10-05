@@ -1,0 +1,55 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "close": "Close",
+    "settings": "Settings",
+    "gotIt": "Got it"
+  },
+  "dashboard": {
+    "install": "Install",
+    "add": "Add new comic",
+    "importing": "Importing…",
+    "preparing": "Preparing library…",
+    "emptyTitle": "No comics yet.",
+    "emptyHint": "Add your first one.",
+    "deleteTitle": "Delete comic?",
+    "deleteMessage": "“{title}” and its reading progress will be deleted permanently.",
+    "deleteConfirm": "Delete",
+    "quotaTitle": "Storage full",
+    "quotaMessage": "There isn’t enough storage space in your browser. Please delete old comics from your library to make room.",
+    "importFailedTitle": "Import failed",
+    "importFailedMessage": "The comic couldn’t be added. ({error})"
+  },
+  "card": {
+    "delete": "Delete comic",
+    "progress": "Page {page}/{total}",
+    "pages": {
+      "one": "{count} page",
+      "other": "{count} pages"
+    }
+  },
+  "reader": {
+    "back": "Back",
+    "debug": "Show detected panels",
+    "hud": "Panel {panel}/{panels} – Page {page}/{pages}"
+  },
+  "pageJump": {
+    "title": "Go to page",
+    "confirm": "Go"
+  },
+  "settings": {
+    "language": "Language",
+    "transition": "Panel transition",
+    "transitionHint": "How the view moves between panels",
+    "smooth": "Smooth pan",
+    "instant": "Instant",
+    "padding": "Zoom margin",
+    "paddingHint": "Space to the screen edge when zooming into a panel (in %)",
+    "top": "Top",
+    "left": "Left",
+    "right": "Right",
+    "bottom": "Bottom",
+    "version": "Version from {date}"
+  }
+}

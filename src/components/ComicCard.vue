@@ -14,25 +14,29 @@
 
       <button
         class="card__delete"
-        aria-label="Comic löschen"
+        :aria-label="t('card.delete')"
         @click.stop="$emit('delete', comic)"
       >
         <img src="/UI-Icons/Delete-Bin-2 Streamline Freehand.svg" class="icon" width="18" height="18" alt="" aria-hidden="true" />
       </button>
 
       <span v-if="progress" class="card__badge">
-        Seite {{ progress.pageIndex + 1 }}/{{ comic.pageCount }}
+        {{ t('card.progress', { page: progress.pageIndex + 1, total: comic.pageCount }) }}
       </span>
     </div>
 
     <div class="card__meta">
       <h3 class="card__title">{{ comic.title }}</h3>
-      <p class="card__pages">{{ comic.pageCount }} Seiten</p>
+      <p class="card__pages">{{ t('card.pages', { count: comic.pageCount }) }}</p>
     </div>
   </article>
 </template>
 
 <script setup>
+import { useI18n } from '../composables/useI18n.js'
+
+const { t } = useI18n()
+
 defineProps({
   comic: { type: Object, required: true },
   progress: { type: Object, default: null },

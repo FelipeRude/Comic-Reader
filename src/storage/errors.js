@@ -4,7 +4,7 @@
  * damit die UI-Schicht ein gezieltes Modal anzeigen kann.
  */
 export class QuotaError extends Error {
-  constructor(message = 'Nicht genügend Speicherplatz im Browser verfügbar.') {
+  constructor(message = 'Not enough storage space available in the browser.') {
     super(message)
     this.name = 'QuotaError'
   }

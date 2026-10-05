@@ -9,14 +9,14 @@
           class="modal__btn modal__btn--ghost"
           @click="$emit('cancel')"
         >
-          {{ cancelLabel }}
+          {{ cancelLabel || t('common.cancel') }}
         </button>
         <button
           class="modal__btn"
           :class="danger ? 'modal__btn--danger' : 'modal__btn--primary'"
           @click="$emit('confirm')"
         >
-          {{ confirmLabel }}
+          {{ confirmLabel || t('common.ok') }}
         </button>
       </div>
     </div>
@@ -24,11 +24,15 @@
 </template>
 
 <script setup>
+import { useI18n } from '../composables/useI18n.js'
+
+const { t } = useI18n()
+
 defineProps({
   title: { type: String, default: '' },
   message: { type: String, required: true },
-  confirmLabel: { type: String, default: 'OK' },
-  cancelLabel: { type: String, default: 'Abbrechen' },
+  confirmLabel: { type: String, default: '' },
+  cancelLabel: { type: String, default: '' },
   showCancel: { type: Boolean, default: true },
   danger: { type: Boolean, default: false },
 })

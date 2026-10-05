@@ -9,15 +9,15 @@
   >
     <div class="reader__stage" ref="stageEl" />
 
-    <button class="reader__back" :class="{ 'is-hidden': !controlsVisible }" aria-label="Zurück" @click="$emit('back')">
+    <button class="reader__back" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('reader.back')" @click="$emit('back')">
       <img src="/UI-Icons/Navigation-Page-Right Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
-    <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" aria-label="Debug-Overlay" @touchstart.stop @touchend.stop @click="toggleDebug">
+    <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" :aria-label="t('reader.debug')" @touchstart.stop @touchend.stop @click="toggleDebug">
       <img src="/UI-Icons/panel.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
     </button>
 
-    <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" aria-label="Einstellungen" @touchstart.stop @touchend.stop @click="showSettings = true">
+    <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('common.settings')" @touchstart.stop @touchend.stop @click="showSettings = true">
       <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
@@ -29,7 +29,7 @@
     </div>
 
     <div class="reader__hud" :class="{ 'is-hidden': !hudVisible || loading }" @touchstart.stop @touchend.stop @click="showPageJump = true">
-      Panel {{ currentPanelIndex + 1 }}/{{ currentPanels.length }} – Seite {{ currentPage + 1 }}/{{ totalPages }}
+      {{ t('reader.hud', { panel: currentPanelIndex + 1, panels: currentPanels.length, page: currentPage + 1, pages: totalPages }) }}
     </div>
 
     <PageJumpModal
@@ -52,6 +52,7 @@
 import { ref, reactive, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useReader } from '../composables/useReader.js'
 import { useSettings } from '../composables/useSettings.js'
+import { useI18n } from '../composables/useI18n.js'
 import SettingsModal from '../components/SettingsModal.vue'
 import PageJumpModal from '../components/PageJumpModal.vue'
 
@@ -59,6 +60,8 @@ const props = defineProps({
   comicId: { type: Number, required: true },
 })
 defineEmits(['back'])
+
+const { t } = useI18n()
 
 const {
   animation,

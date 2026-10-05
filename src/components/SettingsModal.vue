@@ -2,17 +2,38 @@
   <div class="settings" @click.self="$emit('close')">
     <div class="settings__box" role="dialog" aria-modal="true">
       <header class="settings__header">
-        <h2 class="settings__title">Einstellungen</h2>
-        <button class="settings__close" aria-label="Schließen" @click="$emit('close')">
+        <h2 class="settings__title">{{ t('common.settings') }}</h2>
+        <button class="settings__close" :aria-label="t('common.close')" @click="$emit('close')">
           <img src="/UI-Icons/Keyboard-Asterisk-2 Streamline Freehand.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
 
+      <!-- Sprache -->
+      <template v-if="locales.length > 1">
+        <div class="settings__row">
+          <div class="settings__label">
+            <span class="settings__label-title">{{ t('settings.language') }}</span>
+          </div>
+        </div>
+        <div class="settings__toggle settings__toggle--wrap">
+          <button
+            v-for="l in locales"
+            :key="l.code"
+            class="settings__option"
+            :class="{ 'settings__option--active': locale === l.code }"
+            :lang="l.hreflang"
+            @click="setLocale(l.code)"
+          >
+            {{ l.nativeName }}
+          </button>
+        </div>
+      </template>
+
       <!-- Panel-Übergang -->
-      <div class="settings__row">
+      <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 }">
         <div class="settings__label">
-          <span class="settings__label-title">Panel-Übergang</span>
-          <span class="settings__label-hint">Wie zwischen Panels gewechselt wird</span>
+          <span class="settings__label-title">{{ t('settings.transition') }}</span>
+          <span class="settings__label-hint">{{ t('settings.transitionHint') }}</span>
         </div>
       </div>
       <div class="settings__toggle">
@@ -21,28 +42,28 @@
           :class="{ 'settings__option--active': animation === 'smooth' }"
           @click="setAnimation('smooth')"
         >
-          Weiche Kamerafahrt
+          {{ t('settings.smooth') }}
         </button>
         <button
           class="settings__option"
           :class="{ 'settings__option--active': animation === 'instant' }"
           @click="setAnimation('instant')"
         >
-          Instantan
+          {{ t('settings.instant') }}
         </button>
       </div>
 
       <!-- Zoom-Abstand -->
       <div class="settings__row settings__row--pad">
         <div class="settings__label">
-          <span class="settings__label-title">Zoom-Abstand</span>
-          <span class="settings__label-hint">Abstand zum Rand beim Panel-Zoom (in %)</span>
+          <span class="settings__label-title">{{ t('settings.padding') }}</span>
+          <span class="settings__label-hint">{{ t('settings.paddingHint') }}</span>
         </div>
       </div>
 
       <div class="settings__cross">
         <div class="settings__cross-top">
-          <label class="settings__pad-label">Oben</label>
+          <label class="settings__pad-label">{{ t('settings.top') }}</label>
           <div class="settings__pad-field">
             <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localTop" @change="save('top', localTop)" />
             <span class="settings__pad-unit">%</span>
@@ -51,7 +72,7 @@
 
         <div class="settings__cross-mid">
           <div class="settings__cross-side">
-            <label class="settings__pad-label">Links</label>
+            <label class="settings__pad-label">{{ t('settings.left') }}</label>
             <div class="settings__pad-field">
               <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localLeft" @change="save('left', localLeft)" />
               <span class="settings__pad-unit">%</span>
@@ -61,7 +82,7 @@
           <div class="settings__cross-box" aria-hidden="true" />
 
           <div class="settings__cross-side settings__cross-side--right">
-            <label class="settings__pad-label">Rechts</label>
+            <label class="settings__pad-label">{{ t('settings.right') }}</label>
             <div class="settings__pad-field">
               <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localRight" @change="save('right', localRight)" />
               <span class="settings__pad-unit">%</span>
@@ -70,7 +91,7 @@
         </div>
 
         <div class="settings__cross-bottom">
-          <label class="settings__pad-label">Unten</label>
+          <label class="settings__pad-label">{{ t('settings.bottom') }}</label>
           <div class="settings__pad-field">
             <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localBottom" @change="save('bottom', localBottom)" />
             <span class="settings__pad-unit">%</span>
@@ -78,18 +99,22 @@
         </div>
       </div>
 
-      <p class="settings__version">Version vom {{ buildTime }}</p>
+      <p class="settings__version">{{ t('settings.version', { date: buildTime }) }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useSettings } from '../composables/useSettings.js'
+import { useI18n } from '../composables/useI18n.js'
 
 defineEmits(['close'])
 
-const buildTime = __BUILD_TIME__
+const { t, d, locale, locales, setLocale } = useI18n()
+
+// Build-Zeitpunkt kommt als ISO-String und wird in der App-Sprache formatiert.
+const buildTime = computed(() => d(new Date(__BUILD_TIME__), { dateStyle: 'medium', timeStyle: 'short' }))
 
 const {
   animation, setAnimation,
@@ -224,6 +249,10 @@ function save(side, value) {
     background: var(--bg-secondary);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
+  }
+
+  &__toggle--wrap {
+    flex-wrap: wrap;
   }
 
   &__option {

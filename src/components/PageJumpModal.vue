@@ -2,8 +2,8 @@
   <div class="pagejump" @click.self="$emit('close')">
     <div class="pagejump__box" role="dialog" aria-modal="true">
       <header class="pagejump__header">
-        <h2 class="pagejump__title">Zu Seite springen</h2>
-        <button class="pagejump__close" aria-label="Schließen" @click="$emit('close')">
+        <h2 class="pagejump__title">{{ t('pageJump.title') }}</h2>
+        <button class="pagejump__close" :aria-label="t('common.close')" @click="$emit('close')">
           <img src="/UI-Icons/Keyboard-Asterisk-2 Streamline Freehand.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
@@ -20,11 +20,11 @@
           :placeholder="String(currentPage + 1)"
           @keydown.enter="confirm"
         />
-        <span class="pagejump__of">/ {{ totalPages }}</span>
+        <span class="pagejump__of">/ {{ n(totalPages) }}</span>
       </div>
 
       <button class="pagejump__confirm" :disabled="!isValid" @click="confirm">
-        Springen
+        {{ t('pageJump.confirm') }}
       </button>
       </div>
     </div>
@@ -33,6 +33,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+
+const { t, n } = useI18n()
 
 const props = defineProps({
   currentPage: { type: Number, required: true },

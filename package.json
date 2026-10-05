@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "vite",
     "dev:site": "node --watch-path=site --watch-path=scripts --watch-path=locales.config.mjs scripts/build-site.mjs --serve",
-    "build": "rm -rf dist && vite build && node scripts/build-site.mjs",
+    "build": "rm -rf dist && node scripts/i18n-check.mjs && vite build && node scripts/build-site.mjs",
     "build:dev": "DEPLOY_TARGET=dev npm run build",
-    "build:app": "vite build",
+    "build:app": "node scripts/i18n-check.mjs && vite build",
     "build:site": "node scripts/build-site.mjs",
     "preview": "node scripts/build-site.mjs --serve-only",
     "deploy": "./scripts/deploy.sh live",
     "deploy:dev": "./scripts/deploy.sh dev",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "i18n:check": "node scripts/i18n-check.mjs"
   },
   "dependencies": {
     "idb": "^8.0.0",

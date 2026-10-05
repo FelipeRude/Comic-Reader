@@ -3,9 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // Build-Zeitpunkt, in den Einstellungen sichtbar → zeigt, ob das Update angekommen ist.
-const BUILD_TIME = new Date().toLocaleString('de-DE', {
-  timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
-})
+// Als ISO-String, die App formatiert ihn in der eingestellten Sprache.
+const BUILD_TIME = new Date().toISOString()
 
 // Dev-Deploy bekommt eigene (rote) Icons, damit sich beide PWAs am Homescreen unterscheiden
 // (DEPLOY_TARGET setzt scripts/deploy.sh). Erzeugt von scripts/generate-icons.mjs.
@@ -23,6 +22,8 @@ export default defineConfig({
   },
   define: {
     __BUILD_TIME__: JSON.stringify(BUILD_TIME),
+    // Dev-Deploy zeigt auch Sprachen mit status 'draft' (wie die Landing)
+    __DEPLOY_DEV__: JSON.stringify(process.env.DEPLOY_TARGET === 'dev'),
   },
   plugins: [
     vue(),

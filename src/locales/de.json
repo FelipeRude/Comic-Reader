@@ -1,0 +1,55 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "settings": "Einstellungen",
+    "gotIt": "Verstanden"
+  },
+  "dashboard": {
+    "install": "Installieren",
+    "add": "Neuen Comic hinzufügen",
+    "importing": "Importiere…",
+    "preparing": "Bibliothek wird vorbereitet…",
+    "emptyTitle": "Noch keine Comics.",
+    "emptyHint": "Füge dein erstes hinzu.",
+    "deleteTitle": "Comic löschen?",
+    "deleteMessage": "„{title}“ wird mit Lesestand unwiderruflich gelöscht.",
+    "deleteConfirm": "Löschen",
+    "quotaTitle": "Speicher voll",
+    "quotaMessage": "Nicht genügend Speicherplatz im Browser verfügbar. Bitte lösche alte Comics aus der Bibliothek, um Platz zu schaffen.",
+    "importFailedTitle": "Import fehlgeschlagen",
+    "importFailedMessage": "Der Comic konnte nicht hinzugefügt werden. ({error})"
+  },
+  "card": {
+    "delete": "Comic löschen",
+    "progress": "Seite {page}/{total}",
+    "pages": {
+      "one": "{count} Seite",
+      "other": "{count} Seiten"
+    }
+  },
+  "reader": {
+    "back": "Zurück",
+    "debug": "Erkannte Panels anzeigen",
+    "hud": "Panel {panel}/{panels} – Seite {page}/{pages}"
+  },
+  "pageJump": {
+    "title": "Zu Seite springen",
+    "confirm": "Springen"
+  },
+  "settings": {
+    "language": "Sprache",
+    "transition": "Panel-Übergang",
+    "transitionHint": "Wie zwischen Panels gewechselt wird",
+    "smooth": "Weiche Kamerafahrt",
+    "instant": "Instantan",
+    "padding": "Zoom-Abstand",
+    "paddingHint": "Abstand zum Rand beim Panel-Zoom (in %)",
+    "top": "Oben",
+    "left": "Links",
+    "right": "Rechts",
+    "bottom": "Unten",
+    "version": "Version vom {date}"
+  }
+}

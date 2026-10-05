@@ -4,9 +4,9 @@
       <h1 class="dashboard__title">PanelZoom</h1>
       <div class="dashboard__actions">
         <button v-if="canInstall" class="dashboard__install" @click="promptInstall">
-          Installieren
+          {{ t('dashboard.install') }}
         </button>
-        <button class="dashboard__settings" aria-label="Einstellungen" @click="showSettings = true">
+        <button class="dashboard__settings" :aria-label="t('common.settings')" @click="showSettings = true">
           <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
         </button>
       </div>
@@ -14,8 +14,8 @@
 
     <button class="dashboard__add" :disabled="importing" @click="triggerFilePicker">
       <img src="/UI-Icons/Add-Sign-Bold Streamline Freehand.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
-      <span v-if="importing">Importiere…</span>
-      <span v-else>Neuen Comic hinzufügen</span>
+      <span v-if="importing">{{ t('dashboard.importing') }}</span>
+      <span v-else>{{ t('dashboard.add') }}</span>
     </button>
     <input
       ref="fileInput"
@@ -36,23 +36,23 @@
       />
     </section>
 
-    <p v-else-if="migrating" class="dashboard__empty-hint">Bibliothek wird vorbereitet…</p>
+    <p v-else-if="migrating" class="dashboard__empty-hint">{{ t('dashboard.preparing') }}</p>
 
     <div v-else-if="!loading" class="dashboard__empty">
       <div class="dashboard__empty-icon">
         <img src="/UI-Icons/Book-Flip-Page Streamline Freehand.svg" class="icon" width="48" height="48" alt="" aria-hidden="true" />
       </div>
-      <p class="dashboard__empty-text">Noch keine Comics.</p>
-      <p class="dashboard__empty-hint">Füge dein erstes hinzu.</p>
+      <p class="dashboard__empty-text">{{ t('dashboard.emptyTitle') }}</p>
+      <p class="dashboard__empty-hint">{{ t('dashboard.emptyHint') }}</p>
     </div>
 
     <SettingsModal v-if="showSettings" @close="showSettings = false" />
 
     <ConfirmModal
       v-if="comicToDelete"
-      title="Comic löschen?"
-      :message="`„${comicToDelete.title}“ wird mit Lesestand unwiderruflich gelöscht.`"
-      confirm-label="Löschen"
+      :title="t('dashboard.deleteTitle')"
+      :message="t('dashboard.deleteMessage', { title: comicToDelete.title })"
+      :confirm-label="t('dashboard.deleteConfirm')"
       danger
       @confirm="confirmDelete"
       @cancel="comicToDelete = null"
@@ -60,9 +60,9 @@
 
     <ConfirmModal
       v-if="quotaError"
-      title="Speicher voll"
-      message="Nicht genügend Speicherplatz im Browser verfügbar. Bitte lösche alte Comics vom Dashboard, um Platz zu schaffen."
-      confirm-label="Verstanden"
+      :title="t('dashboard.quotaTitle')"
+      :message="t('dashboard.quotaMessage')"
+      :confirm-label="t('common.gotIt')"
       :show-cancel="false"
       @confirm="dismissQuota"
       @cancel="dismissQuota"
@@ -70,9 +70,9 @@
 
     <ConfirmModal
       v-if="importError"
-      title="Import fehlgeschlagen"
-      :message="`Der Comic konnte nicht hinzugefügt werden. (${importError.message || importError})`"
-      confirm-label="Verstanden"
+      :title="t('dashboard.importFailedTitle')"
+      :message="t('dashboard.importFailedMessage', { error: importError.message || importError })"
+      :confirm-label="t('common.gotIt')"
       :show-cancel="false"
       @confirm="importError = null"
       @cancel="importError = null"
@@ -87,11 +87,13 @@ import SettingsModal from '../components/SettingsModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
 import { useComicImport } from '../composables/useComicImport.js'
 import { useInstallPrompt } from '../composables/useInstallPrompt.js'
+import { useI18n } from '../composables/useI18n.js'
 import { getAllComics, deleteComic, migrateBlobsToOpfs } from '../storage/comics.js'
 import { getProgress, deleteProgress } from '../storage/progress.js'
 
 const emit = defineEmits(['open'])
 
+const { t } = useI18n()
 const { canInstall, promptInstall } = useInstallPrompt()
 const { importing, quotaError, error: importError, importFile } = useComicImport()
 
