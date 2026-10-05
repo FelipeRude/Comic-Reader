@@ -11,7 +11,8 @@
     "build:site": "node scripts/build-site.mjs",
     "preview": "node scripts/build-site.mjs --serve-only",
     "deploy": "./scripts/deploy.sh live",
-    "deploy:dev": "./scripts/deploy.sh dev"
+    "deploy:dev": "./scripts/deploy.sh dev",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "idb": "^8.0.0",

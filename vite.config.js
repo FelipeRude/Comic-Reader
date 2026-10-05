@@ -7,11 +7,9 @@ const BUILD_TIME = new Date().toLocaleString('de-DE', {
   timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
 })
 
-// Dev-Deploy bekommt ein eigenes Icon, damit sich beide PWAs am Homescreen unterscheiden
-// (DEPLOY_TARGET setzt scripts/deploy.sh).
-const ICON = process.env.DEPLOY_TARGET === 'dev'
-  ? { src: 'img/icon_DEV.png', sizes: '1250x1250' }
-  : { src: 'img/icon.png', sizes: '512x512' }
+// Dev-Deploy bekommt eigene (rote) Icons, damit sich beide PWAs am Homescreen unterscheiden
+// (DEPLOY_TARGET setzt scripts/deploy.sh). Erzeugt von scripts/generate-icons.mjs.
+const ICON_DIR = process.env.DEPLOY_TARGET === 'dev' ? 'img/pwa-dev' : 'img/pwa'
 
 // Die App liegt unter /app/, Landing Pages unter /de/ und /en/ (docs/SEO-PLAN.md, 4.6 a).
 // Gebaut wird nach dist/app/, scripts/build-site.mjs schreibt danach den Rest von dist/.
@@ -33,9 +31,7 @@ export default defineConfig({
       // 'pre': vor Vites eigener Verarbeitung, damit der Pfad danach noch mit BASE versehen wird
       transformIndexHtml: {
         order: 'pre',
-        handler: (html) => html
-          .replaceAll('/img/icon.png', `/${ICON.src}`)
-          .replace('sizes="512x512"', `sizes="${ICON.sizes}"`),
+        handler: (html) => html.replaceAll('/img/pwa/', `/${ICON_DIR}/`),
       },
     },
     VitePWA({
@@ -61,15 +57,14 @@ export default defineConfig({
         orientation: 'portrait',
         start_url: BASE,
         scope: BASE,
-        background_color: '#ffffff',
-        theme_color: '#1a1a2e',
+        // Splash-Hintergrund = Icon-Hintergrund (Creme), passend zu theme-color in index.html
+        background_color: '#FFFEF0',
+        theme_color: '#FFFEF0',
         icons: [
-          {
-            src: ICON.src,
-            sizes: ICON.sizes,
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
+          { src: `${ICON_DIR}/icon-192.png`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: `${ICON_DIR}/icon-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: `${ICON_DIR}/maskable-192.png`, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+          { src: `${ICON_DIR}/maskable-512.png`, sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
     }),

@@ -38,8 +38,9 @@ export function renderHead(page, ctx) {
         ]
       : ['<meta name="twitter:card" content="summary">']),
     `<meta name="theme-color" content="${esc(site.themeColor)}">`,
-    '<link rel="icon" type="image/png" href="/img/icon.png">',
-    '<link rel="apple-touch-icon" href="/img/icon.png">',
+    '<link rel="icon" href="/favicon.ico" sizes="32x32">',
+    '<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
+    '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
     '<link rel="preload" href="/fonts/bangers-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>',
     `<link rel="stylesheet" href="${esc(ctx.cssHref)}">`,
   ].filter(Boolean).join('\n    ')
