@@ -59,6 +59,26 @@ ${guides.length ? `\n## Guides\n${guides.map((g) => `- [${g.h1 || g.title}](${si
  * .htaccess für netcup (nginx vor Apache). Absolute https-Ziele in den Redirects,
  * weil Apache hinter dem Proxy sonst ggf. http:// erzeugt und ein zweiter Hop entsteht.
  */
+// Content-Security-Policy: nur eigene Quellen, keine fremden Server (passt zum Datenschutz-Versprechen).
+// blob:/data: für Bilder, weil pdf.js und die Panel-Erkennung Seiten als Blob/Canvas weiterreichen.
+// Auf develop im Report-Only-Modus geprüft (Landing, Sprachwechsel, Import, Panel-Erkennung, SW-Cache): keine Verstöße.
+// Zum Debuggen neuer Funktionen CSP_HEADER vorübergehend auf 'Content-Security-Policy-Report-Only' setzen.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join('; ')
+const CSP_HEADER = 'Content-Security-Policy'
+
 export function htaccess({ site, liveLocales, defaultLocale, isDev }) {
   const target = (p) => `https://%{HTTP_HOST}${p}`
   const segments = liveLocales.map((l) => reEsc(l.path.slice(1, -1))).join('|')
@@ -114,6 +134,9 @@ RewriteRule ^(.*[^/])$ ${target('/$1/')} [R=301,L,NE]
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Einbetten in fremde Seiten verbieten (Clickjacking)
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set ${CSP_HEADER} "${CSP}"
   <If "%{HTTPS} == 'on' || %{HTTP:X-Forwarded-Proto} == 'https'">
     Header always set Strict-Transport-Security "max-age=31536000"
   </If>

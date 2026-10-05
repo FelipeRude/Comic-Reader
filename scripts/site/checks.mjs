@@ -55,6 +55,8 @@ export function runChecks(pages, { distDir, site, liveLocales, appBuilt }) {
     if (!head.description) errors.push(`${where}: Meta-Description fehlt`)
     else if (head.description.length > DESCRIPTION_MAX) errors.push(`${where}: Description hat ${head.description.length} Zeichen (> ${DESCRIPTION_MAX})`)
     if (head.canonical !== site.origin + p.path) errors.push(`${where}: canonical ist ${head.canonical ?? '–'}, erwartet ${site.origin + p.path}`)
+    if (/<script(?![^>]*\s(?:src=|type="application\/ld\+json"))[^>]*>/i.test(html)) errors.push(`${where}: Inline-<script> gefunden – die CSP erlaubt nur Skripte aus Dateien`)
+    if (/\sstyle="/i.test(html)) errors.push(`${where}: style-Attribut gefunden – die CSP erlaubt nur Styles aus Dateien`)
   }
 
   // hreflang: Selbstreferenz, Ziele existieren, Rückverweise vorhanden, x-default gesetzt

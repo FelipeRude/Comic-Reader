@@ -14,11 +14,11 @@ import * as sass from 'sass'
 import MarkdownIt from 'markdown-it'
 import { LOCALES, DEFAULT_LOCALE, buildLocales, liveLocales as getLiveLocales } from '../locales.config.mjs'
 import { SITE } from '../site/site.config.mjs'
-import { renderLayout } from '../site/templates/layout.mjs'
+import { renderLayout, LANG_SCRIPT } from '../site/templates/layout.mjs'
 import { renderLanding } from '../site/templates/landing.mjs'
 import { renderArticle } from '../site/templates/article.mjs'
 import { renderGuidesIndex } from '../site/templates/guides-index.mjs'
-import { renderRoot, render404 } from '../site/templates/special.mjs'
+import { renderRoot, render404, rootRedirectScript } from '../site/templates/special.mjs'
 import { sitemapXml, robotsTxt, llmsTxt, htaccess } from './site/generate.mjs'
 import { runChecks } from './site/checks.mjs'
 import { serve } from './site/serve.mjs'
@@ -65,6 +65,8 @@ function build() {
   }
 
   const cssHref = buildCss()
+  const langScriptSrc = writeHashed('lang', 'js', LANG_SCRIPT)
+  const rootScriptSrc = writeHashed('root', 'js', rootRedirectScript({ liveLocales, defaultLocale }))
   copyDir(path.join(SITE_DIR, 'public'), DIST)
 
   const guidesOf = (locale) => pages
@@ -74,6 +76,8 @@ function build() {
     site: SITE,
     isDev,
     cssHref,
+    langScriptSrc,
+    rootScriptSrc,
     liveLocales,
     defaultLocale,
     homeAlternates: groups.get('home') ? alternatesFor(groups.get('home').get(defaultLocale.code)) : [],
@@ -194,9 +198,14 @@ function parseFrontmatter(text, source) {
 
 function buildCss() {
   const { css } = sass.compile(path.join(SITE_DIR, 'styles/site.scss'), { style: 'compressed' })
-  const hash = crypto.createHash('sha256').update(css).digest('hex').slice(0, 8)
-  const href = `/assets/site.${hash}.css`
-  writeFile(href, css)
+  return writeHashed('site', 'css', css)
+}
+
+/** Schreibt eine Datei mit Inhalts-Hash im Namen nach /assets/ (dauerhaft cachebar) und gibt die URL zurück. */
+function writeHashed(name, ext, content) {
+  const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 8)
+  const href = `/assets/${name}.${hash}.${ext}`
+  writeFile(href, content)
   return href
 }
 

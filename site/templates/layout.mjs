@@ -2,7 +2,8 @@ import { esc } from './util.mjs'
 import { renderHead } from './partials/head.mjs'
 
 // Sprachumschalter: merkt sich die Wahl für den Root-Redirect (Cookie) und die App (localStorage).
-const LANG_SCRIPT = `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-lang]');if(!a)return;var l=a.getAttribute('data-lang');document.cookie='lang='+l+';path=/;max-age=31536000;SameSite=Lax;Secure';try{localStorage.setItem('cr-lang',a.getAttribute('hreflang'))}catch(_){}});`
+// Wird als eigene Datei ausgeliefert (CSP erlaubt keine Inline-Skripte).
+export const LANG_SCRIPT = `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-lang]');if(!a)return;var l=a.getAttribute('data-lang');document.cookie='lang='+l+';path=/;max-age=31536000;SameSite=Lax;Secure';try{localStorage.setItem('cr-lang',a.getAttribute('hreflang'))}catch(_){}});`
 
 /** Grundgerüst jeder Seite: Head, Header, Inhalt, Footer mit Sprachumschalter. */
 export function renderLayout(page, content, ctx) {
@@ -45,7 +46,7 @@ ${content}
         </nav>
       </div>
     </footer>
-    <script>${LANG_SCRIPT}</script>
+    <script src="${esc(ctx.langScriptSrc)}"></script>
   </body>
 </html>
 `
