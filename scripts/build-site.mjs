@@ -19,6 +19,7 @@ import { renderLanding } from '../site/templates/landing.mjs'
 import { renderArticle } from '../site/templates/article.mjs'
 import { renderGuidesIndex } from '../site/templates/guides-index.mjs'
 import { renderRoot, render404, rootRedirectScript } from '../site/templates/special.mjs'
+import { renderPage } from '../site/templates/page.mjs'
 import { sitemapXml, robotsTxt, llmsTxt, htaccess } from './site/generate.mjs'
 import { runChecks } from './site/checks.mjs'
 import { serve } from './site/serve.mjs'
@@ -61,7 +62,7 @@ function build() {
   for (const p of pages) {
     p.group = groups.get(p.translationKey)
     p.alternates = alternatesFor(p)
-    p.inSitemap = !isDev && p.locale.status === 'live'
+    p.inSitemap = !isDev && p.locale.status === 'live' && !p.noindex
   }
 
   const cssHref = buildCss()
@@ -84,15 +85,28 @@ function build() {
     appHref: (locale) => `${SITE.appPath}?lang=${locale.code}`,
     guidesOf,
     hasGuides: (locale) => guidesOf(locale).length > 0,
+    // Textseiten (Impressum, Datenschutz) für den Footer, sortiert nach Frontmatter "order"
+    footerLinks: (locale) => pages
+      .filter((p) => p.type === 'page' && p.locale.code === locale.code)
+      .sort((a, b) => a.order - b.order),
     switcherLinks: (page) => liveLocales.map((l) => {
       const target = page.group.get(l.code) ?? groups.get('home')?.get(l.code)
       return { name: l.nativeName, short: l.code.toUpperCase(), hreflang: l.hreflang, segment: l.path.slice(1, -1), href: target?.path ?? l.path, current: l.code === page.locale.code }
     }),
   }
 
-  const templates = { landing: renderLanding, article: renderArticle, guides: renderGuidesIndex }
+  const templates = { landing: renderLanding, article: renderArticle, guides: renderGuidesIndex, page: renderPage }
+  // Platzhalter [[…]] (z. B. im Impressum) im Dev-Build gelb markieren; live darf keiner übrig sein.
+  const placeholders = []
   for (const p of pages) {
-    writeFile(path.join(p.path, 'index.html'), renderLayout(p, templates[p.type](p, ctx), ctx))
+    const html = renderLayout(p, templates[p.type](p, ctx), ctx)
+    const found = [...html.matchAll(/\[\[([^\]]+)\]\]/g)].map((m) => m[1])
+    if (found.length) placeholders.push(`${p.path} (${p.source}): ${[...new Set(found)].join(', ')}`)
+    writeFile(path.join(p.path, 'index.html'), html.replace(/\[\[([^\]]+)\]\]/g, '<mark class="placeholder">[$1]</mark>'))
+  }
+  if (placeholders.length) {
+    if (isDev) for (const p of placeholders) console.warn(`⚠ Platzhalter: ${p}`)
+    else fail(placeholders.map((p) => `Platzhalter noch nicht ersetzt: ${p}`))
   }
 
   writeFile('index.html', renderRoot(ctx))
@@ -153,7 +167,32 @@ function loadPages(locale, ui, md) {
     })
   }
 
-  if (pages.length > 1) {
+  // Textseiten (Impressum, Datenschutz): Markdown in content/<code>/pages/
+  const pagesDir = path.join(SITE_DIR, 'content', locale.code, 'pages')
+  for (const file of fs.existsSync(pagesDir) ? fs.readdirSync(pagesDir).filter((f) => f.endsWith('.md')) : []) {
+    const source = `content/${locale.code}/pages/${file}`
+    const { data, body } = parseFrontmatter(fs.readFileSync(path.join(pagesDir, file), 'utf8'), source)
+    for (const key of ['title', 'description', 'slug', 'translationKey', 'navTitle']) {
+      if (!data[key]) fail([`${source}: Frontmatter "${key}" fehlt`])
+    }
+    pages.push({
+      ...base,
+      type: 'page',
+      source,
+      translationKey: data.translationKey,
+      path: `${locale.path}${data.slug}/`,
+      title: data.title,
+      h1: data.h1 || data.navTitle,
+      navTitle: data.navTitle,
+      description: data.description,
+      noindex: data.noindex === 'true',
+      order: Number(data.order ?? 0),
+      updated: data.updated,
+      html: md.render(body),
+    })
+  }
+
+  if (pages.some((p) => p.type === 'article')) {
     pages.push({
       ...base,
       type: 'guides',

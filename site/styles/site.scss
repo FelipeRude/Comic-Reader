@@ -125,14 +125,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   li::before { content: '✓ '; }
 }
 
-// Jede Funktion ein eigener Abschnitt, Hintergrund abwechselnd
-.feature {
-  padding-block: clamp(2.5rem, 7vw, 4.5rem);
-  border-top: 2px solid var(--border);
-  h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
-  p { font-size: 1.2rem; max-width: 40rem; margin: 0; color: var(--muted); }
-  &:nth-of-type(odd) { background: var(--bg-alt); }
-}
 
 .prose {
   padding-block: 2.5rem 4rem;
@@ -179,3 +171,74 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
   &__list &__code { min-width: 1.6rem; font-weight: 700; color: var(--muted); }
 }
+
+
+// Landing-Abschnitte (site/templates/landing.mjs): Problem, Schritte, Funktionen, Installieren,
+// Vergleich, Für wen, FAQ, Abschluss. Hintergrund wechselt von Abschnitt zu Abschnitt.
+.section {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem);
+  border-top: 2px solid var(--border);
+  &:nth-of-type(even) { background: var(--bg-alt); }
+  h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 1rem; }
+  h3 { font-size: 1.35rem; margin: 0 0 0.35rem; }
+  p { max-width: 42rem; margin: 0 0 1rem; }
+  p:last-child { margin-bottom: 0; }
+  .note { font-size: 0.9rem; color: var(--muted); margin-top: 1rem; }
+}
+
+.section--feature p, .section--problem p { font-size: 1.15rem; }
+
+// Nummerierte Schritte als Comic-Kästen
+.steps {
+  display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin: 1.5rem 0 0; padding: 0; list-style: none; counter-reset: step;
+  li {
+    counter-increment: step; position: relative;
+    padding: 2.4rem 1.25rem 1.25rem;
+    background: var(--bg); border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow);
+    &::before {
+      content: counter(step); position: absolute; top: -0.9rem; left: 1rem;
+      display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
+      font: 1.5rem/1 var(--display); background: var(--btn-bg); color: var(--btn-text);
+      border: 2px solid var(--border); border-radius: 50%;
+    }
+  }
+}
+
+.install {
+  display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin-top: 1.5rem;
+  &__platform { padding: 1.25rem; background: var(--bg); border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow); }
+  ol { margin: 0; padding-left: 1.3rem; li + li { margin-top: 0.35rem; } }
+}
+
+// Vergleichstabelle: auf schmalen Displays horizontal scrollbar statt gequetscht
+.table-scroll { overflow-x: auto; margin-top: 1.5rem; border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow); }
+.compare {
+  width: 100%; min-width: 34rem; border-collapse: collapse; background: var(--bg); font-size: 0.98rem;
+  th, td { padding: 0.65rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--muted); }
+  tbody tr:last-child > * { border-bottom: 0; }
+  thead th { font-family: var(--display); font-weight: 400; font-size: 1.2rem; letter-spacing: 0.04em; border-bottom: 2px solid var(--border); }
+  tbody th { font-weight: 600; }
+  // PanelZoom-Spalte hervorheben
+  th:nth-child(2), td:nth-child(2) { background: var(--bg-alt); font-weight: 600; }
+}
+
+.checklist {
+  list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 0.5rem;
+  li { position: relative; padding-left: 1.6rem; }
+  li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; }
+}
+
+.faq {
+  display: grid; gap: 1.5rem; max-width: 46rem;
+  &__item { padding-bottom: 1.5rem; border-bottom: 1px solid var(--muted); }
+  &__item:last-child { border-bottom: 0; padding-bottom: 0; }
+}
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.footer-nav ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; padding: 0; margin: 1rem 0 0; }
+.footer-nav a { display: inline-block; padding-block: 0.4rem; }
+
+// Platzhalter [[…]] sind nur im Dev-Build sichtbar markiert (Live-Build bricht ab)
+.placeholder { background: #FFE14D; color: #1A1A1A; padding: 0 0.2em; }

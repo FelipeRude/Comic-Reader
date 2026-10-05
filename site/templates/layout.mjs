@@ -21,6 +21,9 @@ export function renderLayout(page, content, ctx) {
   const others = languages.filter((l) => !l.current)
     .map((l) => `<li><a href="${esc(l.href)}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}" data-lang="${esc(l.segment)}"><span class="lang-menu__code">${esc(l.short)}</span> ${esc(l.name)}</a></li>`)
     .join('')
+  const footerNav = ctx.footerLinks(locale)
+    .map((p) => `<li><a href="${esc(p.path)}"${p.path === page.path ? ' aria-current="page"' : ''}>${esc(p.navTitle)}</a></li>`)
+    .join('')
   // Sprach-Menü oben rechts: <details> öffnet/schließt ohne JavaScript
   const langMenu = others ? `<details class="lang-menu">
             <summary class="lang-menu__btn" aria-label="${esc(ui.languageNav)}: ${esc(current.name)}">
@@ -53,6 +56,7 @@ ${content}
       <div class="wrap">
         <p class="site-footer__brand">${esc(ctx.site.name)}</p>
         <p>${esc(ui.footerTagline)}</p>
+        ${footerNav ? `<nav class="footer-nav" aria-label="${esc(ui.footerNav)}"><ul>${footerNav}</ul></nav>` : ''}
       </div>
     </footer>
     <script src="${esc(ctx.langScriptSrc)}"></script>

@@ -18,7 +18,7 @@ export function renderHead(page, ctx) {
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     `<title>${esc(page.title)}</title>`,
     `<meta name="description" content="${esc(page.description)}">`,
-    ctx.isDev ? '<meta name="robots" content="noindex, nofollow">' : '',
+    ctx.isDev ? '<meta name="robots" content="noindex, nofollow">' : page.noindex ? '<meta name="robots" content="noindex, follow">' : '',
     `<link rel="canonical" href="${esc(url)}">`,
     ...page.alternates.map((a) => `<link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`),
     `<meta property="og:type" content="${page.type === 'article' ? 'article' : 'website'}">`,

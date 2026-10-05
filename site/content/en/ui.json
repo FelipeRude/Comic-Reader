@@ -12,5 +12,7 @@
     "description": "Guides on reading PDF comics on your phone: panel-by-panel navigation, file formats, installing the web app.",
     "h1": "Guides",
     "lead": "How-tos for reading comics on your phone."
-  }
+  },
+  "footerNav": "Legal",
+  "asOf": "Last updated:"
 }

@@ -1,6 +1,6 @@
 {
   "translationKey": "home",
-  "updated": "2026-10-02",
+  "updated": "2026-10-05",
   "meta": {
     "title": "PDF Comic Reader – Read Comics Panel by Panel | PanelZoom",
     "description": "Read PDF comics on your phone without pinching and scrolling. Automatic panel detection, guided view for your own files. Free, private, offline.",
@@ -10,11 +10,112 @@
     "h1": ["Read PDF comics on your phone,", "panel by panel"],
     "lead": "PanelZoom detects the panels in your PDF comics and takes you from one to the next with a single tap. No pinching, no scrolling.",
     "cta": "Open free in your browser",
-    "trust": ["No account", "Works offline", "Free"]
+    "trust": ["No account", "Works offline", "Free"],
+    "animationLabel": "Animation: a phone shows a comic page. PanelZoom detects the panels and moves from one to the next with each tap."
+  },
+  "problem": {
+    "title": "A comic page is too big for a phone",
+    "text": [
+      "Comics are drawn for paper. On a phone screen, a full page shrinks until the speech balloons are barely readable. So you pinch in, drag the page around, hunt for the next panel and zoom back out. On every single page.",
+      "A regular PDF viewer doesn’t know what a panel is. It shows you pages, not a story, and after switching apps you often lose your place."
+    ]
+  },
+  "steps": {
+    "title": "How PanelZoom works",
+    "items": [
+      { "title": "Add a PDF", "text": "Open PanelZoom in your browser and tap “Add new comic”. Pick a PDF from your phone, your downloads or your cloud storage app. The comic goes straight into your library." },
+      { "title": "Panels are detected", "text": "As you read, PanelZoom analyzes each page right on your device. It finds the light gutters between the images and works out where every panel starts and ends." },
+      { "title": "Tap to keep reading", "text": "Tap the right edge of the screen and the view moves to the next panel. The left edge takes you back. At the end of a page, the next one follows seamlessly." }
+    ]
   },
   "features": [
-    { "title": "Automatic panel detection", "text": "The app finds the panels on every page and moves through them in order." },
-    { "title": "Progress saved per panel", "text": "Pick up exactly where you left off, even days later." },
-    { "title": "Your comics stay on your device", "text": "Everything is stored locally in your browser. Nothing is uploaded." }
-  ]
+    {
+      "title": "Automatic panel detection",
+      "text": [
+        "PanelZoom finds the panels on every page and moves through them in reading order, left to right and top to bottom. Each panel is shown as large as your screen allows.",
+        "You choose how the transition looks: a smooth camera pan or an instant jump. You can also set the margin to the screen edge, which helps on phones with a notch."
+      ]
+    },
+    {
+      "title": "Progress saved per panel",
+      "text": [
+        "PanelZoom remembers the exact panel you stopped at, not just the page. Close the app in the middle of a scene and you’ll pick up right there next time, even days later.",
+        "Your library shows which page you’re on for every comic, and the page indicator in the reader lets you jump to any page."
+      ]
+    },
+    {
+      "title": "Your comics stay on your device",
+      "text": [
+        "Your PDFs are never uploaded. PanelZoom keeps them in your browser’s storage on your device, and panel detection runs there too. There’s no server that sees your comics, no account and no tracking.",
+        "Because everything lives on your device, you can keep reading offline: on a plane, on the subway or wherever the signal drops. After your first visit, no internet connection is needed."
+      ]
+    },
+    {
+      "title": "Made for phones",
+      "text": [
+        "PanelZoom runs in any current browser on iPhone, Android, tablets and computers. Even huge omnibus editions with more than 1,000 pages open fine, because the app only loads the pages you’re reading.",
+        "Want a closer look at a detail? Pinch to zoom as usual. Light and dark mode follow your device settings."
+      ]
+    }
+  ],
+  "install": {
+    "title": "Add it to your home screen",
+    "intro": "PanelZoom is a web app. Use it right in your browser, or add it to your home screen like any other app. It then opens full screen, without the address bar.",
+    "platforms": [
+      { "name": "iPhone and iPad", "steps": ["Open panelzoom.com/app in Safari.", "Tap the Share icon (the square with an arrow pointing up).", "Choose “Add to Home Screen” and tap “Add”."] },
+      { "name": "Android", "steps": ["Open panelzoom.com/app in Chrome.", "Tap “Install” in PanelZoom, or “Install app” in the Chrome menu (⋮).", "Confirm, and PanelZoom shows up with your other apps."] }
+    ]
+  },
+  "comparison": {
+    "title": "PanelZoom, a PDF viewer or a comic app?",
+    "intro": "There are three ways to read PDF comics on a phone. Which one fits best depends on how you read.",
+    "featureLabel": "Feature",
+    "columns": ["PanelZoom", "PDF viewer", "Comic app"],
+    "rows": [
+      { "label": "Panel-by-panel reading", "values": ["Yes, automatic", "No, you zoom by hand", "In some apps"] },
+      { "label": "Installation", "values": ["Not needed, optional as a web app", "Usually preinstalled", "From the app store"] },
+      { "label": "Account required", "values": ["No", "No", "Depends on the app"] },
+      { "label": "Reading progress", "values": ["Per panel", "Usually per page", "Usually per page"] },
+      { "label": "File formats", "values": ["PDF (CBZ planned)", "PDF", "Often CBZ, CBR and PDF"] },
+      { "label": "Offline reading", "values": ["Yes", "Yes", "Yes"] },
+      { "label": "Price", "values": ["Free", "Usually free", "Free to paid"] }
+    ],
+    "note": "Comic apps vary a lot. This table describes typical apps as of October 2026."
+  },
+  "audience": {
+    "title": "Who is PanelZoom for?",
+    "intro": "Anyone who owns comics as PDFs and wants to read them comfortably on a phone, for example:",
+    "items": [
+      "DRM-free comics bought as PDFs from publishers and stores",
+      "Comics from Humble Bundle deals",
+      "Backer PDFs from Kickstarter and other crowdfunding campaigns",
+      "Indie comics and webcomics offered as PDF downloads",
+      "Your own scans of your comic collection",
+      "Readers who miss comiXology’s Guided View for comics they own"
+    ]
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": [
+      { "q": "Is PanelZoom free?", "a": "Yes. PanelZoom is free and has no ads. You don’t need an account, and there’s nothing to download from an app store." },
+      { "q": "Are my comics uploaded anywhere?", "a": "No. Your PDFs stay on your device, in your browser’s storage, and panel detection runs there too. PanelZoom has no server that comics are sent to." },
+      { "q": "Does PanelZoom work offline?", "a": "Yes. After your first visit, the app is stored on your device, and your comics are local anyway, so you can read without an internet connection." },
+      { "q": "Does it work on iPhone and Android?", "a": "Yes: in Safari on iPhone and iPad, and in Chrome or any other current browser on Android. It works on tablets and computers as well." },
+      { "q": "Which file formats are supported?", "a": "PDF for now. CBZ support is planned." },
+      { "q": "Where are my comics stored, and how much space do I have?", "a": [
+        "In your browser’s storage on your device. How much space you get depends on your free storage and your browser, and it’s usually enough for plenty of comics.",
+        "Keep in mind: if you clear your browser’s website data, your comics and reading progress are deleted too. On iPhone, add PanelZoom to your home screen, because Safari may delete data from websites you haven’t used for a while."
+      ] },
+      { "q": "Does panel detection work with every comic?", "a": [
+        "It works best with comics that have clear, light gutters between panels, which is true for most traditional comics. Pages without gutters, with dark backgrounds or with panels that bleed into each other can trip it up.",
+        "In those cases, pinch to zoom. The panel icon in the reader also shows you which panels were detected."
+      ] },
+      { "q": "Can I read manga right to left?", "a": "Not yet. Right-to-left reading is planned." }
+    ]
+  },
+  "finalCta": {
+    "title": "Try it with your next comic",
+    "text": "PanelZoom starts right in your browser. No sign-up, nothing to install.",
+    "button": "Open PanelZoom for free"
+  }
 }
