@@ -86,7 +86,7 @@ function build() {
     hasGuides: (locale) => guidesOf(locale).length > 0,
     switcherLinks: (page) => liveLocales.map((l) => {
       const target = page.group.get(l.code) ?? groups.get('home')?.get(l.code)
-      return { name: l.nativeName, hreflang: l.hreflang, segment: l.path.slice(1, -1), href: target?.path ?? l.path, current: l.code === page.locale.code }
+      return { name: l.nativeName, short: l.code.toUpperCase(), hreflang: l.hreflang, segment: l.path.slice(1, -1), href: target?.path ?? l.path, current: l.code === page.locale.code }
     }),
   }
 
