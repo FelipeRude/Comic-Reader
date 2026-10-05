@@ -1,4 +1,5 @@
 import { esc } from './util.mjs'
+import { renderHeroAnimation } from './partials/hero-animation.mjs'
 
 const paragraphs = (text) => [].concat(text).map((p) => `<p>${esc(p)}</p>`).join('\n          ')
 
@@ -13,11 +14,14 @@ export function renderLanding(page, ctx) {
 
   const sections = [
     `<section class="hero">
-        <div class="wrap">
-          <h1>${h1}</h1>
-          <p class="lead">${esc(hero.lead)}</p>
-          <p><a class="btn" href="${appHref}">${esc(hero.cta)}</a></p>
-          <ul class="trust">${hero.trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+        <div class="wrap hero__inner">
+          <div class="hero__text">
+            <h1>${h1}</h1>
+            <p class="lead">${esc(hero.lead)}</p>
+            <p><a class="btn" href="${appHref}">${esc(hero.cta)}</a></p>
+            <ul class="trust">${hero.trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+          </div>
+          ${renderHeroAnimation(hero.animationLabel)}
         </div>
       </section>`,
     problem && section('problem', problem.title, paragraphs(problem.text)),

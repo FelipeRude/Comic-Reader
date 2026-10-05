@@ -1,5 +1,8 @@
 // Styles der Landing Pages. Farben und Comic-Look wie in der App (src/styles/_variables.scss).
 
+@use 'sass:math';
+@use 'sass:list';
+
 @font-face {
   font-family: 'Bangers';
   font-style: normal;
@@ -29,6 +32,7 @@
   --shadow: 3px 3px 0 var(--ink);
   --btn-bg: var(--ink);
   --btn-text: var(--cream);
+  --accent: #E0402F; // Erkennungsrahmen der Hero-Animation (liegt immer auf hellem Papier)
   --display: 'Bangers', system-ui, sans-serif;
   --body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
@@ -172,6 +176,100 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   &__list &__code { min-width: 1.6rem; font-weight: 700; color: var(--muted); }
 }
 
+// Hero-Animation (site/templates/partials/hero-animation.mjs): Handy mit Comic-Seite.
+// Ablauf in einer Schleife: ganze Seite → Panels werden erkannt → Tipp rechts → Kamera fährt
+// Panel für Panel an → zurück auf die ganze Seite. Animiert werden nur transform, opacity
+// und stroke-dashoffset. Ohne Animation (reduzierte Bewegung) bleibt das Standbild:
+// ganze Seite mit sichtbaren Erkennungsrahmen.
+
+.hero__inner { display: grid; gap: 2rem; }
+
+.hero-anim {
+  display: block; justify-self: center;
+  width: min(100%, 12.5rem); height: auto;
+  overflow: visible;
+}
+
+@media (min-width: 52rem) {
+  .hero__inner { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3rem; }
+  .hero-anim { width: 16rem; }
+}
+
+.hero-anim {
+  .pz-shadow, .pz-detail { fill: var(--border); }
+  .pz-body { fill: var(--bg); stroke: var(--border); stroke-width: 2; }
+  .pz-screen { fill: #000; stroke: var(--border); stroke-width: 2; }
+  // Die Comic-Seite ist "Papier" und bleibt auch im Dark Mode hell
+  .pz-paper { fill: #FFFEF0; }
+  .pz-page { stroke: #1A1A1A; stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+  .pz-panel { fill: #FFFEF0; stroke-width: 1.6; }
+  .pz-tint { fill: #EAE2CE; }
+  .pz-ink { fill: #1A1A1A; }
+  .pz-line { fill: none; }
+  .pz-bar { fill: none; stroke: #9C9484; stroke-width: 2.4; }
+  .pz-det { fill: none; stroke: var(--accent); stroke-width: 3.5; stroke-linejoin: round; stroke-dasharray: 1; }
+  .pz-tap { fill: rgba(255, 254, 240, 0.55); stroke: #1A1A1A; stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .pz-cam { transform-box: view-box; transform-origin: 0 0; }
+}
+
+// Zeitplan in Sekunden
+$pz-loop: 20;
+$pz-draw: 0.7;    // ein Rahmen zeichnet sich
+$pz-move: 1.2;    // Kamerafahrt (die App nutzt 400 ms, hier verlangsamt)
+$pz-taps: 3.4, 6.6, 9.8, 13, 16.2; // Tipp, die Kamera fährt 0,4 s später los
+$pz-fade: 18.2;   // Rahmen blenden vor dem Neustart aus
+
+@function pz-at($s) { @return math.div(math.round(math.div($s, $pz-loop) * 10000), 100) * 1%; }
+@function pz-r($n) { @return math.div(math.round($n * 100), 100); }
+
+// Kamera wie transformNumbers in src/composables/useReader.js: Panel einpassen und zentrieren.
+// Bildschirm 180×300, 6 Einheiten Rand, Seite liegt bei (5, 22.5). Panels wie PANELS im Template.
+@function pz-view($x, $y, $w, $h) {
+  $s: math.min(math.div(168, $w), math.div(288, $h));
+  $tx: 90 - ($x + 5 + $w * 0.5) * $s;
+  $ty: 150 - ($y + 22.5 + $h * 0.5) * $s;
+  @return translate(pz-r($tx) * 1px, pz-r($ty) * 1px) scale(pz-r($s));
+}
+$pz-page: translate(0px, 0px) scale(1);
+$pz-views: $pz-page, pz-view(8, 8, 98, 96), pz-view(112, 8, 50, 96), pz-view(8, 110, 60, 137), pz-view(74, 110, 88, 137), $pz-page;
+
+@keyframes pz-cam {
+  0% { transform: $pz-page; }
+  @for $i from 1 through list.length($pz-taps) {
+    $start: list.nth($pz-taps, $i) + 0.4;
+    #{pz-at($start)} { transform: list.nth($pz-views, $i); }
+    #{pz-at($start + $pz-move)} { transform: list.nth($pz-views, $i + 1); }
+  }
+  100% { transform: $pz-page; }
+}
+
+@keyframes pz-tap {
+  0% { opacity: 0; transform: scale(0.6); }
+  @each $t in $pz-taps {
+    #{pz-at($t)} { opacity: 0; transform: scale(0.6); }
+    #{pz-at($t + 0.25)} { opacity: 1; transform: scale(1); }
+    #{pz-at($t + 0.8)} { opacity: 0; transform: scale(1.15); }
+  }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-anim {
+    .pz-cam { animation: pz-cam #{$pz-loop}s ease-in-out infinite; }
+    .pz-tap { animation: pz-tap #{$pz-loop}s ease-in-out infinite; }
+  }
+
+  // Rahmen nacheinander, je 0,5 s versetzt
+  @for $i from 1 through 4 {
+    $start: 0.8 + ($i - 1) * 0.5;
+    @keyframes pz-det-#{$i} {
+      0%, #{pz-at($start)} { stroke-dashoffset: 1; opacity: 1; }
+      #{pz-at($start + $pz-draw)}, #{pz-at($pz-fade)} { stroke-dashoffset: 0; opacity: 1; }
+      #{pz-at($pz-fade + 0.8)}, 100% { stroke-dashoffset: 0; opacity: 0; }
+    }
+    .hero-anim .pz-det--#{$i} { animation: pz-det-#{$i} #{$pz-loop}s ease-in-out infinite; }
+  }
+}
 
 // Landing-Abschnitte (site/templates/landing.mjs): Problem, Schritte, Funktionen, Installieren,
 // Vergleich, Für wen, FAQ, Abschluss. Hintergrund wechselt von Abschnitt zu Abschnitt.
