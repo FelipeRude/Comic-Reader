@@ -11,18 +11,18 @@ updated: 2026-10-05
 
 ## Information pursuant to § 5 DDG (German Digital Services Act)
 
-[[First and last name]]  
-[[Street and house number]]  
-[[Postcode and city]]  
+Felipe Rude  
+Hermanstraße 11  
+70178 Stuttgart  
 Germany
 
 ## Contact
 
-Email: [[Email address]]
+Email: <mail@felipe-rude.de>
 
 ## Responsible for content under § 18(2) MStV (German Interstate Media Treaty)
 
-[[First and last name]], address as above
+Felipe Rude, address as above
 
 ## Consumer dispute resolution
 

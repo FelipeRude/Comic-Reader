@@ -96,6 +96,7 @@ ErrorDocument 404 /404.html
   AddType application/manifest+json .webmanifest
   AddType text/javascript .mjs
   AddType font/woff2 .woff2
+  AddType video/webm .webm
 </IfModule>
 
 <IfModule mod_rewrite.c>

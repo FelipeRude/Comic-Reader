@@ -9,7 +9,7 @@ const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript',
   '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.xml': 'application/xml',
   '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon',
-  '.woff2': 'font/woff2', '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4',
+  '.woff2': 'font/woff2', '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4', '.webm': 'video/webm',
 }
 
 export function serve({ distDir, port, liveLocales, defaultLocale, isDev }) {
@@ -51,7 +51,21 @@ export function serve({ distDir, port, liveLocales, defaultLocale, isDev }) {
     }
     const headers = { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream' }
     if (/^\/app\/(sw\.js|index\.html|manifest\.webmanifest)?$/.test(pathname)) headers['Cache-Control'] = 'no-cache'
-    res.writeHead(200, headers)
+    // Byte-Ranges wie Apache: Safari spielt Videos nur damit ab, Chrome braucht sie zum Spulen
+    const size = fs.statSync(file).size
+    const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? '')
+    headers['Accept-Ranges'] = 'bytes'
+    if (range && (range[1] || range[2])) {
+      const start = range[1] ? Number(range[1]) : Math.max(0, size - Number(range[2]))
+      const end = range[1] && range[2] ? Math.min(Number(range[2]), size - 1) : size - 1
+      if (start > end || start >= size) {
+        res.writeHead(416, { 'Content-Range': `bytes */${size}` })
+        return res.end()
+      }
+      res.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': end - start + 1 })
+      return fs.createReadStream(file, { start, end }).pipe(res)
+    }
+    res.writeHead(200, { ...headers, 'Content-Length': size })
     fs.createReadStream(file).pipe(res)
   })
 

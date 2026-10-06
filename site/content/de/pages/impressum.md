@@ -11,18 +11,18 @@ updated: 2026-10-05
 
 ## Angaben gemäß § 5 DDG
 
-[[Vorname Nachname]]  
-[[Straße und Hausnummer]]  
-[[PLZ Ort]]  
+Felipe Rude  
+Hermanstraße 11  
+70178 Stuttgart  
 Deutschland
 
 ## Kontakt
 
-E-Mail: [[E-Mail-Adresse]]
+E-Mail: <mail@felipe-rude.de>
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 
-[[Vorname Nachname]], Anschrift wie oben
+Felipe Rude, Anschrift wie oben
 
 ## Verbraucherstreitbeilegung
 

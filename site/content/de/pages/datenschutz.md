@@ -19,11 +19,11 @@ updated: 2026-10-05
 
 ## 1. Verantwortlicher
 
-[[Vorname Nachname]]  
-[[Straße und Hausnummer]]  
-[[PLZ Ort]]  
+Felipe Rude  
+Hermanstraße 11  
+70178 Stuttgart  
 Deutschland  
-E-Mail: [[E-Mail-Adresse]]
+E-Mail: <mail@felipe-rude.de>
 
 ## 2. Hosting und Server-Logfiles
 
@@ -67,4 +67,4 @@ Links zu anderen Websites, zum Beispiel GitHub, werden erst aufgerufen, wenn du 
 
 Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Wende dich dafür an die oben genannte Adresse.
 
-Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), zum Beispiel bei der Behörde deines Wohnorts oder bei der für uns zuständigen Behörde: [[zuständige Landesdatenschutzbehörde mit Adresse]].
+Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), zum Beispiel bei der Behörde deines Wohnorts oder bei der für uns zuständigen Behörde: Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.

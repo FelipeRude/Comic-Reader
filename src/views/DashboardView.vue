@@ -1,7 +1,7 @@
 <template>
   <main class="dashboard">
     <header class="dashboard__header">
-      <h1 class="dashboard__title">PanelZoom</h1>
+      <h1 class="dashboard__title"><img :src="logoSrc" class="dashboard__logo" width="40" height="40" alt="" /><span class="dashboard__name">PanelZoom<span class="dashboard__tag">Comic-Reader</span></span></h1>
       <div class="dashboard__actions">
         <button v-if="canInstall" class="dashboard__install" @click="promptInstall">
           {{ t('dashboard.install') }}
@@ -92,6 +92,8 @@ import { getAllComics, deleteComic, migrateBlobsToOpfs } from '../storage/comics
 import { getProgress, deleteProgress } from '../storage/progress.js'
 
 const emit = defineEmits(['open'])
+// Dev-Deploy zeigt sein eigenes (rotes) Logo, wie bei den PWA-Icons
+const logoSrc = `${import.meta.env.BASE_URL}img/${__DEPLOY_DEV__ ? 'pwa-dev' : 'pwa'}/logo.svg`
 
 const { t } = useI18n()
 const { canInstall, promptInstall } = useInstallPrompt()
@@ -175,9 +177,33 @@ onMounted(async () => {
   }
 
   &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
+  }
+
+  &__logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: none;
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  &__tag {
+    margin-top: 0.2rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
   }
 
   &__actions {

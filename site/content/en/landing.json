@@ -23,47 +23,37 @@
   "steps": {
     "title": "How PanelZoom works",
     "items": [
-      { "title": "Add a PDF", "text": "Open PanelZoom in your browser and tap “Add new comic”. Pick a PDF from your phone, your downloads or your cloud storage app. The comic goes straight into your library." },
-      { "title": "Panels are detected", "text": "As you read, PanelZoom analyzes each page right on your device. It finds the light gutters between the images and works out where every panel starts and ends." },
-      { "title": "Tap to keep reading", "text": "Tap the right edge of the screen and the view moves to the next panel. The left edge takes you back. At the end of a page, the next one follows seamlessly." }
+      { "title": "Add a PDF", "text": "Open PanelZoom in your browser and pick a PDF from your phone or your cloud storage." },
+      { "title": "Panels are detected", "text": "The app finds the panels on every page, right on your device." },
+      { "title": "Tap to keep reading", "text": "Tap the right side and the view moves to the next panel. The left side takes you back." }
     ]
   },
   "features": [
     {
       "title": "Automatic panel detection",
+      "video": "detect",
+      "videoLabel": "Animation: a phone shows a comic page. PanelZoom detects the panels one after another and highlights them in red.",
       "text": [
         "PanelZoom finds the panels on every page and moves through them in reading order, left to right and top to bottom. Each panel is shown as large as your screen allows.",
         "You choose how the transition looks: a smooth camera pan or an instant jump. You can also set the margin to the screen edge, which helps on phones with a notch."
       ]
-    },
-    {
-      "title": "Progress saved per panel",
-      "text": [
-        "PanelZoom remembers the exact panel you stopped at, not just the page. Close the app in the middle of a scene and you’ll pick up right there next time, even days later.",
-        "Your library shows which page you’re on for every comic, and the page indicator in the reader lets you jump to any page."
-      ]
-    },
-    {
-      "title": "Your comics stay on your device",
-      "text": [
-        "Your PDFs are never uploaded. PanelZoom keeps them in your browser’s storage on your device, and panel detection runs there too. There’s no server that sees your comics, no account and no tracking.",
-        "Because everything lives on your device, you can keep reading offline: on a plane, on the subway or wherever the signal drops. After your first visit, no internet connection is needed."
-      ]
-    },
-    {
-      "title": "Made for phones",
-      "text": [
-        "PanelZoom runs in any current browser on iPhone, Android, tablets and computers. Even huge omnibus editions with more than 1,000 pages open fine, because the app only loads the pages you’re reading.",
-        "Want a closer look at a detail? Pinch to zoom as usual. Light and dark mode follow your device settings."
-      ]
     }
   ],
+  "highlights": {
+    "title": "Private, offline and made for phones",
+    "items": [
+      { "icon": "bookmark", "title": "Progress saved per panel", "text": "PanelZoom remembers the panel you stopped at, not just the page. Even days later, you pick up right there." },
+      { "icon": "lock", "title": "Your comics stay with you", "text": "No upload, no account, no tracking. Your PDFs stay on your device, and you can keep reading offline." },
+      { "icon": "devices", "title": "Works on any phone", "text": "In the browser on iPhone, Android, tablet and computer. Even omnibus editions with over 1,000 pages open quickly." }
+    ]
+  },
   "install": {
     "title": "Add it to your home screen",
     "intro": "PanelZoom is a web app. Use it right in your browser, or add it to your home screen like any other app. It then opens full screen, without the address bar.",
+    "chooseLabel": "Choose your device:",
     "platforms": [
-      { "name": "iPhone and iPad", "steps": ["Open panelzoom.com/app in Safari.", "Tap the Share icon (the square with an arrow pointing up).", "Choose “Add to Home Screen” and tap “Add”."] },
-      { "name": "Android", "steps": ["Open panelzoom.com/app in Chrome.", "Tap “Install” in PanelZoom, or “Install app” in the Chrome menu (⋮).", "Confirm, and PanelZoom shows up with your other apps."] }
+      { "name": "iPhone and iPad", "platform": "ios", "tabLabel": "iOS", "video": "install-ios", "videoLabel": "Animation: in Safari on an iPhone, PanelZoom is added to the home screen via the “•••” menu and “Share”.", "steps": ["Open panelzoom.com/app in Safari.", "Tap “•••” to the right of the address bar, then tap “Share”. On older iOS versions, tap the Share icon (the square with an arrow pointing up) directly.", "Choose “Add to Home Screen”. If you don’t see it, expand the list with “View More” first. Then tap “Add”."] },
+      { "name": "Android", "platform": "android", "tabLabel": "Android", "video": "install-android", "videoLabel": "Animation: in Chrome on Android, PanelZoom is installed from the menu and appears with the other apps.", "steps": ["Open panelzoom.com/app in Chrome.", "Tap the three-dot menu (⋮) to the right of the address bar, then tap “Install and create shortcut”.", "Tap “Install” and confirm. PanelZoom shows up with your other apps."] }
     ]
   },
   "comparison": {

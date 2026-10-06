@@ -19,11 +19,11 @@ updated: 2026-10-05
 
 ## 1. Controller
 
-[[First and last name]]  
-[[Street and house number]]  
-[[Postcode and city]]  
+Felipe Rude  
+Hermanstraße 11  
+70178 Stuttgart  
 Germany  
-Email: [[Email address]]
+Email: <mail@felipe-rude.de>
 
 ## 2. Hosting and server log files
 
@@ -67,4 +67,4 @@ Links to other websites, such as GitHub, are only opened when you click them. Fr
 
 You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and to object to processing (Art. 21 GDPR). To exercise these rights, contact us at the address above.
 
-You also have the right to lodge a complaint with a data protection supervisory authority (Art. 77 GDPR), for example the authority where you live or the one responsible for us: [[responsible state data protection authority with address]].
+You also have the right to lodge a complaint with a data protection supervisory authority (Art. 77 GDPR), for example the authority where you live or the one responsible for us: the State Commissioner for Data Protection and Freedom of Information Baden-Württemberg (Landesbeauftragter für den Datenschutz und die Informationsfreiheit Baden-Württemberg), Lautenschlagerstraße 20, 70173 Stuttgart, Germany.
