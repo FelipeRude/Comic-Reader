@@ -31,7 +31,9 @@ function writeOpenComic(id) {
 }
 
 const activeComicId = ref(readOpenComic())
-const view = ref(activeComicId.value != null ? 'reader' : 'dashboard')
+// ?import=1: Übergabe vom Drop-Feld der Startseite, das importiert die Bibliothek (DashboardView)
+const importRequested = new URLSearchParams(location.search).has('import')
+const view = ref(activeComicId.value != null && !importRequested ? 'reader' : 'dashboard')
 
 function openReader(id) {
   activeComicId.value = id

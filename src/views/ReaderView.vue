@@ -6,6 +6,10 @@
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
     @touchend="onTouchEnd"
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerCancel"
   >
     <div class="reader__stage" ref="stageEl" />
 
@@ -426,7 +430,11 @@ function onTouchEnd(e) {
 
   if (Math.abs(dx) > 10 || Math.abs(dy) > 10 || dt > 300) return
 
-  const x = t.clientX
+  handleTap(t.clientX)
+}
+
+// Tap-Zonen: linkes Fünftel zurück, rechtes Fünftel vor, Mitte Controls.
+function handleTap(x) {
   if (x < viewport.w * 0.2) {
     goPrev()
   } else if (x > viewport.w * 0.8) {
@@ -434,6 +442,69 @@ function onTouchEnd(e) {
   } else {
     toggleControls()
   }
+}
+
+// --- Maus: Klick / Ziehen / Mausrad-Zoom (Desktop-Browser) ------------------
+// Touch läuft weiter über die Touch-Events oben, hier nur pointerType 'mouse'.
+let mouse = null
+
+function isBlocked() {
+  return showSettings.value || showPageJump.value || isPageAnimating.value
+}
+
+// Nur Klicks auf die Bildfläche, nicht auf Buttons, HUD oder Modals.
+function isStageTarget(target) {
+  return target === containerEl.value || stageEl.value?.contains(target)
+}
+
+function onPointerDown(e) {
+  if (e.pointerType !== 'mouse' || e.button !== 0) return
+  if (isBlocked() || !isStageTarget(e.target)) return
+  e.preventDefault()
+  containerEl.value.setPointerCapture(e.pointerId)
+  mouse = { x: e.clientX, y: e.clientY, base: { ...transformNumbers.value }, dragging: false }
+}
+
+function onPointerMove(e) {
+  if (e.pointerType !== 'mouse' || !mouse) return
+  const dx = e.clientX - mouse.x
+  const dy = e.clientY - mouse.y
+  if (!mouse.dragging && Math.hypot(dx, dy) > 4) {
+    mouse.dragging = true
+    containerEl.value.classList.add('is-dragging')
+  }
+  if (mouse.dragging) {
+    setManual({ scale: mouse.base.scale, tx: mouse.base.tx + dx, ty: mouse.base.ty + dy })
+  }
+}
+
+function onPointerUp(e) {
+  if (e.pointerType !== 'mouse' || !mouse) return
+  const wasDragging = mouse.dragging
+  onPointerCancel()
+  if (!wasDragging && !isBlocked()) handleTap(e.clientX)
+}
+
+function onPointerCancel() {
+  mouse = null
+  containerEl.value?.classList.remove('is-dragging')
+}
+
+// Mausrad / Trackpad zoomt um den Cursor herum.
+function onWheel(e) {
+  if (isBlocked() || !isStageTarget(e.target)) return
+  e.preventDefault()
+  const base = transformNumbers.value
+  // deltaMode 1 = Zeilen (Firefox), sonst Pixel; Trackpad-Pinch kommt mit ctrlKey.
+  const delta = e.deltaY * (e.deltaMode === 1 ? 16 : 1)
+  const factor = Math.exp(-delta * (e.ctrlKey ? 0.01 : 0.002))
+  const scale = Math.max(0.2, Math.min(8, base.scale * factor))
+  const ratio = scale / base.scale
+  setManual({
+    scale,
+    tx: e.clientX - (e.clientX - base.tx) * ratio,
+    ty: e.clientY - (e.clientY - base.ty) * ratio,
+  })
 }
 
 // --- Keyboard (Desktop-Testing) ---------------------------------------------
@@ -475,6 +546,8 @@ onMounted(async () => {
   resizeObserver = new ResizeObserver(onResize)
   resizeObserver.observe(containerEl.value)
   window.addEventListener('keydown', onKey)
+  // Nicht-passiv, damit preventDefault den Browser-Zoom (Ctrl/Pinch) verhindert.
+  containerEl.value.addEventListener('wheel', onWheel, { passive: false })
   await init()
   pingControls()
 })
@@ -483,6 +556,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
   window.removeEventListener('orientationchange', onResize)
   window.removeEventListener('keydown', onKey)
+  containerEl.value?.removeEventListener('wheel', onWheel)
   resizeObserver?.disconnect()
   clearTimeout(controlsTimer)
   clearTimeout(hudTimer)
@@ -498,6 +572,12 @@ onBeforeUnmount(() => {
   overflow: hidden;
   background: #000;
   touch-action: none;
+  user-select: none;
+  cursor: grab;
+
+  &.is-dragging { cursor: grabbing; }
+
+  button { cursor: pointer; }
 
   &__stage {
     position: absolute;

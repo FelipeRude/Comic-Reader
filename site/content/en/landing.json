@@ -7,11 +7,40 @@
     "ogTitle": "Read PDF comics on your phone, panel by panel"
   },
   "hero": {
-    "h1": ["Read PDF comics on your phone,", "panel by panel"],
-    "lead": "PanelZoom detects the panels in your PDF comics and takes you from one to the next with a single tap. No pinching, no scrolling.",
-    "cta": "Open free in your browser",
-    "trust": ["No account", "Works offline", "Free"],
+    "h1": [
+      "Read PDF comics on your phone,",
+      "panel by panel"
+    ],
+    "cta": "Start reading",
     "animationLabel": "Animation: a phone shows a comic page. PanelZoom detects the panels and moves from one to the next with each tap."
+  },
+  "trust": {
+    "label": "At a glance",
+    "items": [
+      {
+        "icon": "mask",
+        "text": "No account"
+      },
+      {
+        "icon": "offline",
+        "text": "Works offline"
+      },
+      {
+        "icon": "burst",
+        "text": "Free"
+      }
+    ]
+  },
+  "intro": {
+    "lead": "PanelZoom detects the panels in your PDF comics and takes you from one to the next with a single tap. No pinching, no scrolling.",
+    "dropzone": {
+      "title": "Pick your comic and start reading",
+      "hint": "Drop a PDF here or tap to choose. The file stays on your device.",
+      "button": "Choose a comic",
+      "busy": "Opening your comic …",
+      "wrongType": "That’s not a PDF. Please choose a comic as a PDF file.",
+      "noscript": "Open PanelZoom and pick your comic there"
+    }
   },
   "problem": {
     "title": "A comic page is too big for a phone",
@@ -23,9 +52,18 @@
   "steps": {
     "title": "How PanelZoom works",
     "items": [
-      { "title": "Add a PDF", "text": "Open PanelZoom in your browser and pick a PDF from your phone or your cloud storage." },
-      { "title": "Panels are detected", "text": "The app finds the panels on every page, right on your device." },
-      { "title": "Tap to keep reading", "text": "Tap the right side and the view moves to the next panel. The left side takes you back." }
+      {
+        "title": "Add a PDF",
+        "text": "Open PanelZoom in your browser and pick a PDF from your phone or your cloud storage."
+      },
+      {
+        "title": "Panels are detected",
+        "text": "The app finds the panels on every page, right on your device."
+      },
+      {
+        "title": "Tap to keep reading",
+        "text": "Tap the right side and the view moves to the next panel. The left side takes you back."
+      }
     ]
   },
   "features": [
@@ -42,9 +80,21 @@
   "highlights": {
     "title": "Private, offline and made for phones",
     "items": [
-      { "icon": "bookmark", "title": "Progress saved per panel", "text": "PanelZoom remembers the panel you stopped at, not just the page. Even days later, you pick up right there." },
-      { "icon": "lock", "title": "Your comics stay with you", "text": "No upload, no account, no tracking. Your PDFs stay on your device, and you can keep reading offline." },
-      { "icon": "devices", "title": "Works on any phone", "text": "In the browser on iPhone, Android, tablet and computer. Even omnibus editions with over 1,000 pages open quickly." }
+      {
+        "icon": "bookmark",
+        "title": "Progress saved per panel",
+        "text": "PanelZoom remembers the panel you stopped at, not just the page. Even days later, you pick up right there."
+      },
+      {
+        "icon": "lock",
+        "title": "Your comics stay with you",
+        "text": "No upload, no account, no tracking. Your PDFs stay on your device, and you can keep reading offline."
+      },
+      {
+        "icon": "devices",
+        "title": "Works on any phone",
+        "text": "In the browser on iPhone, Android, tablet and computer. Even omnibus editions with over 1,000 pages open quickly."
+      }
     ]
   },
   "install": {
@@ -52,25 +102,31 @@
     "intro": "PanelZoom is a web app. Use it right in your browser, or add it to your home screen like any other app. It then opens full screen, without the address bar.",
     "chooseLabel": "Choose your device:",
     "platforms": [
-      { "name": "iPhone and iPad", "platform": "ios", "tabLabel": "iOS", "video": "install-ios", "videoLabel": "Animation: in Safari on an iPhone, PanelZoom is added to the home screen via the “•••” menu and “Share”.", "steps": ["Open panelzoom.com/app in Safari.", "Tap “•••” to the right of the address bar, then tap “Share”. On older iOS versions, tap the Share icon (the square with an arrow pointing up) directly.", "Choose “Add to Home Screen”. If you don’t see it, expand the list with “View More” first. Then tap “Add”."] },
-      { "name": "Android", "platform": "android", "tabLabel": "Android", "video": "install-android", "videoLabel": "Animation: in Chrome on Android, PanelZoom is installed from the menu and appears with the other apps.", "steps": ["Open panelzoom.com/app in Chrome.", "Tap the three-dot menu (⋮) to the right of the address bar, then tap “Install and create shortcut”.", "Tap “Install” and confirm. PanelZoom shows up with your other apps."] }
+      {
+        "name": "iPhone and iPad",
+        "platform": "ios",
+        "tabLabel": "iOS",
+        "video": "install-ios",
+        "videoLabel": "Animation: in Safari on an iPhone, PanelZoom is added to the home screen via the “•••” menu and “Share”.",
+        "steps": [
+          "Open panelzoom.com/app in Safari.",
+          "Tap “•••” to the right of the address bar, then tap “Share”. On older iOS versions, tap the Share icon (the square with an arrow pointing up) directly.",
+          "Choose “Add to Home Screen”. If you don’t see it, expand the list with “View More” first. Then tap “Add”."
+        ]
+      },
+      {
+        "name": "Android",
+        "platform": "android",
+        "tabLabel": "Android",
+        "video": "install-android",
+        "videoLabel": "Animation: in Chrome on Android, PanelZoom is installed from the menu and appears with the other apps.",
+        "steps": [
+          "Open panelzoom.com/app in Chrome.",
+          "Tap the three-dot menu (⋮) to the right of the address bar, then tap “Install and create shortcut”.",
+          "Tap “Install” and confirm. PanelZoom shows up with your other apps."
+        ]
+      }
     ]
-  },
-  "comparison": {
-    "title": "PanelZoom, a PDF viewer or a comic app?",
-    "intro": "There are three ways to read PDF comics on a phone. Which one fits best depends on how you read.",
-    "featureLabel": "Feature",
-    "columns": ["PanelZoom", "PDF viewer", "Comic app"],
-    "rows": [
-      { "label": "Panel-by-panel reading", "values": ["Yes, automatic", "No, you zoom by hand", "In some apps"] },
-      { "label": "Installation", "values": ["Not needed, optional as a web app", "Usually preinstalled", "From the app store"] },
-      { "label": "Account required", "values": ["No", "No", "Depends on the app"] },
-      { "label": "Reading progress", "values": ["Per panel", "Usually per page", "Usually per page"] },
-      { "label": "File formats", "values": ["PDF (CBZ planned)", "PDF", "Often CBZ, CBR and PDF"] },
-      { "label": "Offline reading", "values": ["Yes", "Yes", "Yes"] },
-      { "label": "Price", "values": ["Free", "Usually free", "Free to paid"] }
-    ],
-    "note": "Comic apps vary a lot. This table describes typical apps as of October 2026."
   },
   "audience": {
     "title": "Who is PanelZoom for?",
@@ -87,25 +143,49 @@
   "faq": {
     "title": "Frequently asked questions",
     "items": [
-      { "q": "Is PanelZoom free?", "a": "Yes. PanelZoom is free and has no ads. You don’t need an account, and there’s nothing to download from an app store." },
-      { "q": "Are my comics uploaded anywhere?", "a": "No. Your PDFs stay on your device, in your browser’s storage, and panel detection runs there too. PanelZoom has no server that comics are sent to." },
-      { "q": "Does PanelZoom work offline?", "a": "Yes. After your first visit, the app is stored on your device, and your comics are local anyway, so you can read without an internet connection." },
-      { "q": "Does it work on iPhone and Android?", "a": "Yes: in Safari on iPhone and iPad, and in Chrome or any other current browser on Android. It works on tablets and computers as well." },
-      { "q": "Which file formats are supported?", "a": "PDF for now. CBZ support is planned." },
-      { "q": "Where are my comics stored, and how much space do I have?", "a": [
-        "In your browser’s storage on your device. How much space you get depends on your free storage and your browser, and it’s usually enough for plenty of comics.",
-        "Keep in mind: if you clear your browser’s website data, your comics and reading progress are deleted too. On iPhone, add PanelZoom to your home screen, because Safari may delete data from websites you haven’t used for a while."
-      ] },
-      { "q": "Does panel detection work with every comic?", "a": [
-        "It works best with comics that have clear, light gutters between panels, which is true for most traditional comics. Pages without gutters, with dark backgrounds or with panels that bleed into each other can trip it up.",
-        "In those cases, pinch to zoom. The panel icon in the reader also shows you which panels were detected."
-      ] },
-      { "q": "Can I read manga right to left?", "a": "Not yet. Right-to-left reading is planned." }
+      {
+        "q": "Is PanelZoom free?",
+        "a": "Yes. PanelZoom is free and has no ads. You don’t need an account, and there’s nothing to download from an app store."
+      },
+      {
+        "q": "Are my comics uploaded anywhere?",
+        "a": "No. Your PDFs stay on your device, in your browser’s storage, and panel detection runs there too. PanelZoom has no server that comics are sent to."
+      },
+      {
+        "q": "Does PanelZoom work offline?",
+        "a": "Yes. After your first visit, the app is stored on your device, and your comics are local anyway, so you can read without an internet connection."
+      },
+      {
+        "q": "Does it work on iPhone and Android?",
+        "a": "Yes: in Safari on iPhone and iPad, and in Chrome or any other current browser on Android. It works on tablets and computers as well."
+      },
+      {
+        "q": "Which file formats are supported?",
+        "a": "PDF for now. CBZ support is planned."
+      },
+      {
+        "q": "Where are my comics stored, and how much space do I have?",
+        "a": [
+          "In your browser’s storage on your device. How much space you get depends on your free storage and your browser, and it’s usually enough for plenty of comics.",
+          "Keep in mind: if you clear your browser’s website data, your comics and reading progress are deleted too. On iPhone, add PanelZoom to your home screen, because Safari may delete data from websites you haven’t used for a while."
+        ]
+      },
+      {
+        "q": "Does panel detection work with every comic?",
+        "a": [
+          "It works best with comics that have clear, light gutters between panels, which is true for most traditional comics. Pages without gutters, with dark backgrounds or with panels that bleed into each other can trip it up.",
+          "In those cases, pinch to zoom. The panel icon in the reader also shows you which panels were detected."
+        ]
+      },
+      {
+        "q": "Can I read manga right to left?",
+        "a": "Not yet. Right-to-left reading is planned."
+      }
     ]
   },
   "finalCta": {
     "title": "Try it with your next comic",
     "text": "PanelZoom starts right in your browser. No sign-up, nothing to install.",
-    "button": "Open PanelZoom for free"
+    "button": "Start reading"
   }
 }

@@ -2,34 +2,54 @@ import { esc } from './util.mjs'
 import { renderVideo } from './partials/video.mjs'
 import { HIGHLIGHT_ICONS } from './partials/highlight-icons.mjs'
 import { PLATFORM_ICONS } from './partials/platform-icons.mjs'
+import { TRUST_ICONS } from './partials/trust-icons.mjs'
 
 const paragraphs = (text) => [].concat(text).map((p) => `<p>${esc(p)}</p>`).join('\n          ')
 
 /** Landing Page einer Sprache, Gliederung nach SEO-Plan 6.2. Texte in site/content/<code>/landing.json. */
 export function renderLanding(page, ctx) {
-  const { hero, problem, steps, features, highlights, install, comparison, audience, faq, finalCta } = page.data
+  const { hero, trust, intro, problem, steps, features, highlights, install, audience, faq, finalCta } = page.data
   const appHref = esc(ctx.appHref(page.locale))
   // h1 als Liste: jede weitere Zeile beginnt sichtbar neu. Das Leerzeichen davor bleibt im Text,
   // damit Suchmaschinen und Screenreader keine zusammengeklebten Wörter sehen.
   const [h1First, ...h1Rest] = [].concat(hero.h1)
   const h1 = esc(h1First) + h1Rest.map((line) => ` <span class="h1-line">${esc(line)}</span>`).join('')
 
+  // Banner „Kein Account · Offline · Kostenlos“: unter dem Hero und vor dem Abschluss
+  const trustBanner = trust && `<aside class="trust-banner" aria-label="${esc(trust.label)}">
+        <ul class="wrap trust-banner__list">${trust.items.map((t) => `<li>${TRUST_ICONS[t.icon] ?? ''}<span>${esc(t.text)}</span></li>`).join('')}</ul>
+      </aside>`
+
   const sections = [
+    // Hero: Video im Hintergrund links, Überschrift und Button unten rechts
     `<section class="hero">
         <div class="wrap hero__inner">
+          ${renderVideo('hero', hero.animationLabel, 'hero-video')}
           <div class="hero__text">
             <h1>${h1}</h1>
-            <p class="lead">${esc(hero.lead)}</p>
             <p><a class="btn" href="${appHref}">${esc(hero.cta)}</a></p>
-            <ul class="trust">${hero.trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
           </div>
-          ${renderVideo('hero', hero.animationLabel, 'hero-video')}
+        </div>
+      </section>`,
+    trustBanner,
+    // Unterzeile + Drop-Feld. Das Seitenskript (LANG_SCRIPT in layout.mjs) legt die gewählte PDF
+    // in der IndexedDB „panelzoom-handoff“ ab und öffnet die App mit ?import=1, die sie importiert
+    // (src/storage/handoff.js). Ohne Skript bleibt der Link zur App.
+    intro && `<section class="intro">
+        <div class="wrap">
+          <p class="intro__lead">${esc(intro.lead)}</p>
+          <label class="dropzone" data-dropzone data-app="${appHref}" data-msg-busy="${esc(intro.dropzone.busy)}" data-msg-type="${esc(intro.dropzone.wrongType)}">
+            <input class="visually-hidden" type="file" accept="application/pdf,.pdf">
+            ${DROP_ICON}
+            <span class="dropzone__title">${esc(intro.dropzone.title)}</span>
+            <span class="dropzone__hint">${esc(intro.dropzone.hint)}</span>
+            <span class="btn dropzone__btn">${esc(intro.dropzone.button)}</span>
+            <span class="dropzone__status" data-dropzone-status role="status" aria-live="polite"></span>
+          </label>
+          <noscript><p><a class="btn" href="${appHref}">${esc(intro.dropzone.noscript)}</a></p></noscript>
         </div>
       </section>`,
     problem && section('problem', problem.title, paragraphs(problem.text)),
-    steps && section('steps', steps.title, `<ol class="steps">
-            ${steps.items.map((s) => `<li><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('\n            ')}
-          </ol>`),
     ...features.map((f) => f.video
       // Mit Video: Video links, Überschrift und Text rechts (schmal untereinander)
       ? `<section class="section section--feature">
@@ -64,26 +84,23 @@ export function renderLanding(page, ctx) {
               ${p.video ? renderVideo(p.video, p.videoLabel, 'install__video') : ''}
             </div>`).join('\n            ')}
           </div>`),
+    steps && section('steps', steps.title, `<ol class="steps">
+            ${steps.items.map((s) => `<li><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('\n            ')}
+          </ol>`),
     audience && section('audience', audience.title, `${paragraphs(audience.intro)}
           <ul class="checklist">${audience.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`),
     faq && section('faq', faq.title, `<div class="faq">
             ${faq.items.map((i) => `<details class="faq__item"><summary><h3>${esc(i.q)}</h3></summary><div class="faq__answer">${[].concat(i.a).map((a) => `<p>${esc(a)}</p>`).join('')}</div></details>`).join('\n            ')}
           </div>`),
-    comparison && section('comparison', comparison.title, `${paragraphs(comparison.intro)}
-          <div class="table-scroll">
-            <table class="compare">
-              <thead><tr><th scope="col"><span class="visually-hidden">${esc(comparison.featureLabel)}</span></th>${comparison.columns.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead>
-              <tbody>
-                ${comparison.rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th>${r.values.map((v) => `<td>${esc(v)}</td>`).join('')}</tr>`).join('\n                ')}
-              </tbody>
-            </table>
-          </div>
-          ${comparison.note ? `<p class="note">${esc(comparison.note)}</p>` : ''}`),
+    trustBanner,
     finalCta && section('final-cta', finalCta.title, `${paragraphs(finalCta.text)}
           <p><a class="btn" href="${appHref}">${esc(finalCta.button)}</a></p>`),
   ]
   return sections.filter(Boolean).map((s) => `      ${s}`).join('\n')
 }
+
+// Comicseite mit Pfeil nach unten (Drop-Feld)
+const DROP_ICON = '<svg class="dropzone__icon" viewBox="0 0 64 64" width="72" height="72" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path class="hl-paper" d="M12 6H40L52 18V58H12Z"/><path d="M40 6V18H52"/><path class="hl-red" d="M26 22H38V36H45L32 50L19 36H26Z"/></svg>'
 
 function section(kind, title, body) {
   return `<section class="section section--${kind}">

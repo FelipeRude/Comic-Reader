@@ -90,6 +90,7 @@ import { useInstallPrompt } from '../composables/useInstallPrompt.js'
 import { useI18n } from '../composables/useI18n.js'
 import { getAllComics, deleteComic, migrateBlobsToOpfs } from '../storage/comics.js'
 import { getProgress, deleteProgress } from '../storage/progress.js'
+import { consumeImportParam, takeHandoffFile } from '../storage/handoff.js'
 
 const emit = defineEmits(['open'])
 // Dev-Deploy zeigt sein eigenes (rotes) Logo, wie bei den PWA-Icons
@@ -161,6 +162,17 @@ onMounted(async () => {
     migrating.value = false
   }
   await loadLibrary()
+
+  // Von der Startseite (Drop-Feld) übergebene PDF importieren und direkt öffnen
+  if (consumeImportParam()) {
+    const file = await takeHandoffFile()
+    if (!file) return
+    const id = await importFile(file)
+    if (id != null) {
+      await loadLibrary()
+      emit('open', id)
+    }
+  }
 })
 </script>
 

@@ -121,11 +121,50 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .lead { font-size: 1.2rem; max-width: 40rem; color: var(--muted); }
 
-.trust {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem;
-  list-style: none; padding: 0; margin: 1.5rem 0 0;
-  font-weight: 600;
-  li::before { content: '✓ '; }
+// Banner „Kein Account · Offline · Kostenlos“ (unter dem Hero und vor dem Abschluss)
+.trust-banner {
+  background: var(--bg-alt);
+  border-block: 2px solid var(--border);
+  &__list {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 2.5rem;
+    list-style: none; margin-block: 0; padding: 1rem 0;
+  }
+  li { display: inline-flex; align-items: center; gap: 0.6rem; font: 400 1.5rem/1.1 var(--display); letter-spacing: 0.04em; }
+  svg { flex: none; color: var(--text); }
+  // Schmal: drei Spalten nebeneinander, Symbol über dem Text
+  @media (max-width: 34rem) {
+    &__list { flex-wrap: nowrap; justify-content: space-around; gap: 0.5rem; }
+    li { flex-direction: column; gap: 0.3rem; font-size: 1.15rem; text-align: center; }
+  }
+}
+// Abschnitt direkt nach dem Banner immer hell, damit er sich vom Banner abhebt
+.trust-banner + .section.section { background: var(--bg); border-top: 0; }
+.hl-paper { fill: var(--bg); }
+.hl-red { fill: var(--red); }
+
+// Unterzeile und Drop-Feld unter dem Banner
+.intro {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem);
+  text-align: center;
+  &__lead { font-size: clamp(1.15rem, 3vw, 1.4rem); max-width: 40rem; margin: 0 auto 2rem; }
+}
+
+.dropzone {
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+  max-width: 46rem; margin-inline: auto;
+  padding: clamp(2rem, 6vw, 3.5rem) 1.5rem;
+  background: var(--bg); cursor: pointer;
+  border: 3px dashed var(--border); border-radius: 8px;
+  transition: background-color 0.15s, transform 0.1s;
+  &:hover, &.is-over { background: var(--bg-alt); }
+  &.is-over { border-style: solid; transform: translate(-2px, -2px); box-shadow: var(--shadow); }
+  &:focus-within { outline: 3px solid var(--red); outline-offset: 4px; }
+  &.is-busy { cursor: progress; opacity: 0.85; }
+  &__icon { color: var(--text); }
+  &__title { font: 400 clamp(1.6rem, 5vw, 2.2rem)/1.15 var(--display); letter-spacing: 0.04em; }
+  &__hint { color: var(--muted); max-width: 30rem; }
+  &__btn { margin-top: 0.5rem; }
+  &__status { min-height: 1.6em; font-weight: 600; }
 }
 
 
@@ -191,19 +230,43 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   .comic-video video { display: none; }
 }
 
-// Hero: Videohintergrund entspricht --bg, das Video geht ohne Rahmen in die Seite über
-.hero__inner { display: grid; gap: 2rem; }
+// Hero: Video im Hintergrund links (Hintergrund entspricht --bg, geht ohne Rahmen in die Seite
+// über), Überschrift und Button unten rechts darüber. Beide liegen in derselben Rasterzelle.
+.hero__inner { display: grid; }
+.hero-video, .hero__text { grid-area: 1 / 1; }
 
 .hero-video {
-  justify-self: center;
-  // höchstens 70 % der Bildschirmhöhe (Video ist 4:5)
-  width: min(100%, 24rem, 56svh);
+  justify-self: start;
+  // Video ist 4:5; höchstens 75 % der Bildschirmhöhe
+  width: min(88%, 30rem, 60svh);
   aspect-ratio: 4 / 5;
+  // Ränder weich ausblenden: die Videokodierung trifft das Creme nicht exakt,
+  // sonst zeichnet sich die Videofläche als Rechteck ab
+  $fade: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: $fade, linear-gradient(transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: $fade, linear-gradient(transparent, #000 8%, #000 92%, transparent);
+  mask-composite: intersect;
+}
+
+.hero__text {
+  position: relative; z-index: 1;
+  justify-self: end; align-self: end;
+  max-width: 34rem; text-align: right;
+  h1 { margin-bottom: 1.25rem; }
+  p { margin: 0; }
+}
+
+// Schmal: Text unter dem Video, leicht überlappend
+@media (max-width: 51.99rem) {
+  .hero__inner { grid-template-rows: auto auto; }
+  .hero__text { grid-area: 2 / 1; margin-top: -3rem; }
 }
 
 @media (min-width: 52rem) {
-  .hero__inner { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3rem; }
-  .hero-video { width: min(26rem, 36vw, 70svh); }
+  .hero__inner { min-height: min(36rem, 70svh); }
+  .hero-video { width: min(34rem, 52%, 70svh); align-self: center; }
+  .hero__text { max-width: 52%; padding-bottom: 1rem; }
 }
 
 // Funktion mit Video (Panel-Erkennung): Video links, Text rechts. Der Abschnitt hat je nach
@@ -225,8 +288,8 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   .feature__video { width: 100%; }
 }
 
-// Landing-Abschnitte (site/templates/landing.mjs): Problem, Schritte, Funktionen, Installieren,
-// Vergleich, Für wen, FAQ, Abschluss. Hintergrund wechselt von Abschnitt zu Abschnitt.
+// Landing-Abschnitte (site/templates/landing.mjs): Problem, Funktionen, Installieren, Schritte,
+// Für wen, FAQ, Abschluss. Hintergrund wechselt von Abschnitt zu Abschnitt.
 .section {
   padding-block: clamp(2.5rem, 7vw, 4.5rem);
   border-top: 2px solid var(--border);
@@ -263,8 +326,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   margin: 1.5rem 0 0; padding: 0; list-style: none;
   li { padding: 1.25rem; background: var(--bg); border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow); }
   svg { display: block; margin-bottom: 0.75rem; color: var(--text); }
-  .hl-paper { fill: var(--bg); }
-  .hl-red { fill: var(--red); }
 }
 
 .install {
@@ -307,18 +368,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   }
   // Mit Umschalter steht der Gerätename schon im Button, die Überschrift nur für Screenreader
   &.is-tabs h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-}
-
-// Vergleichstabelle: auf schmalen Displays horizontal scrollbar statt gequetscht
-.table-scroll { overflow-x: auto; margin-top: 1.5rem; border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow); }
-.compare {
-  width: 100%; min-width: 34rem; border-collapse: collapse; background: var(--bg); font-size: 0.98rem;
-  th, td { padding: 0.65rem 0.8rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--muted); }
-  tbody tr:last-child > * { border-bottom: 0; }
-  thead th { font-family: var(--display); font-weight: 400; font-size: 1.2rem; letter-spacing: 0.04em; border-bottom: 2px solid var(--border); }
-  tbody th { font-weight: 600; }
-  // PanelZoom-Spalte hervorheben
-  th:nth-child(2), td:nth-child(2) { background: var(--bg-alt); font-weight: 600; }
 }
 
 .checklist {

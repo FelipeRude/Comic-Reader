@@ -1,6 +1,6 @@
 // Illustrationen der Highlight-Boxen (site/content/<code>/landing.json → highlights.items[].icon).
 // Comic-Stil wie das Logo: rote Flächen, Kontur in Textfarbe (currentColor), Papier in --bg.
-// Farben kommen aus site.scss (.hl-paper, .hl-red), damit hell/dunkel automatisch passt.
+// Farben kommen aus site.scss (.hl-paper, .hl-red).
 // Reine Deko: aria-hidden, kein Alt-Text.
 
 const svg = (body) => `<svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">${body}</svg>`
