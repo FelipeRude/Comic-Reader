@@ -1,5 +1,5 @@
 import { esc } from './util.mjs'
-import { renderThemedVideo } from './partials/themed-video.mjs'
+import { renderVideo } from './partials/video.mjs'
 import { HIGHLIGHT_ICONS } from './partials/highlight-icons.mjs'
 import { PLATFORM_ICONS } from './partials/platform-icons.mjs'
 
@@ -23,7 +23,7 @@ export function renderLanding(page, ctx) {
             <p><a class="btn" href="${appHref}">${esc(hero.cta)}</a></p>
             <ul class="trust">${hero.trust.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
           </div>
-          ${renderThemedVideo('hero', hero.animationLabel, 'hero-video')}
+          ${renderVideo('hero', hero.animationLabel, 'hero-video')}
         </div>
       </section>`,
     problem && section('problem', problem.title, paragraphs(problem.text)),
@@ -34,7 +34,7 @@ export function renderLanding(page, ctx) {
       // Mit Video: Video links, Überschrift und Text rechts (schmal untereinander)
       ? `<section class="section section--feature">
         <div class="wrap feature">
-          ${renderThemedVideo(f.video, f.videoLabel, 'feature__video')}
+          ${renderVideo(f.video, f.videoLabel, 'feature__video')}
           <div class="feature__text">
             <h2>${esc(f.title)}</h2>
             ${paragraphs(f.text)}
@@ -61,7 +61,7 @@ export function renderLanding(page, ctx) {
                 <h3>${esc(p.name)}</h3>
                 <ol>${p.steps.map((st) => `<li>${esc(st)}</li>`).join('')}</ol>
               </div>
-              ${p.video ? renderThemedVideo(p.video, p.videoLabel, 'install__video') : ''}
+              ${p.video ? renderVideo(p.video, p.videoLabel, 'install__video') : ''}
             </div>`).join('\n            ')}
           </div>`),
     audience && section('audience', audience.title, `${paragraphs(audience.intro)}

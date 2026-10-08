@@ -32,17 +32,8 @@
   --btn-text: var(--cream);
   --display: 'Bangers', system-ui, sans-serif;
   --body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: var(--ink);
-    --bg-alt: #2C2820;
-    --text: var(--cream);
-    --muted: #C8C0A0;
-    --border: var(--cream);
-    --shadow: 3px 3px 0 var(--cream);
-  }
+  // Nur ein (helles) Design; "only" verhindert auch das automatische Abdunkeln durch Browser
+  color-scheme: only light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -189,16 +180,15 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   &__list &__code { min-width: 1.6rem; font-weight: 700; color: var(--muted); }
 }
 
-// Videos (site/templates/partials/themed-video.mjs): Handy mit Comic-Seite, gerendert im
-// Remotion-Projekt ClaudeMotion. Hell/dunkel per <source media> (plus Skript beim Farbwechsel),
-// Standbild darunter als Poster und für reduzierte Bewegung.
-.themed-video {
+// Videos (site/templates/partials/video.mjs): Handy mit Comic-Seite, gerendert im
+// Remotion-Projekt ClaudeMotion. Standbild darunter als Poster und für reduzierte Bewegung.
+.comic-video {
   position: relative;
   img, video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .themed-video video { display: none; }
+  .comic-video video { display: none; }
 }
 
 // Hero: Videohintergrund entspricht --bg, das Video geht ohne Rahmen in die Seite über

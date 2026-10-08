@@ -38,6 +38,7 @@ export function renderHead(page, ctx) {
         ]
       : ['<meta name="twitter:card" content="summary">']),
     `<meta name="theme-color" content="${esc(site.themeColor)}">`,
+    '<meta name="color-scheme" content="only light">',
     '<link rel="icon" href="/favicon.ico" sizes="32x32">',
     '<link rel="icon" type="image/svg+xml" href="/favicon.svg">',
     '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
