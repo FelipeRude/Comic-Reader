@@ -24,10 +24,7 @@
   "card": {
     "delete": "Delete comic",
     "progress": "Page {page}/{total}",
-    "pages": {
-      "one": "{count} page",
-      "other": "{count} pages"
-    }
+    "percent": "{percent}%"
   },
   "reader": {
     "back": "Back",
