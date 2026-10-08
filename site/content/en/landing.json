@@ -8,10 +8,10 @@
   },
   "hero": {
     "h1": [
-      "Read PDF comics on your phone,",
+      "Read PDF comics,",
       "panel by panel"
     ],
-    "cta": "Start reading",
+    "cta": "Open comic & start reading",
     "animationLabel": "Animation: a phone shows a comic page. PanelZoom detects the panels and moves from one to the next with each tap."
   },
   "trust": {
@@ -88,7 +88,7 @@
       {
         "icon": "lock",
         "title": "Your comics stay with you",
-        "text": "No upload, no account, no tracking. Your PDFs stay on your device, and you can keep reading offline."
+        "text": "No account, no tracking. Your PDFs stay on your device, and you can keep reading offline."
       },
       {
         "icon": "devices",
@@ -186,6 +186,6 @@
   "finalCta": {
     "title": "Try it with your next comic",
     "text": "PanelZoom starts right in your browser. No sign-up, nothing to install.",
-    "button": "Start reading"
+    "button": "Open comic & start reading"
   }
 }

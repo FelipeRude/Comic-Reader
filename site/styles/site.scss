@@ -83,14 +83,15 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   &__logo { width: 1.55em; height: 1.55em; flex: none; }
   &__text { display: flex; flex-direction: column; line-height: 1; }
   &__tag {
-    font-family: var(--body); font-size: 0.42em; font-weight: 600;
+    // so breit wie der Name darüber
+    font-family: var(--body); font-size: 0.55em; font-weight: 600;
     letter-spacing: 0.08em; color: var(--muted); margin-top: 0.15em;
   }
 }
 
 .site-nav {
   display: flex; align-items: center; gap: 0.6rem;
-  // Button und Sprach-Menü gleich hoch (44 px Tippziel)
+  // 44 px Tippziel
   .btn--small { display: inline-flex; align-items: center; min-height: 2.75rem; }
 }
 
@@ -98,7 +99,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 @media (max-width: 400px) {
   .brand { font-size: 1.5rem; }
   .site-nav { gap: 0.4rem; .btn--small { padding-inline: 0.65rem; font-size: 1rem; } }
-  .lang-menu__btn { padding-inline: 0.45rem; }
 }
 
 .btn {
@@ -117,7 +117,17 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   &--small { padding: 0.35rem 0.9rem; font-size: 1.1rem; }
 }
 
-.hero { padding-block: clamp(2.5rem, 8vw, 5rem); }
+// Hero dunkel: eigene Farbwerte, damit Button-Rahmen und Schatten hell werden.
+// Der Hintergrund entspricht dem des Videos (hero-dark, Tinte).
+.hero {
+  --bg: var(--ink);
+  --text: var(--cream);
+  --border: var(--cream);
+  --shadow: 3px 3px 0 rgba(255, 254, 240, 0.75);
+  padding-block: clamp(2.5rem, 8vw, 5rem);
+  background: var(--bg);
+  color: var(--text);
+}
 
 .lead { font-size: 1.2rem; max-width: 40rem; color: var(--muted); }
 
@@ -126,15 +136,26 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   background: var(--bg-alt);
   border-block: 2px solid var(--border);
   &__list {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 2.5rem;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 7rem;
     list-style: none; margin-block: 0; padding: 1rem 0;
   }
   li { display: inline-flex; align-items: center; gap: 0.6rem; font: 400 1.5rem/1.1 var(--display); letter-spacing: 0.04em; }
   svg { flex: none; color: var(--text); }
   // Schmal: drei Spalten nebeneinander, Symbol über dem Text
   @media (max-width: 34rem) {
-    &__list { flex-wrap: nowrap; justify-content: space-around; gap: 0.5rem; }
+    &__list { flex-wrap: nowrap; justify-content: space-around; gap: 1rem; }
     li { flex-direction: column; gap: 0.3rem; font-size: 1.15rem; text-align: center; }
+  }
+  // Laufband (Seitenskript TRUST_SCRIPT in layout.mjs): Liste plus Kopien in einer Spur, die beim
+  // Scrollen nach rechts wandert. Der Abstand steckt auch hinter dem letzten Punkt, damit die
+  // Kopien nahtlos anschließen.
+  &.is-marquee { overflow: hidden; }
+  &__track { display: flex; width: max-content; will-change: transform; }
+  &.is-marquee &__list {
+    --gap: 7rem;
+    flex: none; flex-wrap: nowrap; justify-content: flex-start;
+    gap: var(--gap); padding-inline: 0 var(--gap); width: auto; margin-inline: 0;
+    @media (max-width: 34rem) { --gap: 3.5rem; }
   }
 }
 // Abschnitt direkt nach dem Banner immer hell, damit er sich vom Banner abhebt
@@ -185,40 +206,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   &__brand { font-family: var(--display); font-size: 1.4rem; margin: 0; }
 }
 
-// Sprach-Menü oben rechts
-.lang-menu {
-  position: relative;
-
-  &__btn {
-    display: flex; align-items: center; gap: 0.35rem;
-    // Dezent neben dem App-Button: ohne Rahmen, dünne Schrift, gedämpfte Farbe.
-    // Tippziel bleibt 44 px hoch.
-    min-height: 2.75rem; padding: 0.35rem 0.4rem;
-    border-radius: 4px;
-    font-weight: 400; color: var(--muted); cursor: pointer; user-select: none;
-    list-style: none;
-    transition: color 0.15s;
-    &::-webkit-details-marker { display: none; }
-    &:hover { color: var(--text); }
-    // Pfeil, zeigt bei offenem Menü nach oben
-    &::after { content: ''; width: 0.35rem; height: 0.35rem; margin-left: 0.1rem; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg); }
-  }
-  &[open] &__btn { color: var(--text); }
-  &[open] &__btn::after { transform: translateY(2px) rotate(-135deg); }
-
-  &__icon { flex: none; width: 18px; height: 18px; stroke-width: 1.5; }
-
-  &__list {
-    position: absolute; right: 0; top: calc(100% + 0.4rem); z-index: 20;
-    min-width: 11rem; margin: 0; padding: 0.35rem; list-style: none;
-    background: var(--bg); border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow);
-    a { display: flex; gap: 0.6rem; align-items: center; padding: 0.6rem 0.7rem; border-radius: 2px; text-decoration: none; }
-    a:hover, a:focus-visible { background: var(--bg-alt); }
-  }
-
-  &__list &__code { min-width: 1.6rem; font-weight: 700; color: var(--muted); }
-}
-
 // Videos (site/templates/partials/video.mjs): Handy mit Comic-Seite, gerendert im
 // Remotion-Projekt ClaudeMotion. Standbild darunter als Poster und für reduzierte Bewegung.
 .comic-video {
@@ -230,7 +217,7 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   .comic-video video { display: none; }
 }
 
-// Hero: Video im Hintergrund links (Hintergrund entspricht --bg, geht ohne Rahmen in die Seite
+// Hero: Video im Hintergrund links (Hintergrund entspricht dem dunklen --bg, geht ohne Rahmen in die Seite
 // über), Überschrift und Button unten rechts darüber. Beide liegen in derselben Rasterzelle.
 .hero__inner { display: grid; }
 .hero-video, .hero__text { grid-area: 1 / 1; }
@@ -240,7 +227,7 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   // Video ist 4:5; höchstens 75 % der Bildschirmhöhe
   width: min(88%, 30rem, 60svh);
   aspect-ratio: 4 / 5;
-  // Ränder weich ausblenden: die Videokodierung trifft das Creme nicht exakt,
+  // Ränder weich ausblenden: die Videokodierung trifft den Hintergrund nicht exakt,
   // sonst zeichnet sich die Videofläche als Rechteck ab
   $fade: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: $fade, linear-gradient(transparent, #000 8%, #000 92%, transparent);
@@ -411,6 +398,11 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .footer-nav ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; padding: 0; margin: 1rem 0 0; }
 .footer-nav a { display: inline-block; padding-block: 0.4rem; }
+
+// Sprachwahl im Footer
+.footer-lang ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.footer-lang a, .footer-lang span { display: inline-block; padding-block: 0.4rem; }
+.footer-lang [aria-current] { font-weight: 700; }
 
 // Platzhalter [[…]] sind nur im Dev-Build sichtbar markiert (Live-Build bricht ab)
 .placeholder { background: #FFE14D; color: #1A1A1A; padding: 0 0.2em; }

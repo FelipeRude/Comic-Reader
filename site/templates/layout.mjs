@@ -18,12 +18,14 @@ const INSTALL_SCRIPT = `(function(){var w=document.querySelector('[data-install]
 // importiert sie (src/storage/handoff.js). Klappt das Ablegen nicht, öffnet sich einfach die App.
 const DROP_SCRIPT = `(function(){var z=document.querySelector('[data-dropzone]');if(!z)return;var input=z.querySelector('input[type=file]'),status=z.querySelector('[data-dropzone-status]'),app=z.getAttribute('data-app');function open(ok){location.href=ok?app+(app.indexOf('?')>-1?'&':'?')+'import=1':app}function go(f){if(!f||z.classList.contains('is-busy'))return;if(!/\\.pdf$/i.test(f.name)&&f.type!=='application/pdf'){status.textContent=z.getAttribute('data-msg-type');return}z.classList.add('is-busy');status.textContent=z.getAttribute('data-msg-busy');if(!window.indexedDB)return open(false);var r;try{r=indexedDB.open('panelzoom-handoff',1)}catch(_){return open(false)}r.onupgradeneeded=function(){r.result.createObjectStore('files')};r.onerror=function(){open(false)};r.onsuccess=function(){var db=r.result,tx;try{tx=db.transaction('files','readwrite');tx.objectStore('files').put({blob:f,name:f.name},'pending')}catch(_){db.close();return open(false)}tx.oncomplete=function(){db.close();open(true)};tx.onerror=tx.onabort=function(){db.close();open(false)}}}input.addEventListener('change',function(){go(input.files&&input.files[0]);input.value=''});['dragenter','dragover'].forEach(function(t){z.addEventListener(t,function(e){e.preventDefault();z.classList.add('is-over')})});['dragleave','dragend','drop'].forEach(function(t){z.addEventListener(t,function(e){e.preventDefault();z.classList.remove('is-over')})});z.addEventListener('drop',function(e){go(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0])})})();`
 
-export const LANG_SCRIPT = FAQ_SCRIPT + INSTALL_SCRIPT + DROP_SCRIPT + `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-lang]');if(a){var l=a.getAttribute('data-lang');document.cookie='lang='+l+';path=/;max-age=31536000;SameSite=Lax;Secure';try{localStorage.setItem('cr-lang',a.getAttribute('hreflang'))}catch(_){}}var m=document.querySelector('.lang-menu[open]');if(m&&!m.contains(e.target))m.removeAttribute('open')});document.addEventListener('keydown',function(e){var m=document.querySelector('.lang-menu[open]');if(e.key==='Escape'&&m){m.removeAttribute('open');m.querySelector('summary').focus()}});`
+// Banner (landing.mjs): Laufband, das sich nur beim Scrollen nach rechts bewegt. Das Skript legt
+// die Liste in eine Spur und hängt so viele Kopien (aria-hidden) an, dass die Breite immer gefüllt
+// ist. Ohne Skript oder bei reduzierter Bewegung bleibt das Banner stehen.
+const TRUST_SCRIPT = `(function(){var bs=document.querySelectorAll('.trust-banner');if(!bs.length||!window.matchMedia||matchMedia('(prefers-reduced-motion: reduce)').matches||!window.requestAnimationFrame)return;var its=[].map.call(bs,function(b){var l=b.querySelector('.trust-banner__list'),t=document.createElement('div');t.className='trust-banner__track';l.parentNode.insertBefore(t,l);t.appendChild(l);b.classList.add('is-marquee');return{b:b,t:t,l:l,w:0}});function move(){var y=(window.scrollY||window.pageYOffset)*0.3;its.forEach(function(it){if(it.w)it.t.style.transform='translate3d('+((y%it.w)-it.w)+'px,0,0)'})}function fill(){its.forEach(function(it){while(it.t.children.length>1)it.t.removeChild(it.t.lastChild);it.w=it.l.getBoundingClientRect().width;if(!it.w)return;for(var n=Math.ceil(it.b.clientWidth/it.w)+1;n>0;n--){var c=it.l.cloneNode(true);c.setAttribute('aria-hidden','true');it.t.appendChild(c)}});move()}var raf=0;addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(function(){raf=0;move()})},{passive:true});var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fill,150)});fill();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fill)})();`
 
-// Weltkugel fürs Sprach-Menü (Strichstärke passend zu den Comic-Linien)
-const GLOBE_ICON = '<svg class="lang-menu__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
+export const LANG_SCRIPT = FAQ_SCRIPT + INSTALL_SCRIPT + DROP_SCRIPT + TRUST_SCRIPT + `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-lang]');if(a){var l=a.getAttribute('data-lang');document.cookie='lang='+l+';path=/;max-age=31536000;SameSite=Lax;Secure';try{localStorage.setItem('cr-lang',a.getAttribute('hreflang'))}catch(_){}}});`
 
-/** Grundgerüst jeder Seite: Head, Header, Inhalt, Footer mit Sprachumschalter. */
+/** Grundgerüst jeder Seite: Head, Header, Inhalt, Footer mit Rechtlichem und Sprachwahl. */
 export function renderLayout(page, content, ctx) {
   const { ui, locale } = page
   const home = locale.path
@@ -31,20 +33,15 @@ export function renderLayout(page, content, ctx) {
     ? `<a href="${esc(home + locale.guidesPath + '/')}">${esc(ui.guides)}</a>`
     : ''
   const languages = ctx.switcherLinks(page)
-  const current = languages.find((l) => l.current)
-  const others = languages.filter((l) => !l.current)
-    .map((l) => `<li><a href="${esc(l.href)}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}" data-lang="${esc(l.segment)}"><span class="lang-menu__code">${esc(l.short)}</span> ${esc(l.name)}</a></li>`)
-    .join('')
   const footerNav = ctx.footerLinks(locale)
     .map((p) => `<li><a href="${esc(p.path)}"${p.path === page.path ? ' aria-current="page"' : ''}>${esc(p.navTitle)}</a></li>`)
     .join('')
-  // Sprach-Menü oben rechts: <details> öffnet/schließt ohne JavaScript
-  const langMenu = others ? `<details class="lang-menu">
-            <summary class="lang-menu__btn" aria-label="${esc(ui.languageNav)}: ${esc(current.name)}">
-              ${GLOBE_ICON}<span class="lang-menu__code">${esc(current.short)}</span>
-            </summary>
-            <ul class="lang-menu__list">${others}</ul>
-          </details>` : ''
+  // Sprachwahl im Footer (die Sprache erkennt sonst der Root-Redirect). Aktuelle Sprache ohne Link.
+  const langNav = languages.length > 1 ? `<nav class="footer-lang" aria-label="${esc(ui.languageNav)}"><ul>${languages
+    .map((l) => l.current
+      ? `<li><span aria-current="true" lang="${esc(l.hreflang)}">${esc(l.name)}</span></li>`
+      : `<li><a href="${esc(l.href)}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}" data-lang="${esc(l.segment)}">${esc(l.name)}</a></li>`)
+    .join('')}</ul></nav>` : ''
 
   return `<!doctype html>
 <html lang="${esc(locale.hreflang)}">
@@ -59,7 +56,6 @@ export function renderLayout(page, content, ctx) {
         <nav class="site-nav">
           ${guidesLink}
           <a class="btn btn--small" href="${esc(ctx.appHref(locale))}">${esc(ui.openApp)}</a>
-          ${langMenu}
         </nav>
       </div>
     </header>
@@ -71,6 +67,7 @@ ${content}
         <p class="site-footer__brand">${esc(ctx.site.name)}</p>
         <p>${esc(ui.footerTagline)}</p>
         ${footerNav ? `<nav class="footer-nav" aria-label="${esc(ui.footerNav)}"><ul>${footerNav}</ul></nav>` : ''}
+        ${langNav}
       </div>
     </footer>
     <script src="${esc(ctx.langScriptSrc)}"></script>

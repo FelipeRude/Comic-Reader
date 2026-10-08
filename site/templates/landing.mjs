@@ -21,10 +21,10 @@ export function renderLanding(page, ctx) {
       </aside>`
 
   const sections = [
-    // Hero: Video im Hintergrund links, Überschrift und Button unten rechts
+    // Hero (dunkel): Video im Hintergrund links, Überschrift und Button unten rechts
     `<section class="hero">
         <div class="wrap hero__inner">
-          ${renderVideo('hero', hero.animationLabel, 'hero-video')}
+          ${renderVideo('hero-dark', hero.animationLabel, 'hero-video')}
           <div class="hero__text">
             <h1>${h1}</h1>
             <p><a class="btn" href="${appHref}">${esc(hero.cta)}</a></p>

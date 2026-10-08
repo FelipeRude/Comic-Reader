@@ -8,10 +8,10 @@
   },
   "hero": {
     "h1": [
-      "Comics als PDF auf dem Handy lesen –",
+      "PDF Comics lesen,",
       "Panel für Panel"
     ],
-    "cta": "Jetzt lesen",
+    "cta": "Comic öffnen & lesen",
     "animationLabel": "Animation: Ein Handy zeigt eine Comicseite. PanelZoom erkennt die Panels und fährt sie nach einem Tipp nacheinander an."
   },
   "trust": {
@@ -88,7 +88,7 @@
       {
         "icon": "lock",
         "title": "Deine Comics bleiben bei dir",
-        "text": "Kein Upload, kein Konto, kein Tracking. Deine PDFs bleiben auf dem Gerät, und du liest auch offline weiter."
+        "text": "Kein Konto, kein Tracking. Deine PDFs bleiben auf dem Gerät, und du liest auch offline weiter."
       },
       {
         "icon": "devices",
@@ -184,6 +184,6 @@
   "finalCta": {
     "title": "Probier es mit deinem nächsten Comic",
     "text": "PanelZoom startet sofort im Browser. Ohne Anmeldung und ohne Installation.",
-    "button": "Jetzt lesen"
+    "button": "Comic öffnen & lesen"
   }
 }
