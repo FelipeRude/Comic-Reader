@@ -14,11 +14,11 @@
     <div class="reader__stage" ref="stageEl" />
 
     <button class="reader__back" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('reader.back')" @click="$emit('back')">
-      <img src="/UI-Icons/Navigation-Page-Right Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
+      <img src="/UI-Icons/Navigation-Page-Right-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
     <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" :aria-label="t('reader.debug')" @touchstart.stop @touchend.stop @click="toggleDebug">
-      <img src="/UI-Icons/panel.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
+      <img src="/UI-Icons/panel-filled.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
     </button>
 
     <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('common.settings')" @touchstart.stop @touchend.stop @click="showSettings = true">
