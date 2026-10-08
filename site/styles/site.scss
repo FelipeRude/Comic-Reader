@@ -26,7 +26,7 @@
   --text: var(--ink);
   --muted: #5C554A;
   --border: var(--ink);
-  --shadow: 3px 3px 0 var(--ink);
+  --shadow: 3px 3px 0 rgba(26, 26, 26, 0.75); // 75 % Tinte, wie in der App
   --red: #E63946; // Logo-Rot
   --btn-bg: var(--red);
   --btn-text: var(--cream);

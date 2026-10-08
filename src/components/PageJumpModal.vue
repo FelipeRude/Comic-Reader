@@ -139,7 +139,7 @@ onMounted(() => {
     background: var(--accent);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    box-shadow: 3px 3px 0 var(--border);
+    box-shadow: 3px 3px 0 var(--shadow-color);
     transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {

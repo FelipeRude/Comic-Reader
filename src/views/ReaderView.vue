@@ -22,7 +22,7 @@
     </button>
 
     <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('common.settings')" @touchstart.stop @touchend.stop @click="showSettings = true">
-      <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
+      <img src="/UI-Icons/Settings-Cog-Double-1-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
     </button>
 
     <SettingsModal v-if="showSettings" @close="showSettings = false" />

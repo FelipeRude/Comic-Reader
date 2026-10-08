@@ -7,13 +7,13 @@
           {{ t('dashboard.install') }}
         </button>
         <button class="dashboard__settings" :aria-label="t('common.settings')" @click="showSettings = true">
-          <img src="/UI-Icons/Settings-Cog-Double-1 Streamline Freehand.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
+          <img src="/UI-Icons/Settings-Cog-Double-1-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
         </button>
       </div>
     </header>
 
     <button class="dashboard__add" :disabled="importing" @click="triggerFilePicker">
-      <img src="/UI-Icons/Add-Sign-Bold Streamline Freehand.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
+      <img src="/UI-Icons/Add-Sign-Bold-Filled.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
       <span v-if="importing">{{ t('dashboard.importing') }}</span>
       <span v-else>{{ t('dashboard.add') }}</span>
     </button>
@@ -232,11 +232,11 @@ onMounted(async () => {
   &__install {
     padding: 0.45rem 0.85rem;
     font-size: 1.1rem;
-    color: var(--accent-text);
-    background: var(--accent);
+    color: var(--cream);
+    background: #E63946; // Logo-Rot wie die Buttons der Landingpage
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    box-shadow: 2px 2px 0 var(--border);
+    box-shadow: 2px 2px 0 var(--shadow-color);
     transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
@@ -266,7 +266,7 @@ onMounted(async () => {
     background: var(--accent);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    box-shadow: 3px 3px 0 var(--border);
+    box-shadow: 3px 3px 0 var(--shadow-color);
     transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {

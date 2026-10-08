@@ -17,8 +17,10 @@
   --border:             var(--ink);
   --border-width:       2px;
 
-  --shadow-card:  3px 3px 0 var(--ink);
-  --shadow-modal: 4px 4px 0 var(--ink);
+  // Schatten mit 75 % Tinte → als Schatten lesbar, nicht als zweite Kante
+  --shadow-color: rgba(26, 26, 26, 0.75);
+  --shadow-card:  3px 3px 0 var(--shadow-color);
+  --shadow-modal: 4px 4px 0 var(--shadow-color);
 
   --radius-card:  4px;
   --radius-btn:   4px;

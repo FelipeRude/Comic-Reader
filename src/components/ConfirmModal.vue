@@ -86,7 +86,7 @@ defineEmits(['confirm', 'cancel'])
     font-size: 1.2rem;
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
-    box-shadow: 2px 2px 0 var(--border);
+    box-shadow: 2px 2px 0 var(--shadow-color);
     transition: transform 0.08s, box-shadow 0.08s;
 
     &:active {
@@ -108,7 +108,7 @@ defineEmits(['confirm', 'cancel'])
       color: #fff;
       background: #c0392b;
       border-color: #c0392b;
-      box-shadow: 2px 2px 0 #8b0000;
+      box-shadow: 2px 2px 0 rgba(139, 0, 0, 0.75);
     }
   }
 }
