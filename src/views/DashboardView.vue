@@ -93,8 +93,8 @@ import { getProgress, deleteProgress } from '../storage/progress.js'
 import { consumeImportParam, takeHandoffFile } from '../storage/handoff.js'
 
 const emit = defineEmits(['open'])
-// Dev-Deploy zeigt sein eigenes (rotes) Logo, wie bei den PWA-Icons
-const logoSrc = `${import.meta.env.BASE_URL}img/${__DEPLOY_DEV__ ? 'pwa-dev' : 'pwa'}/logo.svg`
+// Dasselbe Logo wie auf der Landingpage (site/public/logo.svg)
+const logoSrc = `${import.meta.env.BASE_URL}img/pwa/logo.svg`
 
 const { t } = useI18n()
 const { canInstall, promptInstall } = useInstallPrompt()
@@ -188,18 +188,23 @@ onMounted(async () => {
     margin-bottom: 1.5rem;
   }
 
+  // Größen wie .brand auf der Landingpage (site/styles/site.scss)
   &__title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
+
+    @media (max-width: 400px) { font-size: 1.5rem; }
   }
 
+  // Logo so hoch wie Name und Unterzeile zusammen
   &__logo {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.55em;
+    height: 1.55em;
     flex: none;
   }
 
@@ -210,12 +215,12 @@ onMounted(async () => {
   }
 
   &__tag {
-    margin-top: 0.2rem;
+    margin-top: 0.15em;
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.55em;
     font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--text-secondary);
+    color: var(--text-muted);
   }
 
   &__actions {
