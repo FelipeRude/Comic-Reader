@@ -181,11 +181,19 @@ onMounted(async () => {
   min-height: 100vh;
   padding: calc(1.5rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right)) calc(2rem + env(safe-area-inset-bottom)) calc(1.25rem + env(safe-area-inset-left));
 
+  // Kopfzeile wie .site-header der Landingpage: volle Breite, Linie unten,
+  // klebt oben. Negative Ränder heben das Padding von .dashboard auf.
   &__header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin: calc(-1.5rem - env(safe-area-inset-top)) calc(-1.25rem - env(safe-area-inset-right)) 1.5rem calc(-1.25rem - env(safe-area-inset-left));
+    padding: calc(0.75rem + env(safe-area-inset-top)) calc(1.25rem + env(safe-area-inset-right)) 0.75rem calc(1.25rem + env(safe-area-inset-left));
+    background: var(--bg-primary);
+    border-bottom: var(--border-width) solid var(--border);
   }
 
   // Größen wie .brand auf der Landingpage (site/styles/site.scss)
