@@ -61,7 +61,7 @@ export function renderLayout(page, content, ctx) {
         <a class="brand" href="${esc(home)}"><img class="brand__logo" src="/logo.svg" width="44" height="44" alt=""><span class="brand__text">${esc(ctx.site.name)} <span class="brand__tag">${esc(ui.brandTag)}</span></span></a>
         <nav class="site-nav">
           ${guidesLink}
-          <a class="btn btn--small" href="${esc(ctx.appHref(locale))}">${esc(ui.openApp)}</a>
+          <a class="btn btn--small" href="${esc(ctx.appHref(locale))}">${esc(ui.openAppHeader)}</a>
         </nav>
       </div>
     </header>

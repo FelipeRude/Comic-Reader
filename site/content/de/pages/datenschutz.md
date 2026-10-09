@@ -20,7 +20,7 @@ updated: 2026-10-09
 ## 1. Verantwortlicher
 
 Felipe Rude  
-Hermanstraße 11  
+Hermannstraße 11  
 70178 Stuttgart  
 Deutschland  
 E-Mail: <mail@felipe-rude.de>

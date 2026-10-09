@@ -20,7 +20,7 @@ updated: 2026-10-09
 ## 1. Controller
 
 Felipe Rude  
-Hermanstraße 11  
+Hermannstraße 11  
 70178 Stuttgart  
 Germany  
 Email: <mail@felipe-rude.de>

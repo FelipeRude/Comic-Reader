@@ -12,7 +12,7 @@ updated: 2026-10-05
 ## Information pursuant to § 5 DDG (German Digital Services Act)
 
 Felipe Rude  
-Hermanstraße 11  
+Hermannstraße 11  
 70178 Stuttgart  
 Germany
 

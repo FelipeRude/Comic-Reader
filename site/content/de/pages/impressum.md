@@ -12,7 +12,7 @@ updated: 2026-10-05
 ## Angaben gemäß § 5 DDG
 
 Felipe Rude  
-Hermanstraße 11  
+Hermannstraße 11  
 70178 Stuttgart  
 Deutschland
 
