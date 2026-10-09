@@ -69,7 +69,7 @@ export default defineConfig({
         short_name: 'PanelZoom',
         description: 'Read PDF comics on your phone, panel by panel. Automatic panel detection, offline, no account.',
         display: 'standalone',
-        orientation: 'portrait',
+        orientation: 'any',
         start_url: BASE,
         scope: BASE,
         // Splash-Hintergrund = Icon-Hintergrund (Creme), passend zu theme-color in index.html
