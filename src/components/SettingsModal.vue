@@ -9,25 +9,27 @@
       </header>
 
       <!-- Sprache -->
-      <template v-if="locales.length > 1">
-        <div class="settings__row">
-          <div class="settings__label">
-            <span class="settings__label-title">{{ t('settings.language') }}</span>
-          </div>
-        </div>
-        <div class="settings__toggle settings__toggle--wrap">
-          <button
-            v-for="l in locales"
-            :key="l.code"
-            class="settings__option"
-            :class="{ 'settings__option--active': locale === l.code }"
-            :lang="l.hreflang"
-            @click="setLocale(l.code)"
+      <!-- Auswahlliste statt Umschalter, damit auch viele Sprachen passen.
+           Das native <select> liegt unsichtbar über Weltkugel + Kürzel. -->
+      <div v-if="locales.length > 1" class="settings__row settings__row--inline">
+        <label class="settings__label" for="settings-language">
+          <span class="settings__label-title">{{ t('settings.language') }}</span>
+        </label>
+        <div class="settings__lang">
+          <img src="/UI-Icons/globe.svg" class="icon" width="18" height="18" alt="" aria-hidden="true" />
+          <span class="settings__lang-code">{{ locale.toUpperCase() }}</span>
+          <select
+            id="settings-language"
+            class="settings__lang-select"
+            :value="locale"
+            @change="setLocale($event.target.value)"
           >
-            {{ l.nativeName }}
-          </button>
+            <option v-for="l in locales" :key="l.code" :value="l.code" :lang="l.hreflang">
+              {{ l.nativeName }}
+            </option>
+          </select>
         </div>
-      </template>
+      </div>
 
       <!-- Panel-Übergang -->
       <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 }">
@@ -251,8 +253,58 @@ function save(side, value) {
     border-radius: var(--radius-btn);
   }
 
-  &__toggle--wrap {
-    flex-wrap: wrap;
+  &__row--inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__lang {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-btn);
+    box-shadow: 2px 2px 0 var(--shadow-color);
+
+    // Pfeil nach unten: zeigt, dass sich eine Liste öffnet
+    &::after {
+      content: '';
+      width: 0.4rem;
+      height: 0.4rem;
+      margin: 0 0.1rem 0.2rem 0.15rem;
+      border: solid currentColor;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    &:focus-within {
+      outline: 2px solid var(--border);
+      outline-offset: 2px;
+    }
+
+    .icon {
+      filter: var(--icon-filter);
+    }
+  }
+
+  &__lang-code {
+    letter-spacing: 0.04em;
+  }
+
+  &__lang-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 16px; // iOS zoomt sonst beim Antippen
   }
 
   &__option {

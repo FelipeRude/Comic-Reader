@@ -607,7 +607,13 @@ onBeforeUnmount(() => {
     background: #FFFEF0;
     border: 2px solid #1A1A1A;
     border-radius: var(--radius-btn);
-    transition: background 0.2s, border-color 0.2s;
+    box-shadow: 2px 2px 0 var(--shadow-color);
+    transition: transform 0.08s, box-shadow 0.08s, background 0.2s, border-color 0.2s;
+
+    &:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
   }
 
   &__debug-btn.is-active {
