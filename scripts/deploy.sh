@@ -52,4 +52,16 @@ mirror --reverse --delete --verbose --exclude-glob .DS_Store $DRY dist/ /;
 bye
 "
 
+# IndexNow: Bing & Co. über die Seiten der Sitemap informieren (nur live, nicht beim Dry-Run)
+if [ "$TARGET" = "live" ] && [ -z "$DRY" ]; then
+  KEY=$(node -e "import('./site/site.config.mjs').then(m => process.stdout.write(m.SITE.indexNowKey || ''))")
+  URLS=$(grep -o '<loc>[^<]*</loc>' dist/sitemap.xml | sed -E 's#</?loc>##g; s#.*#"&"#' | paste -sd, -)
+  if [ -n "$KEY" ] && [ -n "$URLS" ]; then
+    CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST https://api.indexnow.org/indexnow \
+      -H 'Content-Type: application/json; charset=utf-8' \
+      -d "{\"host\":\"$HOST\",\"key\":\"$KEY\",\"keyLocation\":\"https://$HOST/$KEY.txt\",\"urlList\":[$URLS]}" || echo "000")
+    echo "▶ IndexNow: HTTP $CODE (200/202 = angenommen)"
+  fi
+fi
+
 echo "✔ Fertig: https://$HOST"

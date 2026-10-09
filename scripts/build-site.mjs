@@ -115,6 +115,7 @@ function build() {
   writeFile('robots.txt', robotsTxt(SITE, isDev))
   writeFile('llms.txt', llmsTxt(SITE, liveLocales, pages))
   writeFile('.htaccess', htaccess({ site: SITE, liveLocales, defaultLocale, isDev }))
+  if (!isDev && SITE.indexNowKey) writeFile(`${SITE.indexNowKey}.txt`, SITE.indexNowKey)
 
   const appBuilt = fs.existsSync(path.join(DIST, APP_DIR, 'index.html'))
   const { errors, warnings } = runChecks(pages, { distDir: DIST, site: SITE, liveLocales, appBuilt })
