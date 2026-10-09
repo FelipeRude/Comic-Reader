@@ -17,12 +17,12 @@
 - [x] Guided View im EN-Text beschreibend erwähnen (oder aus der Meta-Description nehmen)
 - [ ] (später) Vergleichstabelle PanelZoom vs. PDF-Viewer vs. Comic-Apps
 - [ ] og:image 1200×630 pro Sprache + `summary_large_image` → nach dem Launch (User will das Hero-Video vorher ändern)
-- [ ] Impressum-Adresse prüfen („Hermanstraße“?)
+- [x] Impressum-Adresse: Hermannstraße korrigiert
 
 ## C. Launch
 - [x] Dev-Deploy, Re-Audit mit dem Plugin
-- [ ] Freigabe durch User → `npm run deploy`
-- [ ] Live prüfen: robots.txt, sitemap.xml, llms.txt, `/` 302, kein X-Robots-Tag, Header, Rich Results Test
+- [x] Freigabe durch User → `npm run deploy` (live seit 2026-10-09, vom User ausgeführt)
+- [x] Live geprüft: robots.txt, sitemap.xml, llms.txt, `/` 302, kein X-Robots-Tag, Header, Caching; Plugin-Recheck ok; validator.schema.org 0 Fehler/0 Warnungen (Rich Results Test lief ohne Google-Login nicht)
 
 ## D. Nach dem Launch
 - [ ] Google Search Console: Domain-Property, DNS-TXT bei netcup, Sitemap einreichen, URL-Prüfung /de/ + /en/
