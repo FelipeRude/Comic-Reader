@@ -8,7 +8,7 @@ const paragraphs = (text) => [].concat(text).map((p) => `<p>${esc(p)}</p>`).join
 
 /** Landing Page einer Sprache, Gliederung nach SEO-Plan 6.2. Texte in site/content/<code>/landing.json. */
 export function renderLanding(page, ctx) {
-  const { hero, trust, intro, problem, steps, features, highlights, install, audience, faq, finalCta } = page.data
+  const { hero, trust, intro, problem, steps, features, highlights, install, audience, faq, about, finalCta } = page.data
   const appHref = esc(ctx.appHref(page.locale))
   // h1 als Liste: jede weitere Zeile beginnt sichtbar neu. Das Leerzeichen davor bleibt im Text,
   // damit Suchmaschinen und Screenreader keine zusammengeklebten Wörter sehen.
@@ -92,6 +92,19 @@ export function renderLanding(page, ctx) {
     faq && section('faq', faq.title, `<div class="faq">
             ${faq.items.map((i) => `<details class="faq__item"><summary><h3>${esc(i.q)}</h3></summary><div class="faq__answer">${[].concat(i.a).map((a) => `<p>${esc(a)}</p>`).join('')}</div></details>`).join('\n            ')}
           </div>`),
+    // Über den Entwickler: Foto links, Geschichte rechts. Ohne Foto steht ein Platzhalter-Panel da;
+    // dessen [[…]]-Text lässt den Live-Build abbrechen, bis about.photo gesetzt ist.
+    about && section('about', about.title, `<div class="about">
+            <figure class="about__photo">
+              ${about.photo
+    ? `<img src="${esc(about.photo)}" alt="${esc(about.photoAlt)}" width="320" height="320" loading="lazy" decoding="async">`
+    : `<div class="about__placeholder" role="img" aria-label="${esc(about.photoAlt)}">${PERSON_ICON}<span>${esc(about.photoPlaceholder)}</span></div>`}
+              <figcaption><strong>${esc(about.name)}</strong><span>${esc(about.role)}</span></figcaption>
+            </figure>
+            <div class="about__text">
+              ${paragraphs(about.text)}
+            </div>
+          </div>`),
     trustBanner,
     finalCta && section('final-cta', finalCta.title, `${paragraphs(finalCta.text)}
           <p><a class="btn" href="${appHref}">${esc(finalCta.button)}</a></p>`),
@@ -101,6 +114,9 @@ export function renderLanding(page, ctx) {
 
 // Comicseite mit Pfeil nach unten (Drop-Feld)
 const DROP_ICON = '<svg class="dropzone__icon" viewBox="0 0 64 64" width="72" height="72" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path class="hl-paper" d="M12 6H40L52 18V58H12Z"/><path d="M40 6V18H52"/><path class="hl-red" d="M26 22H38V36H45L32 50L19 36H26Z"/></svg>'
+
+// Umriss einer Person für das Platzhalter-Foto
+const PERSON_ICON = '<svg viewBox="0 0 64 64" width="96" height="96" aria-hidden="true" focusable="false" fill="currentColor"><circle cx="32" cy="22" r="12"/><path d="M8 60C8 44 19 36 32 36S56 44 56 60Z"/></svg>'
 
 function section(kind, title, body) {
   return `<section class="section section--${kind}">

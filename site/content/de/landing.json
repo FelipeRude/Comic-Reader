@@ -181,6 +181,19 @@
       }
     ]
   },
+  "about": {
+    "title": "Warum es PanelZoom gibt",
+    "photo": null,
+    "photoAlt": "Felipe Rude, Entwickler von PanelZoom",
+    "photoPlaceholder": "[[Foto von Felipe]]",
+    "name": "Felipe Rude",
+    "role": "Entwickler von PanelZoom",
+    "text": [
+      "Hi, ich bin Felipe. PanelZoom ist mein Herzensprojekt. Dahinter steckt kein Unternehmen und kein Team, sondern ich und eine ziemlich große Comicsammlung.",
+      "Die Idee kam mir im Flugzeug. Ich wollte auf dem Handy einen Comic lesen und war nach ein paar Seiten nur noch am Reinzoomen, Rumschieben und Rauszoomen. Das hat mich so genervt, dass ich angefangen habe, einen Reader zu bauen, der die Panels selbst findet und dich Bild für Bild durch die Geschichte führt.",
+      "Daraus ist PanelZoom geworden. Ich entwickle es in meiner Freizeit weiter, damit Comics auf dem Handy endlich so viel Spaß machen wie auf Papier."
+    ]
+  },
   "finalCta": {
     "title": "Probier es mit deinem nächsten Comic",
     "text": "PanelZoom startet sofort im Browser. Ohne Anmeldung und ohne Installation.",

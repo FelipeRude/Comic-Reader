@@ -406,3 +406,29 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 // Platzhalter [[…]] sind nur im Dev-Build sichtbar markiert (Live-Build bricht ab)
 .placeholder { background: #FFE14D; color: #1A1A1A; padding: 0 0.2em; }
+
+// Über den Entwickler: Foto als schräg gestelltes Comic-Panel neben dem Text
+.about {
+  display: grid; gap: 1.75rem; margin-top: 1.5rem;
+  &__photo {
+    margin: 0; width: min(100%, 11rem);
+    img { display: block; }
+    img, .about__placeholder {
+      width: 100%; aspect-ratio: 1; object-fit: cover;
+      border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow);
+      transform: rotate(-2deg);
+    }
+    figcaption { display: grid; margin-top: 1rem; line-height: 1.3; }
+    figcaption strong { font: 400 1.4rem/1.15 var(--display); letter-spacing: 0.04em; }
+    figcaption span { color: var(--muted); font-size: 0.95rem; }
+  }
+  &__placeholder {
+    display: grid; place-content: center; justify-items: center; gap: 0.5rem; padding: 1rem;
+    background: var(--bg); color: var(--muted); text-align: center; font-size: 0.9rem;
+  }
+  &__text p { font-size: 1.15rem; }
+  @media (min-width: 52rem) {
+    grid-template-columns: 15rem minmax(0, 1fr); align-items: start; gap: 3rem;
+    .about__photo { width: 100%; }
+  }
+}
