@@ -1,9 +1,9 @@
 <template>
-  <div class="pagejump" @click.self="$emit('close')">
+  <div class="pagejump" :class="{ 'is-closing': closing }" @click.self="close" @animationend.self="onAnimationEnd">
     <div class="pagejump__box" role="dialog" aria-modal="true">
       <header class="pagejump__header">
         <h2 class="pagejump__title">{{ t('pageJump.title') }}</h2>
-        <button class="pagejump__close" :aria-label="t('common.close')" @click="$emit('close')">
+        <button class="pagejump__close" :class="{ 'is-pressed': closing && !pendingJump }" :aria-label="t('common.close')" @click="close">
           <img src="/UI-Icons/Keyboard-Asterisk-2-Filled.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
@@ -51,9 +51,33 @@ const isValid = computed(() =>
   !isNaN(parsed.value) && parsed.value >= 1 && parsed.value <= props.totalPages
 )
 
+// Schließen mit Animation: erst ausfahren, dann melden (Sprung oder Schließen).
+// Ohne Animation (reduzierte Bewegung) oder falls animationend ausbleibt: direkt.
+const closing = ref(false)
+const pendingJump = ref(null)
+let closeTimer = null
+
+function finish() {
+  clearTimeout(closeTimer)
+  if (pendingJump.value !== null) emit('jump', pendingJump.value)
+  else emit('close')
+}
+
+function close() {
+  if (closing.value) return
+  closing.value = true
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return finish()
+  closeTimer = setTimeout(finish, 400)
+}
+
+function onAnimationEnd() {
+  if (closing.value) finish()
+}
+
 function confirm() {
-  if (!isValid.value) return
-  emit('jump', parsed.value - 1)
+  if (!isValid.value || closing.value) return
+  pendingJump.value = parsed.value - 1
+  close()
 }
 
 onMounted(() => {
@@ -71,8 +95,15 @@ onMounted(() => {
   align-items: flex-start;
   justify-content: center;
   background: var(--bg-overlay);
+  animation: pagejump-fade-in 0.22s ease-out;
+
+  &.is-closing {
+    animation: pagejump-fade-out 0.2s ease-in forwards;
+    pointer-events: none;
+  }
 
   &__box {
+    animation: pagejump-drop-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: 100%;
     max-width: 480px;
     margin-top: calc(3rem + env(safe-area-inset-top));
@@ -81,6 +112,19 @@ onMounted(() => {
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
+  }
+
+  &.is-closing &__box {
+    animation: pagejump-drop-out 0.2s ease-in forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &__box,
+    &.is-closing,
+    &.is-closing &__box {
+      animation: none;
+    }
   }
 
   &__header {
@@ -96,10 +140,30 @@ onMounted(() => {
     color: var(--text-primary);
   }
 
+  // Wie in den Einstellungen: Rahmen, Schatten, beim Drücken eingedrückt.
+  // .is-pressed hält den Zustand, während der Dialog ausfährt.
   &__close {
-    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-btn);
+    box-shadow: 2px 2px 0 var(--shadow-color);
+    transition: transform 0.08s, box-shadow 0.08s, background 0.08s;
+
+    &:active,
+    &.is-pressed {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+      background: var(--bg-secondary);
+    }
 
     .icon {
+      width: 18px;
+      height: 18px;
       filter: var(--icon-filter);
     }
   }
@@ -179,5 +243,22 @@ onMounted(() => {
       padding: 0.6rem 0.9rem;
     }
   }
+}
+
+@keyframes pagejump-fade-in {
+  from { background-color: transparent; }
+}
+
+@keyframes pagejump-fade-out {
+  to { background-color: transparent; }
+}
+
+// Der Dialog sitzt oben, deshalb gleitet er von oben herein und wieder hinaus
+@keyframes pagejump-drop-in {
+  from { transform: translateY(-2rem); opacity: 0; }
+}
+
+@keyframes pagejump-drop-out {
+  to { transform: translateY(-2rem); opacity: 0; }
 }
 </style>
