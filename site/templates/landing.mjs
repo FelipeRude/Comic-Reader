@@ -8,7 +8,7 @@ const paragraphs = (text) => [].concat(text).map((p) => `<p>${esc(p)}</p>`).join
 
 /** Landing Page einer Sprache, Gliederung nach SEO-Plan 6.2. Texte in site/content/<code>/landing.json. */
 export function renderLanding(page, ctx) {
-  const { hero, trust, intro, problem, steps, features, highlights, install, audience, faq, about, finalCta } = page.data
+  const { hero, trust, intro, problem, features, highlights, install, audience, faq, about, finalCta } = page.data
   const appHref = esc(ctx.appHref(page.locale))
   // h1 als Liste: jede weitere Zeile beginnt sichtbar neu. Das Leerzeichen davor bleibt im Text,
   // damit Suchmaschinen und Screenreader keine zusammengeklebten Wörter sehen.
@@ -84,11 +84,6 @@ export function renderLanding(page, ctx) {
               ${p.video ? renderVideo(p.video, p.videoLabel, 'install__video') : ''}
             </div>`).join('\n            ')}
           </div>`),
-    steps && section('steps', steps.title, `<ol class="steps">
-            ${steps.items.map((s) => `<li><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('\n            ')}
-          </ol>`),
-    audience && section('audience', audience.title, `${paragraphs(audience.intro)}
-          <ul class="checklist">${audience.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`),
     faq && section('faq', faq.title, `<div class="faq">
             ${faq.items.map((i) => `<details class="faq__item"><summary><h3>${esc(i.q)}</h3></summary><div class="faq__answer">${[].concat(i.a).map((a) => `<p>${esc(a)}</p>`).join('')}</div></details>`).join('\n            ')}
           </div>`),
@@ -105,6 +100,9 @@ export function renderLanding(page, ctx) {
               ${paragraphs(about.text)}
             </div>
           </div>`),
+    // Für wen? direkt über dem Banner vor dem Abschluss
+    audience && section('audience', audience.title, `${paragraphs(audience.intro)}
+          <ul class="checklist">${audience.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`),
     trustBanner,
     finalCta && section('final-cta', finalCta.title, `${paragraphs(finalCta.text)}
           <p><a class="btn" href="${appHref}">${esc(finalCta.button)}</a></p>`),

@@ -49,23 +49,6 @@
       "A regular PDF viewer doesn’t know what a panel is. It shows you pages, not a story, and after switching apps you often lose your place."
     ]
   },
-  "steps": {
-    "title": "How PanelZoom works",
-    "items": [
-      {
-        "title": "Add a PDF",
-        "text": "Open PanelZoom in your browser and pick a PDF from your phone or your cloud storage."
-      },
-      {
-        "title": "Panels are detected",
-        "text": "The app finds the panels on every page, right on your device."
-      },
-      {
-        "title": "Tap to keep reading",
-        "text": "Tap the right side and the view moves to the next panel. The left side takes you back."
-      }
-    ]
-  },
   "features": [
     {
       "title": "Automatic panel detection",
@@ -81,19 +64,19 @@
     "title": "Private, offline and made for phones",
     "items": [
       {
+        "icon": "devices",
+        "title": "Works on any device",
+        "text": "In the browser on Android, iOS, tablet and PC. Even PDFs with over 1,000 pages open quickly."
+      },
+      {
         "icon": "bookmark",
         "title": "Progress saved per panel",
-        "text": "PanelZoom remembers the panel you stopped at, not just the page. Even days later, you pick up right there."
+        "text": "PanelZoom remembers the panel you stopped at."
       },
       {
         "icon": "lock",
         "title": "Your comics stay with you",
-        "text": "No account, no tracking. Your PDFs stay on your device, and you can keep reading offline."
-      },
-      {
-        "icon": "devices",
-        "title": "Works on any phone",
-        "text": "In the browser on iPhone, Android, tablet and computer. Even omnibus editions with over 1,000 pages open quickly."
+        "text": "No account! PDFs stay on your device, and you can keep reading offline."
       }
     ]
   },
@@ -133,11 +116,9 @@
     "intro": "Anyone who owns comics as PDFs and wants to read them comfortably on a phone, for example:",
     "items": [
       "DRM-free comics bought as PDFs from publishers and stores",
-      "Comics from Humble Bundle deals",
       "Backer PDFs from Kickstarter and other crowdfunding campaigns",
       "Indie comics and webcomics offered as PDF downloads",
-      "Your own scans of your comic collection",
-      "Readers who miss comiXology’s Guided View for comics they own"
+      "Your own scans of your comic collection"
     ]
   },
   "faq": {
@@ -192,7 +173,7 @@
     "role": "Developer of PanelZoom",
     "text": [
       "Hi, I’m Felipe. PanelZoom is my passion project. There’s no company and no team behind it, just me and my ever-growing comic collection.",
-      "The idea hit me on a plane. I wanted to read my first comic on my phone, and a few pages in I was doing nothing but pinching in, dragging around and zooming back out. It drove me so crazy that I started building a reader that finds the panels by itself and walks you through the story one panel at a time.",
+      "The idea hit me on a plane. I wanted to read my first comic on my phone, and a few pages in I was doing nothing but pinching in, dragging around and zooming back out. It drove me so crazy that I started building a reader that detects the panels by itself and walks you through the story one panel at a time.",
       "That reader became PanelZoom. I keep working on it in my spare time, so reading comics on your phone is actually fun."
     ]
   },

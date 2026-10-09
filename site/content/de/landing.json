@@ -49,23 +49,6 @@
       "Ein normaler PDF-Viewer kennt keine Panels, er zeigt nur Seiten. Die Geschichte gerät dabei in den Hintergrund, und nach einem App-Wechsel bist du oft nicht mehr an der Stelle, an der du warst."
     ]
   },
-  "steps": {
-    "title": "So funktioniert PanelZoom",
-    "items": [
-      {
-        "title": "PDF hinzufügen",
-        "text": "Öffne PanelZoom im Browser und wähle eine PDF von deinem Handy oder aus der Cloud."
-      },
-      {
-        "title": "Panels werden erkannt",
-        "text": "Die App findet die Panels jeder Seite, direkt auf deinem Gerät."
-      },
-      {
-        "title": "Antippen und weiterlesen",
-        "text": "Tippe rechts, und die Ansicht fährt zum nächsten Panel. Links geht es zurück."
-      }
-    ]
-  },
   "features": [
     {
       "title": "Automatische Panel-Erkennung",
@@ -81,19 +64,19 @@
     "title": "Privat, offline und gemacht fürs Handy",
     "items": [
       {
+        "icon": "devices",
+        "title": "Läuft auf jedem Gerät",
+        "text": "Im Browser auf Android, iOS, Tablet und PC. Auch PDFs mit über 1.000 Seiten öffnen schnell."
+      },
+      {
         "icon": "bookmark",
         "title": "Lesestand pro Panel",
-        "text": "PanelZoom merkt sich das Panel, bei dem du aufgehört hast, nicht nur die Seite. Auch nach Tagen geht es genau dort weiter."
+        "text": "PanelZoom merkt sich das Panel, bei dem du aufgehört hast."
       },
       {
         "icon": "lock",
         "title": "Deine Comics bleiben bei dir",
-        "text": "Kein Konto, kein Tracking. Deine PDFs bleiben auf dem Gerät, und du liest auch offline weiter."
-      },
-      {
-        "icon": "devices",
-        "title": "Läuft auf jedem Handy",
-        "text": "Im Browser auf iPhone, Android, Tablet und Computer. Auch Sammelbände mit über 1.000 Seiten öffnen schnell."
+        "text": "Kein Konto! PDFs bleiben auf dem Gerät, und du liest auch offline weiter."
       }
     ]
   },
@@ -190,7 +173,7 @@
     "role": "Entwickler von PanelZoom",
     "text": [
       "Hi, ich bin Felipe. PanelZoom ist mein Herzensprojekt. Dahinter steckt kein Unternehmen und kein Team, sondern ich und meine immer größer werdende Comicsammlung.",
-      "Die Idee kam mir im Flugzeug. Ich wollte meinen ersten Comic auf dem Handy lesen und war nach ein paar Seiten nur noch am Reinzoomen, Rumschieben und Rauszoomen. Das hat mich so genervt, dass ich angefangen habe, einen Reader zu bauen, der die Panels selbst findet und dich Bild für Bild durch die Geschichte führt.",
+      "Die Idee kam mir im Flugzeug. Ich wollte meinen ersten Comic auf dem Handy lesen und war nach ein paar Seiten nur noch am Reinzoomen, Rumschieben und Rauszoomen. Das hat mich so genervt, dass ich angefangen habe, einen Reader zu bauen, der die Panels selbst erkennt und dich Bild für Bild durch die Geschichte führt.",
       "Daraus ist PanelZoom geworden. Ich entwickle es in meiner Freizeit weiter, damit Comics auf dem Handy Spaß machen zu lesen."
     ]
   },

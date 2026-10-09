@@ -290,23 +290,6 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .section--feature p, .section--problem p { font-size: 1.15rem; }
 
-// Nummerierte Schritte als Comic-Kästen
-.steps {
-  display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  margin: 1.5rem 0 0; padding: 0; list-style: none; counter-reset: step;
-  li {
-    counter-increment: step; position: relative;
-    padding: 2.4rem 1.25rem 1.25rem;
-    background: var(--bg); border: 2px solid var(--border); border-radius: 4px; box-shadow: var(--shadow);
-    &::before {
-      content: counter(step); position: absolute; top: -0.9rem; left: 1rem;
-      display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
-      font: 700 1.4rem/1 var(--body); background: var(--btn-bg); color: var(--btn-text);
-      border: 2px solid var(--border); border-radius: 50%;
-    }
-  }
-}
-
 // Highlights: drei Boxen mit Illustration (partials/highlight-icons.mjs)
 .highlights {
   display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
