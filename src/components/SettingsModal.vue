@@ -4,7 +4,7 @@
       <header class="settings__header">
         <h2 class="settings__title">{{ t('common.settings') }}</h2>
         <button class="settings__close" :aria-label="t('common.close')" @click="$emit('close')">
-          <img src="/UI-Icons/Keyboard-Asterisk-2 Streamline Freehand.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
+          <img src="/UI-Icons/Keyboard-Asterisk-2-Filled.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
 
