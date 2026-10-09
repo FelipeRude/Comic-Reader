@@ -8,7 +8,8 @@
   },
   "hero": {
     "h1": [
-      "Read PDF comics,",
+      "Read PDF comics",
+      "on your phone,",
       "panel by panel"
     ],
     "cta": "Open comic & start reading",
@@ -32,7 +33,7 @@
     ]
   },
   "intro": {
-    "lead": "PanelZoom detects the panels in your PDF comics and takes you from one to the next with a single tap. No pinching, no scrolling.",
+    "lead": "PanelZoom is a free PDF comic reader that runs in your browser. It detects the panels in your comics and takes you from one to the next with a single tap, so you can read comics on your phone without pinching or scrolling.",
     "dropzone": {
       "title": "Pick your comic and start reading",
       "hint": "Drop a PDF here or tap to choose. The file stays on your device.",
@@ -56,6 +57,7 @@
       "videoLabel": "Animation: a phone shows a comic page. PanelZoom detects the panels one after another and highlights them in red.",
       "text": [
         "PanelZoom finds the panels on every page and moves through them in reading order, left to right and top to bottom. Each panel is shown as large as your screen allows.",
+        "If you’ve used Guided View on comiXology, it works much the same way, but for your own PDF files.",
         "You choose how the transition looks: a smooth camera pan or an instant jump. You can also set the margin to the screen edge, which helps on phones with a notch."
       ]
     }

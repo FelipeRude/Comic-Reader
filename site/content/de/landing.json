@@ -8,7 +8,8 @@
   },
   "hero": {
     "h1": [
-      "PDF Comics lesen,",
+      "PDF-Comics",
+      "auf dem Handy lesen,",
       "Panel für Panel"
     ],
     "cta": "Comic öffnen & lesen",
@@ -32,7 +33,7 @@
     ]
   },
   "intro": {
-    "lead": "PanelZoom erkennt die Panels deiner PDF-Comics und führt dich mit einem Tipp von Bild zu Bild. Kein Zoomen, kein Scrollen.",
+    "lead": "PanelZoom ist ein kostenloser PDF-Comic-Reader im Browser. Er erkennt die Panels deiner Comics und führt dich mit einem Tipp von Bild zu Bild. So liest du Comics auf dem Handy ohne Zoomen und Scrollen.",
     "dropzone": {
       "title": "Wähle dein Comic und fang an zu lesen",
       "hint": "PDF hierher ziehen oder antippen. Die Datei bleibt auf deinem Gerät.",

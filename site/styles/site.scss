@@ -28,7 +28,7 @@
   --border: var(--ink);
   --shadow: 3px 3px 0 rgba(26, 26, 26, 0.75); // 75 % Tinte, wie in der App
   --red: #E63946; // Logo-Rot
-  --btn-bg: var(--red);
+  --btn-bg: #C62833; // dunkler als das Logo-Rot: Creme-Schrift erreicht so 5,5:1 (WCAG AA)
   --btn-text: var(--cream);
   --display: 'Bangers', system-ui, sans-serif;
   --body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
