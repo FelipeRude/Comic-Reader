@@ -77,38 +77,53 @@
 
       <div class="settings__cross">
         <div class="settings__cross-top">
-          <label class="settings__pad-label">{{ t('settings.top') }}</label>
+          <label class="settings__pad-label" for="pad-top">{{ t('settings.top') }}</label>
           <div class="settings__pad-field">
-            <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localTop" @change="save('top', localTop)" />
+            <button class="settings__pad-step" :aria-label="`${t('settings.top')} −`" @click="step('top', -1)">−</button>
+            <input id="pad-top" class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localTop" @change="save('top', localTop)" />
             <span class="settings__pad-unit">%</span>
+            <button class="settings__pad-step" :aria-label="`${t('settings.top')} +`" @click="step('top', 1)">+</button>
           </div>
         </div>
 
         <div class="settings__cross-mid">
           <div class="settings__cross-side">
-            <label class="settings__pad-label">{{ t('settings.left') }}</label>
+            <label class="settings__pad-label" for="pad-left">{{ t('settings.left') }}</label>
             <div class="settings__pad-field">
-              <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localLeft" @change="save('left', localLeft)" />
+              <button class="settings__pad-step" :aria-label="`${t('settings.left')} −`" @click="step('left', -1)">−</button>
+              <input id="pad-left" class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localLeft" @change="save('left', localLeft)" />
               <span class="settings__pad-unit">%</span>
+              <button class="settings__pad-step" :aria-label="`${t('settings.left')} +`" @click="step('left', 1)">+</button>
             </div>
           </div>
 
-          <div class="settings__cross-box" aria-hidden="true" />
+          <!-- Vorschau: Bildschirm mit Kachel. Abstände doppelt so groß wie echt,
+               damit schon wenige Prozent sichtbar sind (max. 20 % → 40 %). -->
+          <div class="settings__preview" :style="previewSize" aria-hidden="true">
+            <div
+              class="settings__preview-tile"
+              :style="{ top: `${clampPad(localTop) * 2}%`, right: `${clampPad(localRight) * 2}%`, bottom: `${clampPad(localBottom) * 2}%`, left: `${clampPad(localLeft) * 2}%` }"
+            />
+          </div>
 
           <div class="settings__cross-side settings__cross-side--right">
-            <label class="settings__pad-label">{{ t('settings.right') }}</label>
+            <label class="settings__pad-label" for="pad-right">{{ t('settings.right') }}</label>
             <div class="settings__pad-field">
-              <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localRight" @change="save('right', localRight)" />
+              <button class="settings__pad-step" :aria-label="`${t('settings.right')} −`" @click="step('right', -1)">−</button>
+              <input id="pad-right" class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localRight" @change="save('right', localRight)" />
               <span class="settings__pad-unit">%</span>
+              <button class="settings__pad-step" :aria-label="`${t('settings.right')} +`" @click="step('right', 1)">+</button>
             </div>
           </div>
         </div>
 
         <div class="settings__cross-bottom">
-          <label class="settings__pad-label">{{ t('settings.bottom') }}</label>
+          <label class="settings__pad-label" for="pad-bottom">{{ t('settings.bottom') }}</label>
           <div class="settings__pad-field">
-            <input class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localBottom" @change="save('bottom', localBottom)" />
+            <button class="settings__pad-step" :aria-label="`${t('settings.bottom')} −`" @click="step('bottom', -1)">−</button>
+            <input id="pad-bottom" class="settings__pad-input" type="number" inputmode="decimal" min="0" max="20" step="0.5" v-model.number="localBottom" @change="save('bottom', localBottom)" />
             <span class="settings__pad-unit">%</span>
+            <button class="settings__pad-step" :aria-label="`${t('settings.bottom')} +`" @click="step('bottom', 1)">+</button>
           </div>
         </div>
       </div>
@@ -178,9 +193,30 @@ onMounted(() => {
   localBottom.value = paddingBottom.value ?? (safeBottom > 0 ? safeBottom : PAD_DEFAULTS.bottom)
 })
 
+const locals = { left: localLeft, top: localTop, right: localRight, bottom: localBottom }
+
+function clampPad(v) {
+  return Math.max(0, Math.min(20, parseFloat(v) || 0))
+}
+
 function save(side, value) {
   setPaddingSide(side, value)
 }
+
+// −/+ in 0,5er-Schritten, begrenzt auf 0–20 %
+function step(side, dir) {
+  const next = Math.round((clampPad(locals[side].value) + dir * 0.5) * 2) / 2
+  locals[side].value = clampPad(next)
+  save(side, locals[side].value)
+}
+
+// Vorschau im Seitenverhältnis des Bildschirms (Hoch- oder Querformat),
+// höchstens 96 px hoch und 140 px breit, damit auch kleine Abstände sichtbar sind
+const previewSize = (() => {
+  const ratio = window.innerWidth / window.innerHeight
+  const w = Math.min(140, 96 * ratio)
+  return { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px` }
+})()
 </script>
 
 <style lang="scss" scoped>
@@ -430,13 +466,20 @@ function save(side, value) {
     }
   }
 
-  &__cross-box {
-    width: 48px;
-    height: 48px;
+  &__preview {
+    position: relative;
     flex-shrink: 0;
-    border: 2px solid var(--text-muted);
+    background: var(--bg-secondary);
+    border: var(--border-width) solid var(--text-muted);
     border-radius: 6px;
-    opacity: 0.35;
+    overflow: hidden;
+  }
+
+  &__preview-tile {
+    position: absolute;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: inset 0.15s;
   }
 
   &__pad-label {
@@ -450,15 +493,33 @@ function save(side, value) {
   &__pad-field {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.3rem 0.5rem;
+    gap: 0.15rem;
+    padding: 0 0.15rem;
     background: var(--bg-secondary);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
   }
 
+  &__pad-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary);
+    border-radius: calc(var(--radius-btn) - 2px);
+
+    &:active {
+      background: var(--border);
+      color: var(--bg-card);
+    }
+  }
+
   &__pad-input {
-    width: 3.5rem;
+    width: 2.4rem;
     font-size: 0.95rem;
     font-weight: 700;
     text-align: center;
