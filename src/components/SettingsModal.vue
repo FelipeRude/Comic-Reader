@@ -560,7 +560,7 @@ const previewSize = (() => {
     align-items: center;
     gap: 0.15rem;
     padding: 0 0.15rem;
-    background: var(--bg-card);
+    background: var(--bg-secondary);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
   }
@@ -588,9 +588,12 @@ const previewSize = (() => {
     font-size: 0.95rem;
     font-weight: 700;
     text-align: center;
+    padding: 0.1rem 0;
     color: var(--text-primary);
-    background: transparent;
-    border: none;
+    // Eigene helle Box nur um die Zahl
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
     outline: none;
 
     // Spinner-Pfeile ausblenden
