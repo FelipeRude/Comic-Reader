@@ -82,6 +82,7 @@ ErrorDocument 404 /404.html
   AddType text/javascript .mjs
   AddType font/woff2 .woff2
   AddType video/webm .webm
+  AddType image/webp .webp
 </IfModule>
 
 <IfModule mod_rewrite.c>
