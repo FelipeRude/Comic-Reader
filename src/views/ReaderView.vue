@@ -13,17 +13,20 @@
   >
     <div class="reader__stage" ref="stageEl" />
 
-    <button class="reader__back" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('reader.back')" @click="$emit('back')">
-      <img src="/UI-Icons/Navigation-Page-Right-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
-    </button>
+    <!-- Bedienleiste oben mittig: Zurück, Einstellungen, Panel-Overlay -->
+    <div class="reader__top" :class="{ 'is-hidden': !controlsVisible }" @touchstart.stop @touchend.stop>
+      <button class="reader__btn" :aria-label="t('reader.back')" @click="$emit('back')">
+        <img src="/UI-Icons/Navigation-Page-Right Streamline Freehand_Fill.svg" class="icon" width="22" height="19" alt="" aria-hidden="true" />
+      </button>
 
-    <button class="reader__debug-btn" :class="{ 'is-hidden': !controlsVisible, 'is-active': debugOverlay }" :aria-label="t('reader.debug')" @touchstart.stop @touchend.stop @click="toggleDebug">
-      <img src="/UI-Icons/panel-filled.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
-    </button>
+      <button class="reader__btn" :aria-label="t('common.settings')" @click="showSettings = true">
+        <img src="/UI-Icons/Settings-Cog-Double-1-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
+      </button>
 
-    <button class="reader__settings" :class="{ 'is-hidden': !controlsVisible }" :aria-label="t('common.settings')" @touchstart.stop @touchend.stop @click="showSettings = true">
-      <img src="/UI-Icons/Settings-Cog-Double-1-Filled.svg" class="icon" width="24" height="24" alt="" aria-hidden="true" />
-    </button>
+      <button class="reader__btn reader__debug-btn" :class="{ 'is-active': debugOverlay }" :aria-label="t('reader.debug')" @click="toggleDebug">
+        <img src="/UI-Icons/panel-filled.svg" class="icon" width="20" height="20" alt="" aria-hidden="true" />
+      </button>
+    </div>
 
     <SettingsModal v-if="showSettings" @close="showSettings = false" />
 
@@ -584,27 +587,18 @@ onBeforeUnmount(() => {
     inset: 0;
   }
 
-  &__back {
+  &__top {
     position: absolute;
     top: calc(0.75rem + env(safe-area-inset-top));
-    left: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 2;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    background: #FFFEF0;
-    border: 2px solid #1A1A1A;
-    border-radius: var(--radius-btn);
+    gap: 0.5rem;
     transition: opacity 0.3s;
   }
 
-  &__settings {
-    position: absolute;
-    top: calc(0.75rem + env(safe-area-inset-top));
-    right: 0.75rem;
-    z-index: 2;
+  &__btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -613,28 +607,12 @@ onBeforeUnmount(() => {
     background: #FFFEF0;
     border: 2px solid #1A1A1A;
     border-radius: var(--radius-btn);
-    transition: opacity 0.3s;
+    transition: background 0.2s, border-color 0.2s;
   }
 
-  &__debug-btn {
-    position: absolute;
-    top: calc(0.75rem + env(safe-area-inset-top) + 42px + 0.5rem);
-    right: 0.75rem;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    background: #FFFEF0;
-    border: 2px solid #1A1A1A;
-    border-radius: var(--radius-btn);
-    transition: opacity 0.3s, background 0.2s, border-color 0.2s;
-
-    &.is-active {
-      background: #1A1A1A;
-      border-color: #FFFEF0;
-    }
+  &__debug-btn.is-active {
+    background: #1A1A1A;
+    border-color: #FFFEF0;
   }
 
   &__debug-overlay {
@@ -697,13 +675,10 @@ onBeforeUnmount(() => {
   // links UND rechts, deshalb nur die tatsächliche Notch-Seite einrücken.
   &--notch-left {
     .reader__zone--left { padding-left: calc(0.5rem + env(safe-area-inset-left)); }
-    .reader__back { left: calc(0.75rem + env(safe-area-inset-left)); }
   }
 
   &--notch-right {
     .reader__zone--right { padding-right: calc(0.5rem + env(safe-area-inset-right)); }
-    .reader__settings,
-    .reader__debug-btn { right: calc(0.75rem + env(safe-area-inset-right)); }
   }
 
   &__chevron {
