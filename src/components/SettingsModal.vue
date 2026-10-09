@@ -9,27 +9,39 @@
       </header>
 
       <!-- Sprache -->
-      <!-- Auswahlliste statt Umschalter, damit auch viele Sprachen passen.
-           Das native <select> liegt unsichtbar über Weltkugel + Kürzel. -->
-      <div v-if="locales.length > 1" class="settings__row settings__row--inline">
-        <label class="settings__label" for="settings-language">
-          <span class="settings__label-title">{{ t('settings.language') }}</span>
-        </label>
-        <div class="settings__lang">
-          <img src="/UI-Icons/globe.svg" class="icon" width="18" height="18" alt="" aria-hidden="true" />
-          <span class="settings__lang-code">{{ locale.toUpperCase() }}</span>
-          <select
-            id="settings-language"
-            class="settings__lang-select"
-            :value="locale"
-            @change="setLocale($event.target.value)"
-          >
-            <option v-for="l in locales" :key="l.code" :value="l.code" :lang="l.hreflang">
-              {{ l.nativeName }}
-            </option>
-          </select>
+      <!-- Auswahlliste statt Umschalter, damit auch viele Sprachen passen -->
+      <template v-if="locales.length > 1">
+        <div class="settings__row">
+          <div class="settings__label">
+            <span id="settings-language" class="settings__label-title">{{ t('settings.language') }}</span>
+          </div>
         </div>
-      </div>
+        <div ref="langEl" class="settings__lang" @focusout="onLangFocusOut" @keydown.esc.stop="langOpen = false">
+          <button
+            class="settings__lang-btn"
+            aria-haspopup="listbox"
+            :aria-expanded="langOpen"
+            aria-labelledby="settings-language"
+            @click="langOpen = !langOpen"
+          >
+            <img src="/UI-Icons/globe.svg" class="icon" width="18" height="18" alt="" aria-hidden="true" />
+            <span class="settings__lang-code">{{ locale.toUpperCase() }}</span>
+          </button>
+          <ul v-if="langOpen" class="settings__lang-list" role="listbox" aria-labelledby="settings-language">
+            <li v-for="l in locales" :key="l.code" role="option" :aria-selected="locale === l.code">
+              <button
+                class="settings__lang-option"
+                :class="{ 'is-active': locale === l.code }"
+                :lang="l.hreflang"
+                @click="chooseLocale(l.code)"
+              >
+                <span class="settings__lang-option-code">{{ l.code.toUpperCase() }}</span>
+                {{ l.nativeName }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </template>
 
       <!-- Panel-Übergang -->
       <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 }">
@@ -114,6 +126,19 @@ import { useI18n } from '../composables/useI18n.js'
 defineEmits(['close'])
 
 const { t, d, locale, locales, setLocale } = useI18n()
+
+// Sprach-Liste: schließt bei Auswahl, Escape und Fokus außerhalb
+const langOpen = ref(false)
+const langEl = ref(null)
+
+function chooseLocale(code) {
+  setLocale(code)
+  langOpen.value = false
+}
+
+function onLangFocusOut(e) {
+  if (!langEl.value?.contains(e.relatedTarget)) langOpen.value = false
+}
 
 // Build-Zeitpunkt kommt als ISO-String und wird in der App-Sprache formatiert.
 const buildTime = computed(() => d(new Date(__BUILD_TIME__), { dateStyle: 'medium', timeStyle: 'short' }))
@@ -253,15 +278,12 @@ function save(side, value) {
     border-radius: var(--radius-btn);
   }
 
-  &__row--inline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
   &__lang {
     position: relative;
+    display: inline-block;
+  }
+
+  &__lang-btn {
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -272,8 +294,14 @@ function save(side, value) {
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
     box-shadow: 2px 2px 0 var(--shadow-color);
+    transition: transform 0.08s, box-shadow 0.08s;
 
-    // Pfeil nach unten: zeigt, dass sich eine Liste öffnet
+    &:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    // Pfeil: nach unten, bei offener Liste nach oben
     &::after {
       content: '';
       width: 0.4rem;
@@ -282,11 +310,12 @@ function save(side, value) {
       border: solid currentColor;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
+      transition: transform 0.15s, margin 0.15s;
     }
 
-    &:focus-within {
-      outline: 2px solid var(--border);
-      outline-offset: 2px;
+    &[aria-expanded='true']::after {
+      margin-bottom: -0.2rem;
+      transform: rotate(-135deg);
     }
 
     .icon {
@@ -298,13 +327,51 @@ function save(side, value) {
     letter-spacing: 0.04em;
   }
 
-  &__lang-select {
+  &__lang-list {
     position: absolute;
-    inset: 0;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    z-index: 5;
+    min-width: 12rem;
+    max-height: 16rem;
+    overflow-y: auto;
+    padding: 0.25rem;
+    list-style: none;
+    background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-btn);
+    box-shadow: var(--shadow-card);
+  }
+
+  &__lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     width: 100%;
-    opacity: 0;
-    cursor: pointer;
-    font-size: 16px; // iOS zoomt sonst beim Antippen
+    padding: 0.55rem 0.6rem;
+    font-size: 1.05rem;
+    text-align: left;
+    color: var(--text-primary);
+    border-radius: calc(var(--radius-btn) - 2px);
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: var(--bg-secondary);
+    }
+
+    &.is-active {
+      color: var(--accent-text);
+      background: var(--accent);
+    }
+  }
+
+  &__lang-option-code {
+    min-width: 1.6rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
   }
 
   &__option {
