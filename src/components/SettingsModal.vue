@@ -495,7 +495,7 @@ const previewSize = (() => {
     align-items: center;
     gap: 0.15rem;
     padding: 0 0.15rem;
-    background: var(--bg-secondary);
+    background: var(--bg-card);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
   }
@@ -525,6 +525,7 @@ const previewSize = (() => {
     text-align: center;
     color: var(--text-primary);
     background: transparent;
+    border: none;
     outline: none;
 
     // Spinner-Pfeile ausblenden
