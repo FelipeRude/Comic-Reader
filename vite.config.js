@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+import { createHash } from 'node:crypto'
+import { CSP } from './scripts/site/csp.mjs'
 
 // Build-Zeitpunkt, in den Einstellungen sichtbar → zeigt, ob das Update angekommen ist.
 // Als ISO-String, die App formatiert ihn in der eingestellten Sprache.
@@ -13,6 +15,11 @@ const ICON_DIR = process.env.DEPLOY_TARGET === 'dev' ? 'img/pwa-dev' : 'img/pwa'
 // Die App liegt unter /app/, Landing Pages unter /de/ und /en/ (docs/SEO-PLAN.md, 4.6 a).
 // Gebaut wird nach dist/app/, scripts/build-site.mjs schreibt danach den Rest von dist/.
 const BASE = '/app/'
+
+// Der Service Worker speichert Antworten samt Headern und lädt eine Datei nur neu,
+// wenn sich ihr Inhalt ändert. Ohne diese Kennung behielte z. B. pdf.worker.min.mjs
+// nach einer CSP-Änderung die alte CSP (WebAssembly blieb so auf iOS blockiert).
+const CSP_REV = createHash('sha256').update(CSP).digest('hex').slice(0, 8)
 
 export default defineConfig({
   base: BASE,
@@ -48,6 +55,13 @@ export default defineConfig({
         // SW-Scope ist ohnehin /app/; die Allowlist stellt zusätzlich sicher,
         // dass Landing Pages nie aus dem App-Cache beantwortet werden.
         navigateFallbackAllowlist: [/^\/app\//],
+        // CSP-Kennung an jede Revision hängen → neue CSP = alle Dateien frisch vom Server.
+        manifestTransforms: [
+          async (entries) => ({
+            manifest: entries.map((e) => ({ ...e, revision: `${e.revision ?? ''}-csp${CSP_REV}` })),
+            warnings: [],
+          }),
+        ],
       },
       manifest: {
         id: BASE,
