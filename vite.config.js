@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import { createHash } from 'node:crypto'
+import { rmSync } from 'node:fs'
 import { CSP } from './scripts/site/csp.mjs'
 
 // Build-Zeitpunkt, in den Einstellungen sichtbar → zeigt, ob das Update angekommen ist.
@@ -10,7 +11,8 @@ const BUILD_TIME = new Date().toISOString()
 
 // Dev-Deploy bekommt eigene (rote) Icons, damit sich beide PWAs am Homescreen unterscheiden
 // (DEPLOY_TARGET setzt scripts/deploy.sh). Erzeugt von scripts/generate-icons.mjs.
-const ICON_DIR = process.env.DEPLOY_TARGET === 'dev' ? 'img/pwa-dev' : 'img/pwa'
+const IS_DEV_DEPLOY = process.env.DEPLOY_TARGET === 'dev'
+const ICON_DIR = IS_DEV_DEPLOY ? 'img/pwa-dev' : 'img/pwa'
 
 // Die App liegt unter /app/, Landing Pages unter /de/ und /en/ (docs/SEO-PLAN.md, 4.6 a).
 // Gebaut wird nach dist/app/, scripts/build-site.mjs schreibt danach den Rest von dist/.
@@ -30,7 +32,7 @@ export default defineConfig({
   define: {
     __BUILD_TIME__: JSON.stringify(BUILD_TIME),
     // Dev-Deploy zeigt auch Sprachen mit status 'draft' (wie die Landing)
-    __DEPLOY_DEV__: JSON.stringify(process.env.DEPLOY_TARGET === 'dev'),
+    __DEPLOY_DEV__: JSON.stringify(IS_DEV_DEPLOY),
   },
   plugins: [
     vue(),
@@ -42,6 +44,15 @@ export default defineConfig({
         handler: (html) => html.replaceAll('/img/pwa/', `/${ICON_DIR}/`),
       },
     },
+    {
+      // Live-Build: die Dev-Icons nicht mit ausliefern (img/pwa braucht auch der Dev-Build,
+      // DashboardView lädt daraus das Logo)
+      name: 'drop-dev-icons',
+      apply: 'build',
+      closeBundle() {
+        if (!IS_DEV_DEPLOY) rmSync('dist/app/img/pwa-dev', { recursive: true, force: true })
+      },
+    },
     VitePWA({
       scope: BASE,
       registerType: 'autoUpdate',
@@ -51,6 +62,7 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,mjs}'],
+        globIgnores: IS_DEV_DEPLOY ? [] : ['img/pwa-dev/**'],
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
         // SW-Scope ist ohnehin /app/; die Allowlist stellt zusätzlich sicher,
         // dass Landing Pages nie aus dem App-Cache beantwortet werden.

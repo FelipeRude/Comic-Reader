@@ -44,17 +44,30 @@ Sitemap: ${site.origin}/sitemap.xml
 /** llms.txt (optional, für KI-Agenten; Google ignoriert die Datei). */
 export function llmsTxt(site, liveLocales, pages) {
   const guides = pages.filter((p) => p.type === 'article' && p.inSitemap)
-  return `# ${site.name} – PDF Comic Reader
+  const legal = pages.filter((p) => p.type === 'page' && p.locale.status === 'live')
+  return `# ${site.name}
 
-> Free, privacy-first web app (PWA) that reads PDF comics on phones panel by panel.
-> Automatic panel detection, guided-view style smart zoom, reading progress saved per panel.
-> Runs entirely in the browser: no account, no uploads, works offline.
-> Available in: ${liveLocales.map((l) => l.nativeName).join(', ')}.
+> ${site.name} is a free web app (PWA) for reading PDF comics on a phone, panel by panel.
+> It detects the panels of each page automatically and moves from one panel to the next with a tap,
+> so there is no pinching and scrolling. Everything runs in the browser: no account, no uploads,
+> the PDFs stay on the device, and it works offline once opened.
+
+## Key facts
+- Price: free, no ads, no account.
+- Format: PDF comics (CBZ/CBR not supported yet).
+- Reading direction: left to right, or right to left for manga.
+- Platforms: any current browser; installable to the home screen on iOS (Safari) and Android (Chrome).
+- Privacy: panel detection runs locally in the browser; comics are never sent to a server.
+- Developer: Felipe Rude, independent developer from Germany (no company).
+- Languages: ${liveLocales.map((l) => l.nativeName).join(', ')}.
 
 ## Pages
-${liveLocales.map((l) => `- [Landing (${l.hreflang})](${site.origin}${l.path})`).join('\n')}
-- [Open the app](${site.origin}${site.appPath})
-${guides.length ? `\n## Guides\n${guides.map((g) => `- [${g.h1 || g.title}](${site.origin}${g.path}) (${g.locale.hreflang})`).join('\n')}\n` : ''}`
+${liveLocales.map((l) => `- [${site.name} (${l.nativeName})](${site.origin}${l.path}): what the app does, features, installation, FAQ`).join('\n')}
+- [Open the app](${site.origin}${site.appPath}): the reader itself (import a PDF and start reading)
+${guides.length ? `\n## Guides\n${guides.map((g) => `- [${g.h1 || g.title}](${site.origin}${g.path}) (${g.locale.hreflang}): ${g.description}`).join('\n')}\n` : ''}
+## Legal
+${legal.map((p) => `- [${p.navTitle}](${site.origin}${p.path}) (${p.locale.hreflang})`).join('\n')}
+`
 }
 
 /**
@@ -123,6 +136,7 @@ RewriteRule ^(.*[^/])$ ${target('/$1/')} [R=301,L,NE]
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   # Einbetten in fremde Seiten verbieten (Clickjacking)
   Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
   Header always set ${CSP_HEADER} "${CSP}"
   <If "%{HTTPS} == 'on' || %{HTTP:X-Forwarded-Proto} == 'https'">
     Header always set Strict-Transport-Security "max-age=31536000"
@@ -137,6 +151,11 @@ RewriteRule ^(.*[^/])$ ${target('/$1/')} [R=301,L,NE]
   # Service Worker, Manifest und App-Shell immer neu prüfen, sonst kommen Updates nicht an
   <If "%{REQUEST_URI} =~ m#^/app/(index\\.html|sw\\.js|workbox-[^/]+\\.js|manifest\\.webmanifest)?$#">
     Header set Cache-Control "no-cache"
+  </If>
+
+  # Medien und Fonts der Landing (ohne Hash im Namen): eine Woche, danach neu prüfen
+  <If "%{REQUEST_URI} =~ m#^/(media|fonts)/#">
+    Header set Cache-Control "public, max-age=604800"
   </If>
 
   # Dateien mit Hash im Namen dauerhaft cachen

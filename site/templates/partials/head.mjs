@@ -1,4 +1,5 @@
 import { esc } from '../util.mjs'
+import { renderSchema } from './schema.mjs'
 
 /**
  * <head>-Inhalt jeder Seite: Title, Description, canonical, hreflang (inkl. x-default),
@@ -44,5 +45,6 @@ export function renderHead(page, ctx) {
     '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
     '<link rel="preload" href="/fonts/bangers-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>',
     `<link rel="stylesheet" href="${esc(ctx.cssHref)}">`,
+    renderSchema(page, ctx),
   ].filter(Boolean).join('\n    ')
 }

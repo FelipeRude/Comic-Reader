@@ -181,5 +181,17 @@
     "title": "Try it with your next comic",
     "text": "PanelZoom starts right in your browser. No sign-up, nothing to install.",
     "button": "Open comic & start reading"
+  },
+  "schema": {
+    "featureList": [
+      "Automatic panel detection in the browser",
+      "Panel-by-panel guided reading in reading order",
+      "Smooth camera pan or instant jump",
+      "Adjustable margin to the screen edge",
+      "Reading progress saved per panel",
+      "Works offline",
+      "Installable to the home screen",
+      "No account, PDFs stay on your device"
+    ]
   }
 }

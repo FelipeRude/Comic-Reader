@@ -181,5 +181,17 @@
     "title": "Probier es mit deinem nächsten Comic",
     "text": "PanelZoom startet sofort im Browser. Ohne Anmeldung und ohne Installation.",
     "button": "Comic öffnen & lesen"
+  },
+  "schema": {
+    "featureList": [
+      "Automatische Panel-Erkennung direkt im Browser",
+      "Panel-für-Panel-Führung in Leserichtung",
+      "Weicher Kameraschwenk oder direkter Sprung",
+      "Einstellbarer Abstand zum Bildschirmrand",
+      "Lesestand pro Panel",
+      "Offline nutzbar",
+      "Installierbar auf dem Home-Bildschirm",
+      "Ohne Konto, PDFs bleiben auf dem Gerät"
+    ]
   }
 }
