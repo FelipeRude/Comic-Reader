@@ -112,6 +112,9 @@ onMounted(() => {
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-modal);
     box-shadow: var(--shadow-modal);
+    // Wie in den Einstellungen: nur der Titel in der Comic-Schrift
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: normal;
   }
 
   &.is-closing &__box {
@@ -135,8 +138,10 @@ onMounted(() => {
   }
 
   &__title {
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-family: 'Bangers', system-ui, sans-serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
   }
 
@@ -197,8 +202,9 @@ onMounted(() => {
 
   &__confirm {
     width: 100%;
-    padding: 0.9rem;
-    font-size: 1.3rem;
+    padding: 0.85rem;
+    font-size: 1.05rem;
+    font-weight: 600;
     color: var(--accent-text);
     background: var(--accent);
     border: var(--border-width) solid var(--border);
