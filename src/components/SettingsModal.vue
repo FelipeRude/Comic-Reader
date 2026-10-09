@@ -207,6 +207,9 @@ function save(side, value) {
     border-bottom: none;
     border-radius: var(--radius-modal) var(--radius-modal) 0 0;
     box-shadow: var(--shadow-modal);
+    // Nur Titel und Überschriften in der Comic-Schrift, der Rest normal
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: normal;
   }
 
   &__header {
@@ -234,8 +237,10 @@ function save(side, value) {
   }
 
   &__title {
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-family: 'Bangers', system-ui, sans-serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
   }
 
@@ -257,8 +262,10 @@ function save(side, value) {
 
   &__label-title {
     display: block;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-family: 'Bangers', system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
   }
 
