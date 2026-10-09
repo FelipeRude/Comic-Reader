@@ -1,7 +1,7 @@
 <template>
   <div
     class="reader"
-    :class="notchSide && `reader--notch-${notchSide}`"
+    :class="[notchSide && `reader--notch-${notchSide}`, { 'reader--rtl': direction === 'rtl' }]"
     ref="containerEl"
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
@@ -28,7 +28,18 @@
       </button>
     </div>
 
-    <SettingsModal v-if="showSettings" @close="showSettings = false" />
+    <SettingsModal
+      v-if="showSettings"
+      :direction="direction"
+      @direction="setDirection"
+      @close="showSettings = false"
+    />
+
+    <ReadingDirectionModal
+      v-if="needsDirection"
+      :suggested="suggestedDirection"
+      @select="setDirection"
+    />
 
     <div class="reader__zones" :class="{ 'is-hidden': !controlsVisible }">
       <div class="reader__zone reader__zone--left"><span class="reader__chevron" aria-hidden="true" /></div>
@@ -56,12 +67,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useReader } from '../composables/useReader.js'
 import { useSettings } from '../composables/useSettings.js'
 import { useI18n } from '../composables/useI18n.js'
 import SettingsModal from '../components/SettingsModal.vue'
 import PageJumpModal from '../components/PageJumpModal.vue'
+import ReadingDirectionModal from '../components/ReadingDirectionModal.vue'
 
 const props = defineProps({
   comicId: { type: Number, required: true },
@@ -97,6 +109,9 @@ const {
   setManual,
   jumpToPage,
   getPagePanels,
+  direction,
+  suggestedDirection,
+  setDirection,
   init,
   destroy,
 } = useReader(props.comicId, viewport)
@@ -108,6 +123,10 @@ const showSettings = ref(false)
 const showPageJump = ref(false)
 const debugOverlay = ref(false)
 const isPageAnimating = ref(false)
+
+// Erstes Öffnen: Leserichtung ist noch nicht gewählt → Abfrage zeigen.
+const needsDirection = computed(() => !loading.value && !direction.value)
+const modalOpen = computed(() => showSettings.value || showPageJump.value || needsDirection.value)
 
 // --- Canvas-Verwaltung -------------------------------------------------------
 
@@ -366,7 +385,7 @@ function dist(a, b) {
 }
 
 function onTouchStart(e) {
-  if (showSettings.value || showPageJump.value || isPageAnimating.value) return
+  if (modalOpen.value || isPageAnimating.value) return
   if (e.touches.length === 2) {
     const [a, b] = e.touches
     pinch = {
@@ -383,7 +402,7 @@ function onTouchStart(e) {
 }
 
 function onTouchMove(e) {
-  if (showSettings.value || showPageJump.value || isPageAnimating.value) return
+  if (modalOpen.value || isPageAnimating.value) return
   if (pinch && e.touches.length === 2) {
     e.preventDefault()
     const [a, b] = e.touches
@@ -412,7 +431,7 @@ function onTouchMove(e) {
 }
 
 function onTouchEnd(e) {
-  if (showSettings.value || showPageJump.value || isPageAnimating.value) return
+  if (modalOpen.value || isPageAnimating.value) return
   if (pinch) {
     if (e.touches.length < 2) pinch = null
     return
@@ -437,11 +456,13 @@ function onTouchEnd(e) {
 }
 
 // Tap-Zonen: linkes Fünftel zurück, rechtes Fünftel vor, Mitte Controls.
+// Manga: gespiegelt (links tippen = weiter).
 function handleTap(x) {
+  const rtl = direction.value === 'rtl'
   if (x < viewport.w * 0.2) {
-    goPrev()
+    rtl ? goNext() : goPrev()
   } else if (x > viewport.w * 0.8) {
-    goNext()
+    rtl ? goPrev() : goNext()
   } else {
     toggleControls()
   }
@@ -452,7 +473,7 @@ function handleTap(x) {
 let mouse = null
 
 function isBlocked() {
-  return showSettings.value || showPageJump.value || isPageAnimating.value
+  return modalOpen.value || isPageAnimating.value
 }
 
 // Nur Klicks auf die Bildfläche, nicht auf Buttons, HUD oder Modals.
@@ -512,8 +533,9 @@ function onWheel(e) {
 
 // --- Keyboard (Desktop-Testing) ---------------------------------------------
 function onKey(e) {
-  if (e.key === 'ArrowRight') goNext()
-  else if (e.key === 'ArrowLeft') goPrev()
+  const rtl = direction.value === 'rtl'
+  if (e.key === 'ArrowRight' && !needsDirection.value) rtl ? goPrev() : goNext()
+  else if (e.key === 'ArrowLeft' && !needsDirection.value) rtl ? goNext() : goPrev()
   else if (e.key === 'Escape') document.activeElement?.blur()
 }
 
@@ -699,6 +721,10 @@ onBeforeUnmount(() => {
   &__zone--left &__chevron {
     transform: scaleX(-1);
   }
+
+  // Manga: Pfeile zeigen in die umgekehrte Richtung
+  &--rtl &__zone--left &__chevron { transform: none; }
+  &--rtl &__zone--right &__chevron { transform: scaleX(-1); }
 
   &__hud {
     position: absolute;

@@ -8,7 +8,8 @@ let dbPromise = null
 /**
  * Liefert die geteilte IndexedDB-Verbindung (Singleton).
  * Beim ersten Aufruf wird das Schema angelegt:
- *   - comics:   { id (auto), title, fileName, size, coverDataUrl, pageCount, addedAt }
+ *   - comics:   { id (auto), title, fileName, size, coverDataUrl, pageCount, addedAt,
+ *                 direction? ('ltr' | 'rtl', fehlt bis zur ersten Abfrage im Reader) }
  *               (PDF liegt als Datei im OPFS, siehe files.js)
  *   - progress: { comicId (keyPath), pageIndex, panelIndex, updatedAt }
  */

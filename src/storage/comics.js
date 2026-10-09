@@ -39,6 +39,16 @@ export async function getComic(id) {
 }
 
 /**
+ * Speichert die Leserichtung eines Comics: 'ltr' (Comic) oder 'rtl' (Manga).
+ */
+export async function setComicDirection(id, direction) {
+  const db = await getDB()
+  const comic = await db.get('comics', id)
+  if (!comic) return
+  await db.put('comics', { ...comic, direction })
+}
+
+/**
  * Löscht einen Comic samt PDF-Datei. Der Fortschritt wird separat
  * über progress.js entfernt.
  */

@@ -1,6 +1,8 @@
 // Generatoren für sitemap.xml, robots.txt, llms.txt und .htaccess (docs/SEO-PLAN.md, 4.2 + 7).
 // Alle Sprach-Angaben kommen aus locales.config.mjs, damit eine neue Sprache nur ein Eintrag ist.
 
+import { CSP } from './csp.mjs'
+
 const xmlEsc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c])
 const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
@@ -59,24 +61,7 @@ ${guides.length ? `\n## Guides\n${guides.map((g) => `- [${g.h1 || g.title}](${si
  * .htaccess für netcup (nginx vor Apache). Absolute https-Ziele in den Redirects,
  * weil Apache hinter dem Proxy sonst ggf. http:// erzeugt und ein zweiter Hop entsteht.
  */
-// Content-Security-Policy: nur eigene Quellen, keine fremden Server (passt zum Datenschutz-Versprechen).
-// blob:/data: für Bilder, weil pdf.js und die Panel-Erkennung Seiten als Blob/Canvas weiterreichen.
-// Auf develop im Report-Only-Modus geprüft (Landing, Sprachwechsel, Import, Panel-Erkennung, SW-Cache): keine Verstöße.
-// Zum Debuggen neuer Funktionen CSP_HEADER vorübergehend auf 'Content-Security-Policy-Report-Only' setzen.
-const CSP = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self'",
-  "img-src 'self' data: blob:",
-  "font-src 'self'",
-  "connect-src 'self'",
-  "worker-src 'self'",
-  "manifest-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'self'",
-].join('; ')
+// Zum Debuggen neuer Funktionen vorübergehend auf 'Content-Security-Policy-Report-Only' setzen.
 const CSP_HEADER = 'Content-Security-Policy'
 
 export function htaccess({ site, liveLocales, defaultLocale, isDev }) {
