@@ -43,8 +43,34 @@
         </div>
       </template>
 
+      <!-- Leserichtung (nur im Reader, gilt für das geöffnete Comic) -->
+      <template v-if="direction">
+        <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 }">
+          <div class="settings__label">
+            <span class="settings__label-title">{{ t('settings.direction') }}</span>
+            <span class="settings__label-hint">{{ t('settings.directionHint') }}</span>
+          </div>
+        </div>
+        <div class="settings__toggle">
+          <button
+            class="settings__option"
+            :class="{ 'settings__option--active': direction === 'ltr' }"
+            @click="$emit('direction', 'ltr')"
+          >
+            {{ t('settings.directionLtr') }}
+          </button>
+          <button
+            class="settings__option"
+            :class="{ 'settings__option--active': direction === 'rtl' }"
+            @click="$emit('direction', 'rtl')"
+          >
+            {{ t('settings.directionRtl') }}
+          </button>
+        </div>
+      </template>
+
       <!-- Panel-Übergang -->
-      <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 }">
+      <div class="settings__row" :class="{ 'settings__row--pad': locales.length > 1 || direction }">
         <div class="settings__label">
           <span class="settings__label-title">{{ t('settings.transition') }}</span>
           <span class="settings__label-hint">{{ t('settings.transitionHint') }}</span>
@@ -138,7 +164,12 @@ import { ref, computed, onMounted } from 'vue'
 import { useSettings } from '../composables/useSettings.js'
 import { useI18n } from '../composables/useI18n.js'
 
-const emit = defineEmits(['close'])
+defineProps({
+  // 'ltr' | 'rtl' — nur im Reader gesetzt; null blendet den Abschnitt aus
+  direction: { type: String, default: null },
+})
+
+const emit = defineEmits(['close', 'direction'])
 
 // Schließen mit Animation: erst ausfahren, dann 'close' melden.
 // Ohne Animation (reduzierte Bewegung) oder falls animationend ausbleibt: direkt.

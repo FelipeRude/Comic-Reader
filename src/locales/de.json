@@ -47,6 +47,19 @@
     "left": "Links",
     "right": "Rechts",
     "bottom": "Unten",
-    "version": "Version vom {date}"
+    "version": "Version vom {date}",
+    "direction": "Leserichtung",
+    "directionHint": "Gilt nur für dieses Comic",
+    "directionLtr": "Comic (L → R)",
+    "directionRtl": "Manga (R → L)"
+  },
+  "direction": {
+    "title": "Comic oder Manga?",
+    "message": "Wie wird dieses Heft gelesen? Du kannst das später in den Einstellungen ändern.",
+    "comic": "Comic",
+    "manga": "Manga",
+    "ltr": "Links → Rechts",
+    "rtl": "Rechts → Links",
+    "fromPdf": "Laut PDF"
   }
 }

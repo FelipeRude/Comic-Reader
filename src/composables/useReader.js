@@ -1,6 +1,6 @@
 import { ref, shallowRef, computed } from 'vue'
 import { loadPdf, loadPdfFromFile, renderPageToCanvas } from '../pdf-loader.js'
-import { getComic } from '../storage/comics.js'
+import { getComic, setComicDirection } from '../storage/comics.js'
 import { getComicFile } from '../storage/files.js'
 import { detectPanels } from '../panel-detector.js'
 import { getProgress, saveProgress } from '../storage/progress.js'
@@ -8,6 +8,13 @@ import { useSettings } from './useSettings.js'
 
 const RENDER_MAX_WIDTH = 2000
 const WHOLE_PAGE = [{ x: 0, y: 0, w: 1, h: 1 }]
+
+// Lesereihenfolge: oben→unten, innerhalb einer Zeile links→rechts (Comic)
+// bzw. rechts→links (Manga).
+function orderPanels(panels, direction) {
+  const dir = direction === 'rtl' ? -1 : 1
+  return [...panels].sort((a, b) => (a.y - b.y) || dir * (a.x - b.x))
+}
 
 export function useReader(comicId, viewport) {
   const { effectivePadLeft, effectivePadTop, effectivePadRight, effectivePadBottom } = useSettings()
@@ -28,11 +35,14 @@ export function useReader(comicId, viewport) {
   const pagesPanels = ref([])
   const manual = ref(null)
 
+  // 'ltr' | 'rtl' — null, solange der Nutzer beim ersten Öffnen noch nicht gewählt hat.
+  const direction = ref(null)
+  // Vorschlag aus den PDF-Metadaten (/ViewerPreferences /Direction), sonst null.
+  const suggestedDirection = ref(null)
+
   let pdf = null
 
-  const currentPanels = computed(
-    () => pagesPanels.value[currentPage.value] || WHOLE_PAGE
-  )
+  const currentPanels = computed(() => getPagePanels(currentPage.value))
   const currentPanel = computed(
     () => currentPanels.value[currentPanelIndex.value] || currentPanels.value[0]
   )
@@ -200,6 +210,11 @@ export function useReader(comicId, viewport) {
       ? await loadPdfFromFile(await getComicFile(comic.value.fileName))
       : await loadPdf(comic.value.blob)
     totalPages.value = pdf.numPages
+    direction.value = comic.value.direction ?? null
+    if (!direction.value) {
+      const prefs = await pdf.getViewerPreferences().catch(() => null)
+      suggestedDirection.value = prefs?.Direction === 'R2L' ? 'rtl' : prefs?.Direction === 'L2R' ? 'ltr' : null
+    }
 
     pagesPanels.value = []
 
@@ -225,7 +240,19 @@ export function useReader(comicId, viewport) {
   }
 
   function getPagePanels(pageIdx) {
-    return pagesPanels.value[pageIdx] || WHOLE_PAGE
+    const panels = pagesPanels.value[pageIdx]
+    return panels ? orderPanels(panels, direction.value) : WHOLE_PAGE
+  }
+
+  // Beim Umschalten bleibt das gerade gezeigte Panel aktiv, nur sein Index ändert sich.
+  async function setDirection(value) {
+    const dir = value === 'rtl' ? 'rtl' : 'ltr'
+    const active = currentPanel.value
+    direction.value = dir
+    const idx = currentPanels.value.indexOf(active)
+    if (idx >= 0) currentPanelIndex.value = idx
+    persist()
+    await setComicDirection(comicId, dir)
   }
 
   function destroy() {
@@ -263,6 +290,9 @@ export function useReader(comicId, viewport) {
     setManual,
     jumpToPage,
     getPagePanels,
+    direction,
+    suggestedDirection,
+    setDirection,
     init,
     destroy,
   }

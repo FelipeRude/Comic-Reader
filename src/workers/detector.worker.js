@@ -192,7 +192,8 @@ function removeContainedPanels(panels) {
 
 /**
  * Kombiniert beide Analysen, mergt zu kleine Panels und sortiert in westlicher
- * Leserichtung (oben→unten, links→rechts). Koordinaten werden auf 0–1
+ * Leserichtung (oben→unten, links→rechts). Für Manga sortiert der Reader um
+ * (siehe orderPanels in useReader.js). Koordinaten werden auf 0–1
  * normalisiert (relativ zur Seitengröße → auflösungsunabhängig für den Reader).
  * Fallback: ganze Seite als ein Panel.
  */
