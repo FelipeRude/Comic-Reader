@@ -1,9 +1,9 @@
 <template>
-  <div class="settings" @click.self="$emit('close')">
+  <div class="settings" :class="{ 'is-closing': closing }" @click.self="close" @animationend.self="onAnimationEnd">
     <div class="settings__box" role="dialog" aria-modal="true">
       <header class="settings__header">
         <h2 class="settings__title">{{ t('common.settings') }}</h2>
-        <button class="settings__close" :aria-label="t('common.close')" @click="$emit('close')">
+        <button class="settings__close" :class="{ 'is-pressed': closing }" :aria-label="t('common.close')" @click="close">
           <img src="/UI-Icons/Keyboard-Asterisk-2-Filled.svg" class="icon" width="22" height="22" alt="" aria-hidden="true" />
         </button>
       </header>
@@ -138,7 +138,28 @@ import { ref, computed, onMounted } from 'vue'
 import { useSettings } from '../composables/useSettings.js'
 import { useI18n } from '../composables/useI18n.js'
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
+
+// Schließen mit Animation: erst ausfahren, dann 'close' melden.
+// Ohne Animation (reduzierte Bewegung) oder falls animationend ausbleibt: direkt.
+const closing = ref(false)
+let closeTimer = null
+
+function close() {
+  if (closing.value) return
+  closing.value = true
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    emit('close')
+    return
+  }
+  closeTimer = setTimeout(() => emit('close'), 400)
+}
+
+function onAnimationEnd() {
+  if (!closing.value) return
+  clearTimeout(closeTimer)
+  emit('close')
+}
 
 const { t, d, locale, locales, setLocale } = useI18n()
 
@@ -228,8 +249,18 @@ const previewSize = (() => {
   align-items: flex-end;
   justify-content: center;
   background: var(--bg-overlay);
+  animation: settings-fade-in 0.22s ease-out;
+
+  // Ausfahrweg des Fensters: im Hochformat von ganz unten, als Karte nur ein Stück
+  --sheet-from: 100%;
+
+  &.is-closing {
+    animation: settings-fade-out 0.2s ease-in forwards;
+    pointer-events: none;
+  }
 
   &__box {
+    animation: settings-sheet-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
     width: 100%;
     max-width: 480px;
     max-height: calc(100% - 0.75rem - env(safe-area-inset-top));
@@ -255,8 +286,22 @@ const previewSize = (() => {
     margin-bottom: 1.25rem;
   }
 
+  &.is-closing &__box {
+    animation: settings-sheet-out 0.2s ease-in forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &__box,
+    &.is-closing,
+    &.is-closing &__box {
+      animation: none;
+    }
+  }
+
   // Querformat: als zentrierte Karte mit Abstand oben/unten, Inhalt scrollbar
   @media (orientation: landscape) and (max-height: 600px) {
+    --sheet-from: 2rem;
     align-items: center;
     padding:
       calc(0.75rem + env(safe-area-inset-top))
@@ -280,10 +325,30 @@ const previewSize = (() => {
     color: var(--text-primary);
   }
 
+  // Wie die anderen Buttons: Rahmen, Schatten, beim Drücken eingedrückt.
+  // .is-pressed hält den Zustand, während das Fenster ausfährt.
   &__close {
-    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: var(--bg-card);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-btn);
+    box-shadow: 2px 2px 0 var(--shadow-color);
+    transition: transform 0.08s, box-shadow 0.08s, background 0.08s;
+
+    &:active,
+    &.is-pressed {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+      background: var(--bg-secondary);
+    }
 
     .icon {
+      width: 18px;
+      height: 18px;
       filter: var(--icon-filter);
     }
   }
@@ -546,5 +611,21 @@ const previewSize = (() => {
     font-weight: 600;
     color: var(--text-muted);
   }
+}
+
+@keyframes settings-fade-in {
+  from { background-color: transparent; }
+}
+
+@keyframes settings-fade-out {
+  to { background-color: transparent; }
+}
+
+@keyframes settings-sheet-in {
+  from { transform: translateY(var(--sheet-from)); opacity: 0; }
+}
+
+@keyframes settings-sheet-out {
+  to { transform: translateY(var(--sheet-from)); opacity: 0; }
 }
 </style>
