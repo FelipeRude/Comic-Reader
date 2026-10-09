@@ -185,15 +185,15 @@
   },
   "about": {
     "title": "Why PanelZoom exists",
-    "photo": null,
+    "photo": "/media/felipe.webp",
     "photoAlt": "Felipe Rude, developer of PanelZoom",
     "photoPlaceholder": "[[Photo of Felipe]]",
     "name": "Felipe Rude",
     "role": "Developer of PanelZoom",
     "text": [
-      "Hi, I’m Felipe. PanelZoom is my passion project. There’s no company and no team behind it, just me and a rather large comic collection.",
-      "The idea hit me on a plane. I wanted to read a comic on my phone, and a few pages in I was doing nothing but pinching in, dragging around and zooming back out. It drove me so crazy that I started building a reader that finds the panels by itself and walks you through the story one panel at a time.",
-      "That reader became PanelZoom. I keep working on it in my spare time, so reading comics on a phone can finally be as much fun as reading them on paper."
+      "Hi, I’m Felipe. PanelZoom is my passion project. There’s no company and no team behind it, just me and my ever-growing comic collection.",
+      "The idea hit me on a plane. I wanted to read my first comic on my phone, and a few pages in I was doing nothing but pinching in, dragging around and zooming back out. It drove me so crazy that I started building a reader that finds the panels by itself and walks you through the story one panel at a time.",
+      "That reader became PanelZoom. I keep working on it in my spare time, so reading comics on your phone is actually fun."
     ]
   },
   "finalCta": {
