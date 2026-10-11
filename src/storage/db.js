@@ -9,8 +9,10 @@ let dbPromise = null
  * Liefert die geteilte IndexedDB-Verbindung (Singleton).
  * Beim ersten Aufruf wird das Schema angelegt:
  *   - comics:   { id (auto), title, fileName, size, coverDataUrl, pageCount, addedAt,
+ *                 format? ('pdf' | 'zip' | 'tar', fehlt bei älteren Einträgen = PDF),
+ *                 series?, number?, volume? (aus ComicInfo.xml),
  *                 direction? ('ltr' | 'rtl', fehlt bis zur ersten Abfrage im Reader) }
- *               (PDF liegt als Datei im OPFS, siehe files.js)
+ *               (Datei liegt im OPFS, siehe files.js; CBR/CB7 als umgewandeltes TAR)
  *   - progress: { comicId (keyPath), pageIndex, panelIndex, updatedAt }
  */
 export function getDB() {

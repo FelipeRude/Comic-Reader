@@ -67,11 +67,3 @@ export async function renderPageToCanvas(pdf, pageNumber, maxWidth) {
   page.cleanup()
   return canvas
 }
-
-/**
- * Erzeugt aus Seite 1 ein Cover als JPEG-DataURL (Standard max. 300px Breite).
- */
-export async function generateCover(pdf, maxWidth = 300) {
-  const canvas = await renderPageToCanvas(pdf, 1, maxWidth)
-  return canvas.toDataURL('image/jpeg', 0.8)
-}

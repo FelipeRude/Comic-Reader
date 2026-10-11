@@ -16,7 +16,9 @@
     "i18n:check": "node scripts/i18n-check.mjs"
   },
   "dependencies": {
+    "fflate": "^0.8.3",
     "idb": "^8.0.0",
+    "libarchive.js": "^2.0.2",
     "pdfjs-dist": "^4.7.76",
     "vue": "^3.5.0"
   },

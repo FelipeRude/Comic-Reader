@@ -3,11 +3,12 @@ import { wrapQuota } from './errors.js'
 import { saveComicFile, deleteComicFile } from './files.js'
 
 /**
- * Speichert die Metadaten eines neuen Comics. Das PDF selbst liegt
- * bereits als Datei im OPFS (siehe files.js), hier nur `fileName`.
+ * Speichert die Metadaten eines neuen Comics. Die Datei selbst (PDF oder Archiv) liegt
+ * bereits im OPFS (siehe files.js), hier nur `fileName`. series/number/volume stammen
+ * aus einer ComicInfo.xml, falls vorhanden.
  * Gibt die neue auto-generierte id zurück. Wirft QuotaError bei vollem Speicher.
  */
-export function addComic({ title, fileName, size, coverDataUrl, pageCount }) {
+export function addComic({ title, fileName, size, coverDataUrl, pageCount, format = 'pdf', series = null, number = null, volume = null }) {
   return wrapQuota(async () => {
     const db = await getDB()
     return db.add('comics', {
@@ -16,6 +17,10 @@ export function addComic({ title, fileName, size, coverDataUrl, pageCount }) {
       size,
       coverDataUrl,
       pageCount,
+      format,
+      series,
+      number,
+      volume,
       addedAt: Date.now(),
     })
   })
@@ -49,7 +54,7 @@ export async function setComicDirection(id, direction) {
 }
 
 /**
- * Löscht einen Comic samt PDF-Datei. Der Fortschritt wird separat
+ * Löscht einen Comic samt Datei. Der Fortschritt wird separat
  * über progress.js entfernt.
  */
 export async function deleteComic(id) {

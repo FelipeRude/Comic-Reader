@@ -1,5 +1,5 @@
 import { ref, shallowRef, computed } from 'vue'
-import { loadPdf, loadPdfFromFile, renderPageToCanvas } from '../pdf-loader.js'
+import { openPageSource, openPdfSource } from '../sources/index.js'
 import { getComic, setComicDirection } from '../storage/comics.js'
 import { getComicFile } from '../storage/files.js'
 import { detectPanels } from '../panel-detector.js'
@@ -37,10 +37,11 @@ export function useReader(comicId, viewport) {
 
   // 'ltr' | 'rtl' — null, solange der Nutzer beim ersten Öffnen noch nicht gewählt hat.
   const direction = ref(null)
-  // Vorschlag aus den PDF-Metadaten (/ViewerPreferences /Direction), sonst null.
+  // Vorschlag aus der Datei (PDF: /ViewerPreferences /Direction, Archiv: ComicInfo.xml), sonst null.
   const suggestedDirection = ref(null)
 
-  let pdf = null
+  // Seitenquelle (PDF oder Comic-Archiv, siehe src/sources/)
+  let source = null
 
   const currentPanels = computed(() => getPagePanels(currentPage.value))
   const currentPanel = computed(
@@ -91,7 +92,7 @@ export function useReader(comicId, viewport) {
   // erst zurückgegeben, wenn die Panels feststehen (wichtig für Seitenwechsel).
   async function renderPage(pageIndex) {
     if (pageIndex < 0 || pageIndex >= totalPages.value) return null
-    const canvas = await renderPageToCanvas(pdf, pageIndex + 1, RENDER_MAX_WIDTH)
+    const canvas = await source.renderPage(pageIndex + 1, RENDER_MAX_WIDTH)
     if (!pagesPanels.value[pageIndex]) {
       pagesPanels.value[pageIndex] = await detectPanels(canvas)
     }
@@ -206,14 +207,13 @@ export function useReader(comicId, viewport) {
   async function init() {
     comic.value = await getComic(comicId)
     // Fallback: Migration ins OPFS ist für diesen Comic noch nicht gelungen.
-    pdf = comic.value.fileName
-      ? await loadPdfFromFile(await getComicFile(comic.value.fileName))
-      : await loadPdf(comic.value.blob)
-    totalPages.value = pdf.numPages
+    source = comic.value.fileName
+      ? await openPageSource(await getComicFile(comic.value.fileName))
+      : await openPdfSource(comic.value.blob)
+    totalPages.value = source.numPages
     direction.value = comic.value.direction ?? null
     if (!direction.value) {
-      const prefs = await pdf.getViewerPreferences().catch(() => null)
-      suggestedDirection.value = prefs?.Direction === 'R2L' ? 'rtl' : prefs?.Direction === 'L2R' ? 'ltr' : null
+      suggestedDirection.value = await source.getSuggestedDirection()
     }
 
     pagesPanels.value = []
@@ -262,9 +262,9 @@ export function useReader(comicId, viewport) {
     prevCanvas.value = null
     pageCanvas.value = null
     nextCanvas.value = null
-    if (pdf) {
-      pdf.destroy()
-      pdf = null
+    if (source) {
+      source.destroy()
+      source = null
     }
   }
 

@@ -1,7 +1,7 @@
 import { QuotaError } from './errors.js'
 
 /**
- * Comic-PDFs liegen als Dateien im Origin Private File System (OPFS):
+ * Comics (PDF, CBZ, CBT bzw. aus CBR/CB7 umgewandeltes TAR) liegen als Dateien im Origin Private File System (OPFS):
  * app-eigener Ordner, keine Berechtigung nötig, unabhängig vom Original
  * (z. B. im Downloads-Ordner). Gelesen wird per getFile() — ein
  * disk-gestütztes File, das nicht komplett in den RAM geladen wird.
@@ -34,9 +34,10 @@ function getWorker() {
   return worker
 }
 
-function createFileName() {
+/** Neuer eindeutiger Dateiname im OPFS. Die Endung dient nur der Übersicht, gelesen wird nach Inhalt. */
+export function createFileName(ext = 'pdf') {
   const id = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
-  return `${id}.pdf`
+  return `${id}.${ext}`
 }
 
 async function getDir() {
@@ -49,8 +50,8 @@ async function getDir() {
  * Gibt { fileName, size } zurück. Wirft QuotaError bei vollem Speicher.
  * Ein ArrayBuffer wird an den Worker übertragen (danach detached).
  */
-export async function saveComicFile(source) {
-  const fileName = createFileName()
+export async function saveComicFile(source, ext = 'pdf') {
+  const fileName = createFileName(ext)
   const id = nextId++
   const transfer = source instanceof ArrayBuffer ? [source] : []
   try {
