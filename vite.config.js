@@ -57,6 +57,10 @@ export default defineConfig({
       scope: BASE,
       registerType: 'autoUpdate',
       injectRegister: false, // Registrierung in src/pwa.js (mit Update-Checks)
+      // Icons kommen schon über globPatterns (*.png) in den Precache. Doppelt eingetragen
+      // (einmal ohne CSP-Kennung, siehe manifestTransforms) bricht Workbox die Installation ab
+      // (add-to-cache-list-conflicting-entries) → kein Offline-Cache.
+      includeManifestIcons: false,
       workbox: {
         cleanupOutdatedCaches: true,
         clientsClaim: true,
