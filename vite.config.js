@@ -71,6 +71,21 @@ export default defineConfig({
         // SW-Scope ist ohnehin /app/; die Allowlist stellt zusätzlich sicher,
         // dass Landing Pages nie aus dem App-Cache beantwortet werden.
         navigateFallbackAllowlist: [/^\/app\//],
+        // libarchive.wasm (~1 MB, nur für CBR/CB7-Import) nicht vorab laden, sondern beim ersten
+        // Gebrauch cachen. Danach klappt auch der Import offline. Lesen braucht es nie
+        // (Archive werden beim Import in ein TAR umgewandelt). Der Worker selbst ist klein
+        // und wird vorab gecacht (*.js), damit er die aktuelle CSP mitbringt.
+        runtimeCaching: [
+          {
+            // Als RegExp, weil Workbox Funktionen ohne ihren Kontext ins sw.js kopiert
+            urlPattern: new RegExp(`${BASE.replaceAll('/', '\\/')}assets\\/[^/]+\\.wasm$`),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'panelzoom-wasm',
+              expiration: { maxEntries: 2 },
+            },
+          },
+        ],
         // CSP-Kennung an jede Revision hängen → neue CSP = alle Dateien frisch vom Server.
         manifestTransforms: [
           async (entries) => ({

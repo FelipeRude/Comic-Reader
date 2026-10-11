@@ -96,6 +96,8 @@ ErrorDocument 404 /404.html
   AddType font/woff2 .woff2
   AddType video/webm .webm
   AddType image/webp .webp
+  # libarchive (CBR/CB7-Import): ohne diesen Typ scheitert WebAssembly.instantiateStreaming
+  AddType application/wasm .wasm
 </IfModule>
 
 <IfModule mod_rewrite.c>

@@ -1,15 +1,16 @@
 // Mini-Server für die lokale Vorschau von dist/ (Landing + App). Bildet die wichtigsten
 // Regeln der .htaccess nach: Root-Redirect nach Sprache, Slash-Redirect, 404-Seite,
-// no-cache für den Service Worker, X-Robots-Tag im Dev-Build. Kein Ersatz für den Test auf develop.
+// no-cache für den Service Worker, X-Robots-Tag im Dev-Build, CSP. Kein Ersatz für den Test auf develop.
 import http from 'node:http'
 import fs from 'node:fs'
 import path from 'node:path'
+import { CSP } from './csp.mjs'
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript',
   '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.xml': 'application/xml',
   '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon',
-  '.woff2': 'font/woff2', '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4', '.webm': 'video/webm',
+  '.woff2': 'font/woff2', '.wasm': 'application/wasm', '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4', '.webm': 'video/webm',
 }
 
 export function serve({ distDir, port, liveLocales, defaultLocale, isDev }) {
@@ -30,6 +31,9 @@ export function serve({ distDir, port, liveLocales, defaultLocale, isDev }) {
     const url = new URL(req.url, 'http://localhost')
     const pathname = decodeURIComponent(url.pathname)
     if (isDev) res.setHeader('X-Robots-Tag', 'noindex, nofollow')
+    // Wie .htaccess, damit CSP-Verstöße schon lokal auffallen
+    res.setHeader('Content-Security-Policy', CSP)
+    res.setHeader('X-Content-Type-Options', 'nosniff')
 
     if (pathname === '/') {
       res.writeHead(302, { Location: pickLocale(req), Vary: 'Accept-Language, Cookie', 'Cache-Control': 'no-store' })
