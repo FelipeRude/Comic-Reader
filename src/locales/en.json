@@ -19,7 +19,15 @@
     "quotaTitle": "Storage full",
     "quotaMessage": "There isn’t enough storage space in your browser. Please delete old comics from your library to make room.",
     "importFailedTitle": "Import failed",
-    "importFailedMessage": "The comic couldn’t be added. ({error})"
+    "importFailedMessage": "The comic couldn’t be added. ({error})",
+    "importErrors": {
+      "unsupported": "PanelZoom can’t open this file type. Supported formats are PDF, CBZ, CBR, CB7 and CBT.",
+      "empty": "This archive doesn’t contain any images that can be shown as comic pages.",
+      "encrypted": "This archive is password-protected. Please extract it and repack the images without a password.",
+      "corrupt": "The file is damaged or incomplete. Please download it again.",
+      "offline": "PanelZoom needs an internet connection once to open CBR and CB7 files for the first time. After that it works offline too.",
+      "tooLarge": "This archive is too large for this device’s memory. Repacked as CBZ, it will open."
+    }
   },
   "card": {
     "delete": "Delete comic",
@@ -60,6 +68,6 @@
     "manga": "Manga",
     "ltr": "Left → Right",
     "rtl": "Right → Left",
-    "fromPdf": "From PDF"
+    "fromFile": "From file"
   }
 }

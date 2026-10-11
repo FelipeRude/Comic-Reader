@@ -17,7 +17,7 @@
           </span>
           <span class="modal__option-title">{{ t(opt.title) }}</span>
           <span class="modal__option-hint">{{ t(opt.hint) }}</span>
-          <span v-if="suggested === opt.value" class="modal__badge">{{ t('direction.fromPdf') }}</span>
+          <span v-if="suggested === opt.value" class="modal__badge">{{ t('direction.fromFile') }}</span>
         </button>
       </div>
     </div>
@@ -30,7 +30,7 @@ import { useI18n } from '../composables/useI18n.js'
 const { t } = useI18n()
 
 defineProps({
-  // 'ltr' | 'rtl' | null — Vorschlag aus den PDF-Metadaten
+  // 'ltr' | 'rtl' | null — Vorschlag aus der Datei (PDF-Metadaten oder ComicInfo.xml)
   suggested: { type: String, default: null },
 })
 

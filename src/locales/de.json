@@ -19,7 +19,15 @@
     "quotaTitle": "Speicher voll",
     "quotaMessage": "Nicht genügend Speicherplatz im Browser verfügbar. Bitte lösche alte Comics aus der Bibliothek, um Platz zu schaffen.",
     "importFailedTitle": "Import fehlgeschlagen",
-    "importFailedMessage": "Der Comic konnte nicht hinzugefügt werden. ({error})"
+    "importFailedMessage": "Der Comic konnte nicht hinzugefügt werden. ({error})",
+    "importErrors": {
+      "unsupported": "Dieses Dateiformat kann PanelZoom nicht öffnen. Unterstützt werden PDF, CBZ, CBR, CB7 und CBT.",
+      "empty": "In diesem Archiv sind keine Bilder, die sich als Comicseiten anzeigen lassen.",
+      "encrypted": "Das Archiv ist mit einem Passwort geschützt. Bitte entpacke es und packe die Bilder ohne Passwort neu.",
+      "corrupt": "Die Datei ist beschädigt oder unvollständig. Lade sie bitte noch einmal herunter.",
+      "offline": "Zum ersten Öffnen von CBR- und CB7-Dateien braucht PanelZoom einmalig eine Internetverbindung. Danach geht es auch offline.",
+      "tooLarge": "Das Archiv ist zu groß für den Speicher dieses Geräts. Als CBZ gepackt lässt es sich öffnen."
+    }
   },
   "card": {
     "delete": "Comic löschen",
@@ -60,6 +68,6 @@
     "manga": "Manga",
     "ltr": "Links → Rechts",
     "rtl": "Rechts → Links",
-    "fromPdf": "Laut PDF"
+    "fromFile": "Laut Datei"
   }
 }

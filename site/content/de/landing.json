@@ -39,7 +39,7 @@
       "hint": "PDF hierher ziehen oder antippen. Die Datei bleibt auf deinem Gerät.",
       "button": "Comic auswählen",
       "busy": "Dein Comic wird geöffnet …",
-      "wrongType": "Das ist keine PDF-Datei. Bitte wähle ein Comic als PDF.",
+      "wrongType": "Dieses Format kann PanelZoom nicht öffnen. Bitte wähle ein Comic als PDF, CBZ, CBR, CB7 oder CBT.",
       "noscript": "PanelZoom öffnen und dort dein Comic auswählen"
     }
   },

@@ -20,7 +20,7 @@
     <input
       ref="fileInput"
       type="file"
-      accept="application/pdf,.pdf"
+      :accept="fileAccept"
       hidden
       @change="onFileSelected"
     />
@@ -71,7 +71,7 @@
     <ConfirmModal
       v-if="importError"
       :title="t('dashboard.importFailedTitle')"
-      :message="t('dashboard.importFailedMessage', { error: importError.message || importError })"
+      :message="importErrorMessage"
       :confirm-label="t('common.gotIt')"
       :show-cancel="false"
       @confirm="importError = null"
@@ -81,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import ComicCard from '../components/ComicCard.vue'
 import SettingsModal from '../components/SettingsModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
@@ -99,6 +99,30 @@ const logoSrc = `${import.meta.env.BASE_URL}img/pwa/logo.svg`
 const { t } = useI18n()
 const { canInstall, promptInstall } = useInstallPrompt()
 const { importing, quotaError, error: importError, importFile } = useComicImport()
+
+// iOS graut Dateien mit unbekannten Endungen (.cbr, .cb7 …) im Auswahldialog aus.
+// Dort deshalb ohne Filter; das Format prüft der Import ohnehin am Dateiinhalt.
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+const fileAccept = IS_IOS
+  ? undefined
+  : 'application/pdf,.pdf,.cbz,.cbr,.cb7,.cbt,application/vnd.comicbook+zip,application/vnd.comicbook-rar,application/x-cbz,application/x-cbr,application/x-cb7,application/x-cbt'
+
+const importErrorMessage = computed(() => {
+  const err = importError.value
+  if (!err) return ''
+  // ArchiveError hat einen code, pdf.js meldet kaputte PDFs über den Namen
+  const code = err.code ?? (err.name === 'InvalidPDFException' ? 'corrupt' : null)
+  switch (code) {
+    case 'unsupported': return t('dashboard.importErrors.unsupported')
+    case 'empty': return t('dashboard.importErrors.empty')
+    case 'encrypted': return t('dashboard.importErrors.encrypted')
+    case 'corrupt': return t('dashboard.importErrors.corrupt')
+    case 'offline': return t('dashboard.importErrors.offline')
+    case 'tooLarge': return t('dashboard.importErrors.tooLarge')
+    default: return t('dashboard.importFailedMessage', { error: err.message || err })
+  }
+})
 
 const comics = ref([])
 const progressMap = reactive({})
@@ -163,7 +187,7 @@ onMounted(async () => {
   }
   await loadLibrary()
 
-  // Von der Startseite (Drop-Feld) übergebene PDF importieren und direkt öffnen
+  // Von der Startseite (Drop-Feld) übergebenen Comic importieren und direkt öffnen
   if (consumeImportParam()) {
     const file = await takeHandoffFile()
     if (!file) return

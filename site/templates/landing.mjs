@@ -32,14 +32,14 @@ export function renderLanding(page, ctx) {
         </div>
       </section>`,
     trustBanner,
-    // Unterzeile + Drop-Feld. Das Seitenskript (LANG_SCRIPT in layout.mjs) legt die gewählte PDF
+    // Unterzeile + Drop-Feld. Das Seitenskript (LANG_SCRIPT in layout.mjs) legt die gewählte Datei
     // in der IndexedDB „panelzoom-handoff“ ab und öffnet die App mit ?import=1, die sie importiert
     // (src/storage/handoff.js). Ohne Skript bleibt der Link zur App.
     intro && `<section class="intro">
         <div class="wrap">
           <p class="intro__lead">${esc(intro.lead)}</p>
           <label class="dropzone" data-dropzone data-app="${appHref}" data-msg-busy="${esc(intro.dropzone.busy)}" data-msg-type="${esc(intro.dropzone.wrongType)}">
-            <input class="visually-hidden" type="file" accept="application/pdf,.pdf">
+            <input class="visually-hidden" type="file" accept="application/pdf,.pdf,.cbz,.cbr,.cb7,.cbt,application/vnd.comicbook+zip,application/vnd.comicbook-rar">
             ${DROP_ICON}
             <span class="dropzone__title">${esc(intro.dropzone.title)}</span>
             <span class="dropzone__hint">${esc(intro.dropzone.hint)}</span>

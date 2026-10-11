@@ -1,6 +1,6 @@
 /**
  * Übergabe von der Landing Page: Das Drop-Feld dort (site/templates/layout.mjs, DROP_SCRIPT)
- * legt die gewählte PDF in dieser eigenen IndexedDB ab und öffnet die App mit ?import=1.
+ * legt die gewählte Datei (PDF oder Comic-Archiv) in dieser eigenen IndexedDB ab und öffnet die App mit ?import=1.
  * Gleiche Origin, daher hat die App Zugriff. Die Datei wird nach dem Lesen gelöscht.
  */
 const DB_NAME = 'panelzoom-handoff'
@@ -16,7 +16,7 @@ export function consumeImportParam() {
   return true
 }
 
-/** Liefert die übergebene PDF als File (oder null) und räumt die Übergabe-Datenbank auf. */
+/** Liefert die übergebene Datei als File (oder null) und räumt die Übergabe-Datenbank auf. */
 export async function takeHandoffFile() {
   if (!window.indexedDB) return null
   try {
@@ -37,7 +37,8 @@ export async function takeHandoffFile() {
     db.close()
     indexedDB.deleteDatabase(DB_NAME)
     if (!entry?.blob) return null
-    return entry.blob instanceof File ? entry.blob : new File([entry.blob], entry.name || 'comic.pdf', { type: 'application/pdf' })
+    // Das Format erkennt der Import am Inhalt, Name und Typ dienen nur als Titel-Fallback
+    return entry.blob instanceof File ? entry.blob : new File([entry.blob], entry.name || 'comic', { type: entry.blob.type || '' })
   } catch (err) {
     console.error('Übergabe von der Startseite fehlgeschlagen:', err)
     return null
