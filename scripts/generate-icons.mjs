@@ -14,7 +14,7 @@ const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..')
 const MOTIFS = {
   // Logo (Design: logo.svg, 1250er Raster mit 125 Rand). Kontur 25 mittig auf der Formkante.
   live: {
-    stroke: 25, inset: 0.5, radius: 0.1, fill: '#E63946',
+    stroke: 25, inset: 0.5, radius: 0.1, fill: '#C62833',
     // Favicon: Kontur ganz außen, so treffen sich die Konturen benachbarter Panels (Abstand 50)
     // und werden zu einer Linie. Mittig blieben bei 16–32 px nur Bruchteile von Pixeln Abstand.
     favicon: { stroke: 25, inset: 0 },

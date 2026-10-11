@@ -241,7 +241,7 @@ onMounted(async () => {
     padding: 0.45rem 0.85rem;
     font-size: 1.1rem;
     color: var(--cream);
-    background: #E63946; // Logo-Rot wie die Buttons der Landingpage
+    background: #C62833; // Markenrot wie Logo und Buttons der Landingpage
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-btn);
     box-shadow: 2px 2px 0 var(--shadow-color);
