@@ -17,8 +17,10 @@ const MOTIFS = {
   // Logo (Design: logo.svg, 1250er Raster mit 125 Rand). Flächige Panels ohne Kontur.
   live: {
     stroke: 0, inset: 0, radius: 0.1, fill: '#C62833',
-    // Favicons exakt wie das Logo: gleicher Rand, keine Pixel-Rundung
-    favicon: { scale: SCALE_ANY, snap: false },
+    // Favicons wie das Logo: gleicher Rand
+    favicon: { scale: SCALE_ANY },
+    // PNGs: Kanten auf ganze Pixel, damit die Panels keine verwaschenen Ränder bekommen
+    hardEdges: true,
     shapes: [
       [[0, 0, 398, 386]],                                                 // links oben
       [[0, 415, 398, 1000]],                                              // links unten, hoch
@@ -64,15 +66,26 @@ function layers(motif, size, scale, opts = {}) {
   const off = (size - size * scale) / 2
   // Kleine Bitmaps (Favicons): Kanten auf ganze Pixel runden, Kontur mindestens 1 px –
   // sonst verschwimmen die Linien zwischen zwei Pixeln zu Grau.
-  const snap = (opts.snap ?? true) && size <= 48
+  const snap = size < 1000 && (motif.hardEdges || size <= 48)
   const pos = (v) => (snap ? Math.round(off + v * k) : off + v * k)
   const px = (v) => (snap ? Math.round(v * k) : v * k)
   let out = px(stroke * (1 - inset))
   let inn = px(stroke * inset)
   if (snap && out + inn < 1) out = 1
-  const rects = motif.shapes.flat().map(([x0, y0, x1, y1]) => [pos(x0), pos(y0), pos(x1), pos(y1)])
+  // Harte Kanten ohne Kontur: Lücken zwischen Panels als Ganzes runden (mindestens 1 px), nicht
+  // jede Kante einzeln – sonst werden gleich breite Lücken mal 0, mal 2 px breit.
+  const all = motif.shapes.flatMap((sh, i) => sh.map((r) => ({ r, i })))
+  const end = (r, i, a) => {
+    const b = 1 - a
+    const next = all.filter((o) => o.i !== i && o.r[a] > r[a + 2] && o.r[a] - r[a + 2] <= 40
+      && o.r[b] < r[b + 2] && o.r[b + 2] > r[b]).map((o) => o.r[a])
+    if (!snap || stroke || !next.length) return pos(r[a + 2])
+    const s = Math.min(...next)
+    return pos(s) - Math.max(1, Math.round((s - r[a + 2]) * k))
+  }
+  const rects = all.map(({ r, i }) => [pos(r[0]), pos(r[1]), end(r, i, 0), end(r, i, 1)])
   return [
-    { color: COLORS.bg, rects: [[0, 0, size, size]], radius: round * size },
+    { color: COLORS.bg, rects: [[0, 0, size, size]], radius: round * size, hard: snap },
     ...(stroke ? [{ color: COLORS.ink, rects: rects.map(([x0, y0, x1, y1]) => [x0 - out, y0 - out, x1 + out, y1 + out]) }] : []),
     { color: motif.fill, rects: rects.map(([x0, y0, x1, y1]) => [x0 + inn, y0 + inn, x1 - inn, y1 - inn]) },
   ]
@@ -111,7 +124,9 @@ function rasterize(size, ls) {
       const i = (y * size + x) * 4
       // Farbe nur über die deckenden Samples mitteln (sonst dunkle Säume an runden Ecken)
       for (let ch = 0; ch < 3; ch++) rgba[i + ch] = acc[3] ? Math.round(acc[ch] / acc[3]) : 0
-      rgba[i + 3] = Math.round((acc[3] / (N * N)) * 255)
+      // Harte Kanten: Ecke ist pro Pixel ganz deckend oder ganz transparent
+      const cover = acc[3] / (N * N)
+      rgba[i + 3] = ls[0].hard ? (cover >= 0.5 ? 255 : 0) : Math.round(cover * 255)
     }
   }
   return rgba
@@ -137,9 +152,11 @@ function chunk(type, data) {
 }
 
 function png(size, ls) {
-  const rgba = rasterize(size, ls)
   // Ohne runde Ecken ist alles deckend: dann RGB, das spart ein Viertel
-  const opaque = !ls[0].radius
+  return encodePng(size, rasterize(size, ls), !ls[0].radius)
+}
+
+function encodePng(size, rgba, opaque) {
   const ch = opaque ? 3 : 4
   const ihdr = Buffer.alloc(13)
   ihdr.writeUInt32BE(size, 0)
@@ -160,9 +177,57 @@ function png(size, ls) {
   ])
 }
 
+/**
+ * Handgezeichnete Pixel-Grafik (SVG aus rect und M/H/V-Pfaden auf ganzen Pixeln) ohne
+ * Kantenglättung rastern: jedes Pixel bekommt die Farbe der obersten Form in seiner Mitte.
+ */
+function pixelSvg(rel) {
+  const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/<defs>[\s\S]*?<\/defs>/g, '')
+  const size = +src.match(/viewBox="0 0 (\d+) \d+"/)[1]
+  const attr = (tag, name, def) => +(tag.match(new RegExp(`\\s${name}="([^"]+)"`))?.[1] ?? def)
+  const shapes = [...src.matchAll(/<(rect|path)\b[^>]*>/g)].map(([tag, type]) => {
+    const fill = hex(tag.match(/fill="(#[0-9A-Fa-f]{6}|white)"/)[1].replace('white', '#FFFFFF'))
+    if (type === 'rect') {
+      const x = attr(tag, 'x', 0), y = attr(tag, 'y', 0)
+      const w = attr(tag, 'width'), h = attr(tag, 'height')
+      return { fill, poly: [[x, y], [x + w, y], [x + w, y + h], [x, y + h]] }
+    }
+    // Pfad aus M/H/V/Z, absolute Koordinaten
+    const poly = []
+    let x = 0, y = 0
+    for (const [, cmd, args] of tag.match(/\sd="([^"]+)"/)[1].matchAll(/([MHVZ])([^MHVZ]*)/g)) {
+      const n = args.trim().split(/[\s,]+/).filter(Boolean).map(Number)
+      if (cmd === 'M') [x, y] = n
+      else if (cmd === 'H') x = n[0]
+      else if (cmd === 'V') y = n[0]
+      else continue
+      poly.push([x, y])
+    }
+    return { fill, poly }
+  })
+  const inside = (poly, px, py) => {
+    let hit = false
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j]
+      if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) hit = !hit
+    }
+    return hit
+  }
+  const rgba = Buffer.alloc(size * size * 4)
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const top = shapes.findLast((sh) => inside(sh.poly, x + 0.5, y + 0.5))
+      const i = (y * size + x) * 4
+      if (top) { rgba.set(top.fill, i); rgba[i + 3] = 255 }
+    }
+  }
+  return encodePng(size, rgba, rgba.every((v, i) => i % 4 !== 3 || v === 255))
+}
+
 /** ICO mit eingebetteten PNGs (von allen aktuellen Browsern unterstützt). */
-function ico(sizes, layersFor) {
-  const images = sizes.map((s) => png(s, layersFor(s)))
+function ico(sizes, layersFor, extra = []) {
+  const images = [...extra.map((e) => e.png), ...sizes.map((s) => png(s, layersFor(s)))]
+  sizes = [...extra.map((e) => e.size), ...sizes]
   const header = Buffer.alloc(6 + 16 * sizes.length)
   header.writeUInt16LE(1, 2)
   header.writeUInt16LE(sizes.length, 4)
@@ -215,8 +280,10 @@ for (const [variant, dir] of [['live', 'public/img/pwa'], ['dev', 'public/img/pw
 // iOS /apple-touch-icon.png auch ohne <link> an der Root an.
 const live = MOTIFS.live
 const fav = (s) => layers(live, s, live.favicon.scale, { ...live.favicon, round: live.radius })
-// 16 px kommt als eigene, handgezeichnete Datei
-write('site/public/favicon.ico', ico([32, 48], fav))
+// 16 px ist von Hand gezeichnet (scripts/assets/favicon-16.svg), Pixel für Pixel übernommen
+const fav16 = pixelSvg('scripts/assets/favicon-16.svg')
+write('public/img/pwa/favicon-16.png', fav16)
+write('site/public/favicon.ico', ico([32, 48], fav, [{ size: 16, png: fav16 }]))
 write('site/public/favicon.svg', svg(fav(1000)))
 write('site/public/apple-touch-icon.png', png(180, layers(live, 180, SCALE.any)))
 write('site/public/logo.svg', svg(layers(live, 1000, SCALE.any, { round: live.radius })))
