@@ -12,18 +12,18 @@ import zlib from 'node:zlib'
 const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..')
 
 const MOTIFS = {
-  // Logo (Design: logo.svg, 1250er Raster mit 125 Rand). Kontur 25 mittig auf der Formkante.
+  // Logo (Design: logo.svg, 1250er Raster mit 125 Rand). Flächige Panels ohne Kontur.
   live: {
-    stroke: 25, inset: 0.5, radius: 0.1, fill: '#C62833',
-    // Favicon: Kontur ganz außen, so treffen sich die Konturen benachbarter Panels (Abstand 50)
-    // und werden zu einer Linie. Mittig blieben bei 16–32 px nur Bruchteile von Pixeln Abstand.
-    favicon: { stroke: 25, inset: 0 },
+    stroke: 0, inset: 0, radius: 0.1, fill: '#C62833',
+    // Kleinster Abstand zwischen zwei Panels; bei Favicons bleibt dort mindestens 1 px frei.
+    gap: 27,
+    favicon: {},
     shapes: [
-      [[12.5, 12.5, 387.5, 562.5]],                                                    // links, hoch
-      [[12.5, 612.5, 387.5, 987.5]],                                                   // links unten
-      [[437.5, 12.5, 987.5, 287.5], [612.5, 12.5, 987.5, 375.1]],                      // oben rechts, L-Form
-      [[612.5, 424.5, 827.5, 786.5], [437.5, 512.5, 827.5, 786.5], [437.5, 512.5, 587.5, 787.5]], // Mitte, L-Form
-      [[877.5, 424.5, 987.5, 787.5]],                                                  // rechts, schmal
+      [[0, 0, 398, 386]],                                                 // links oben
+      [[0, 415, 398, 1000]],                                              // links unten, hoch
+      [[427, 0, 1000, 300], [600, 0, 1000, 384]],                         // oben rechts, L-Form
+      [[600.3, 413, 760, 799], [427, 501, 760, 799]],                     // Mitte, L-Form
+      [[787, 413, 1000, 799]],                                            // rechts, schmal
     ],
   },
   // Bisheriges Raster, bleibt für die Dev-PWA. Kontur 25 außen um die Formkante.
@@ -68,10 +68,12 @@ function layers(motif, size, scale, { stroke = motif.stroke, inset = motif.inset
   let out = px(stroke * (1 - inset))
   let inn = px(stroke * inset)
   if (snap && out + inn < 1) out = 1
-  const rects = motif.shapes.flat().map(([x0, y0, x1, y1]) => [pos(x0), pos(y0), pos(x1), pos(y1)])
+  // Ohne Kontur: Innenkanten so zurücknehmen, dass beim Runden mindestens 1 px Abstand bleibt
+  const end = (v) => (snap && !stroke && v < 1000 ? Math.min(pos(v), pos(v + motif.gap) - 1) : pos(v))
+  const rects = motif.shapes.flat().map(([x0, y0, x1, y1]) => [pos(x0), pos(y0), end(x1), end(y1)])
   return [
     { color: COLORS.bg, rects: [[0, 0, size, size]], radius: round * size },
-    { color: COLORS.ink, rects: rects.map(([x0, y0, x1, y1]) => [x0 - out, y0 - out, x1 + out, y1 + out]) },
+    ...(stroke ? [{ color: COLORS.ink, rects: rects.map(([x0, y0, x1, y1]) => [x0 - out, y0 - out, x1 + out, y1 + out]) }] : []),
     { color: motif.fill, rects: rects.map(([x0, y0, x1, y1]) => [x0 + inn, y0 + inn, x1 - inn, y1 - inn]) },
   ]
 }
@@ -178,13 +180,13 @@ function ico(sizes, layersFor) {
   return Buffer.concat([header, ...images])
 }
 
-function svg([bg, ink, fl]) {
+function svg([bg, ...ls]) {
   const size = 1000
   const n = (v) => +v.toFixed(1)
   const r = (l) => l.rects.map(([x0, y0, x1, y1]) => `M${n(x0)} ${n(y0)}H${n(x1)}V${n(y1)}H${n(x0)}Z`).join('')
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">`
     + (bg.radius ? `<rect width="${size}" height="${size}" rx="${n(bg.radius)}" fill="${bg.color}"/>` : `<path fill="${bg.color}" d="${r(bg)}"/>`)
-    + `<path fill="${ink.color}" d="${r(ink)}"/><path fill="${fl.color}" d="${r(fl)}"/></svg>\n`
+    + ls.map((l) => `<path fill="${l.color}" d="${r(l)}"/>`).join('') + '</svg>\n'
 }
 
 function write(rel, data) {
