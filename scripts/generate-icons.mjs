@@ -271,7 +271,6 @@ for (const [variant, dir] of [['live', 'public/img/pwa'], ['dev', 'public/img/pw
   write(`${dir}/maskable-512.png`, png(512, layers(m, 512, SCALE.maskable)))
   write(`${dir}/apple-touch-icon.png`, png(180, layers(m, 180, SCALE.any)))
   write(`${dir}/favicon-32.png`, png(32, layers(m, 32, m.favicon.scale ?? SCALE.favicon, { ...m.favicon, round })))
-  write(`${dir}/favicon.svg`, svg(layers(m, 1000, m.favicon.scale ?? SCALE.favicon, { ...m.favicon, round })))
   // Logo in voller Größe für die Kopfzeile der App
   write(`${dir}/logo.svg`, svg(layers(m, 1000, SCALE.any, { round })))
 }
@@ -284,6 +283,5 @@ const fav = (s) => layers(live, s, live.favicon.scale, { ...live.favicon, round:
 const fav16 = pixelSvg('scripts/assets/favicon-16.svg')
 write('public/img/pwa/favicon-16.png', fav16)
 write('site/public/favicon.ico', ico([32, 48], fav, [{ size: 16, png: fav16 }]))
-write('site/public/favicon.svg', svg(fav(1000)))
 write('site/public/apple-touch-icon.png', png(180, layers(live, 180, SCALE.any)))
 write('site/public/logo.svg', svg(layers(live, 1000, SCALE.any, { round: live.radius })))

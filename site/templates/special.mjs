@@ -40,8 +40,7 @@ export function render404(ctx) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>404 – ${esc(ctx.site.name)}</title>
-    <link rel="icon" href="/favicon.ico" sizes="32x32">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
     <link rel="stylesheet" href="${esc(ctx.cssHref)}">
   </head>
   <body>
