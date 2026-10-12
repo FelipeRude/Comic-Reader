@@ -7,12 +7,12 @@ slug: datenschutz
 translationKey: privacy
 noindex: true
 order: 2
-updated: 2026-10-09
+updated: 2026-10-12
 ---
 
 ## Das Wichtigste in Kürze
 
-- Deine Comics werden **nicht hochgeladen**. PDFs, Lesestände und Einstellungen bleiben im Speicher deines Browsers auf deinem Gerät.
+- Deine Comics werden **nicht hochgeladen**. Comic-Dateien, Lesestände und Einstellungen bleiben im Speicher deines Browsers auf deinem Gerät.
 - Es gibt **kein Tracking**, keine Analyse-Tools, keine Werbung und kein Benutzerkonto.
 - Schriften und alle anderen Dateien kommen von panelzoom.com selbst. Es werden **keine Inhalte von Drittanbietern** geladen.
 - Beim Aufruf der Website verarbeitet unser Hosting-Anbieter technisch notwendige Zugriffsdaten (Server-Logfiles).
@@ -42,9 +42,9 @@ Mit netcup besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. netc
 
 ## 3. Die App: Speicherung auf deinem Gerät
 
-PanelZoom läuft vollständig in deinem Browser. Wenn du einen Comic hinzufügst, wird die PDF-Datei im Speicher deines Browsers abgelegt (Origin Private File System und IndexedDB). Dort liegen auch das Titelbild, die erkannten Panels und dein Lesestand. Deine Einstellungen speichert die App im lokalen Speicher des Browsers (localStorage). Die Panel-Erkennung findet ebenfalls auf deinem Gerät statt.
+PanelZoom läuft vollständig in deinem Browser. Wenn du einen Comic hinzufügst, wird die Datei (PDF, CBZ, CBR, CB7 oder CBT) im Speicher deines Browsers abgelegt (Origin Private File System und IndexedDB). Dort liegen auch das Titelbild, die erkannten Panels und dein Lesestand. CBR- und CB7-Dateien wandelt die App dabei auf deinem Gerät in ein anderes Archivformat um. Deine Einstellungen speichert die App im lokalen Speicher des Browsers (localStorage). Die Panel-Erkennung findet ebenfalls auf deinem Gerät statt.
 
-Ziehst du eine PDF auf das Feld auf der Startseite, legt die Website sie kurz in einem eigenen Bereich der IndexedDB ab, damit die App sie übernehmen kann. Auch dabei wird nichts hochgeladen.
+Ziehst du eine Comic-Datei auf das Feld auf der Startseite, legt die Website sie kurz in einem eigenen Bereich der IndexedDB ab, damit die App sie übernehmen kann. Auch dabei wird nichts hochgeladen.
 
 Diese Daten werden **nicht an uns oder Dritte übertragen**. Wir haben keinen Zugriff darauf. Du kannst sie jederzeit löschen: einzelne Comics direkt in der App oder alles, indem du die Website-Daten von panelzoom.com in deinem Browser löschst.
 

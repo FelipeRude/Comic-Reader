@@ -1,21 +1,21 @@
 # 📖 PanelZoom
 
-**PDF-Comics auf dem Handy lesen, Panel für Panel – ohne Zoomen, ohne Scrollen.**
+**Comics als PDF, CBZ oder CBR auf dem Handy lesen, Panel für Panel – ohne Zoomen, ohne Scrollen.**
 Die App erkennt jedes Comic-Panel automatisch und springt beim Lesen von Bild zu Bild.
 
 ### [Live ausprobieren: panelzoom.com](https://panelzoom.com)
 
-*Am besten am Smartphone öffnen. Kostenlos, ohne Konto, die PDFs bleiben auf deinem Gerät.*
+*Am besten am Smartphone öffnen. Kostenlos, ohne Konto, deine Comic-Dateien bleiben auf deinem Gerät.*
 
-*English: PanelZoom is a free web app for reading PDF comics on your phone, panel by panel → [panelzoom.com/en/](https://panelzoom.com/en/)*
+*English: PanelZoom is a free web app for reading PDF, CBZ and CBR comics on your phone, panel by panel → [panelzoom.com/en/](https://panelzoom.com/en/)*
 
 ---
 
 ## Was macht die App?
 
-PDF-Comics auf dem Smartphone sind frustrierend: ständig zoomen, ständig scrollen – und beim Schließen ist der Lesestand weg. PanelZoom löst das in drei Schritten:
+Comics auf dem Smartphone sind frustrierend: ständig zoomen, ständig scrollen – und beim Schließen ist der Lesestand weg. PanelZoom löst das in drei Schritten:
 
-1. **PDF importieren** – das Comic wird komplett lokal im Browser gespeichert (OPFS)
+1. **Comic importieren** (PDF, CBZ, CBR, CB7 oder CBT) – die Datei wird komplett lokal im Browser gespeichert (OPFS)
 2. **Automatische Panel-Erkennung** – ein selbst entwickelter Algorithmus analysiert jede Seite und findet die einzelnen Panels
 3. **Smart-Zoom-Lesen** – ein Tap, und die Kamera fährt zum nächsten Panel. Der Lesestand wird bei jedem Schritt gespeichert
 
@@ -48,8 +48,9 @@ Alles läuft im Browser: **kein Backend, kein Account, 100 % offline** – insta
 |---|---|
 | Framework | Vue 3 (Composition API) + Vite |
 | PDF-Rendering | PDF.js (Mozilla) |
+| Comic-Archive | CBZ/CBT direkt gelesen, CBR/CB7 per libarchive (WASM) beim Import in TAR umgewandelt |
 | Panel-Erkennung | Eigener Algorithmus (Canvas `getImageData`, Projection-Profile) |
-| Speicherung | OPFS (PDF-Dateien) + IndexedDB via `idb` (Bibliothek, Panels, Lesestand) |
+| Speicherung | OPFS (Comic-Dateien) + IndexedDB via `idb` (Bibliothek, Panels, Lesestand) |
 | Styling | Custom SCSS – bewusst **ohne** UI-Framework |
 | Offline / PWA | Service Worker via `vite-plugin-pwa` |
 

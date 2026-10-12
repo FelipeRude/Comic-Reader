@@ -98,7 +98,7 @@ export default defineConfig({
         id: BASE,
         name: 'PanelZoom',
         short_name: 'PanelZoom',
-        description: 'Read PDF comics on your phone, panel by panel. Automatic panel detection, offline, no account.',
+        description: 'Read PDF, CBZ and CBR comics on your phone, panel by panel. Automatic panel detection, offline, no account.',
         display: 'standalone',
         orientation: 'any',
         start_url: BASE,

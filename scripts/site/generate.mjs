@@ -47,14 +47,14 @@ export function llmsTxt(site, liveLocales, pages) {
   const legal = pages.filter((p) => p.type === 'page' && p.locale.status === 'live')
   return `# ${site.name}
 
-> ${site.name} is a free web app (PWA) for reading PDF comics on a phone, panel by panel.
+> ${site.name} is a free web app (PWA) for reading comics on a phone, panel by panel: PDF, CBZ, CBR, CB7 and CBT.
 > It detects the panels of each page automatically and moves from one panel to the next with a tap,
 > so there is no pinching and scrolling. Everything runs in the browser: no account, no uploads,
-> the PDFs stay on the device, and it works offline once opened.
+> the comic files stay on the device, and it works offline once opened.
 
 ## Key facts
 - Price: free, no ads, no account.
-- Format: PDF comics (CBZ/CBR not supported yet).
+- Formats: PDF and comic archives CBZ (ZIP), CBR (RAR), CB7 (7z) and CBT (TAR) with JPEG, PNG, WebP or AVIF pages.
 - Reading direction: left to right, or right to left for manga.
 - Platforms: any current browser; installable to the home screen on iOS (Safari) and Android (Chrome).
 - Privacy: panel detection runs locally in the browser; comics are never sent to a server.
@@ -63,7 +63,7 @@ export function llmsTxt(site, liveLocales, pages) {
 
 ## Pages
 ${liveLocales.map((l) => `- [${site.name} (${l.nativeName})](${site.origin}${l.path}): what the app does, features, installation, FAQ`).join('\n')}
-- [Open the app](${site.origin}${site.appPath}): the reader itself (import a PDF and start reading)
+- [Open the app](${site.origin}${site.appPath}): the reader itself (add a PDF, CBZ or CBR and start reading)
 ${guides.length ? `\n## Guides\n${guides.map((g) => `- [${g.h1 || g.title}](${site.origin}${g.path}) (${g.locale.hreflang}): ${g.description}`).join('\n')}\n` : ''}
 ## Legal
 ${legal.map((p) => `- [${p.navTitle}](${site.origin}${p.path}) (${p.locale.hreflang})`).join('\n')}

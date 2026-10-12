@@ -1,9 +1,9 @@
 {
   "translationKey": "home",
-  "updated": "2026-10-05",
+  "updated": "2026-10-12",
   "meta": {
-    "title": "Comics auf dem Handy lesen – PDF Comic Reader | PanelZoom",
-    "description": "PDF-Comics am Smartphone lesen, ohne Zoomen: Die App erkennt jedes Panel und springt automatisch weiter. Kostenlos, ohne Anmeldung, offline.",
+    "title": "Comics auf dem Handy lesen – PDF & CBZ Reader | PanelZoom",
+    "description": "PDF-Comics am Smartphone lesen, ohne Zoomen, auch CBZ und CBR: Die App erkennt jedes Panel und springt automatisch weiter. Kostenlos, ohne Anmeldung, offline.",
     "ogTitle": "Comics auf dem Handy lesen – Panel für Panel"
   },
   "hero": {
@@ -33,10 +33,10 @@
     ]
   },
   "intro": {
-    "lead": "PanelZoom ist ein kostenloser PDF-Comic-Reader im Browser. Er erkennt die Panels deiner Comics und führt dich mit einem Tipp von Bild zu Bild. So liest du Comics auf dem Handy ohne Zoomen und Scrollen.",
+    "lead": "PanelZoom ist ein kostenloser Comic-Reader im Browser, der alle gängigen Formate wie **PDF**, **CBZ**, **CBR**, **CB7** und **CBT** öffnet. Er erkennt die Panels deiner Comics und führt dich mit einem Tipp von Bild zu Bild. So liest du Comics auf dem Handy ohne Zoomen und Scrollen.",
     "dropzone": {
       "title": "Wähle dein Comic und fang an zu lesen",
-      "hint": "PDF hierher ziehen oder antippen. Die Datei bleibt auf deinem Gerät.",
+      "hint": "PDF, CBZ, CBR, CB7 oder CBT hierher ziehen oder antippen. Die Datei bleibt auf deinem Gerät.",
       "button": "Comic auswählen",
       "busy": "Dein Comic wird geöffnet …",
       "wrongType": "Dieses Format kann PanelZoom nicht öffnen. Bitte wähle ein Comic als PDF, CBZ, CBR, CB7 oder CBT.",
@@ -47,7 +47,7 @@
     "title": "Eine Comicseite ist fürs Handy zu groß",
     "text": [
       "Comics sind für Papier gezeichnet. Auf dem Handy schrumpft eine ganze Seite so stark, dass du die Sprechblasen kaum lesen kannst. Also zoomst du hinein, schiebst die Seite hin und her, suchst das nächste Bild und zoomst wieder heraus. Auf jeder Seite von vorn.",
-      "Ein normaler PDF-Viewer kennt keine Panels, er zeigt nur Seiten. Die Geschichte gerät dabei in den Hintergrund, und nach einem App-Wechsel bist du oft nicht mehr an der Stelle, an der du warst."
+      "Ein normaler PDF-Viewer oder Bildbetrachter kennt keine Panels, er zeigt nur Seiten. Die Geschichte gerät dabei in den Hintergrund, und nach einem App-Wechsel bist du oft nicht mehr an der Stelle, an der du warst."
     ]
   },
   "features": [
@@ -77,7 +77,7 @@
       {
         "icon": "lock",
         "title": "Deine Comics bleiben bei dir",
-        "text": "Kein Konto! PDFs bleiben auf dem Gerät, und du liest auch offline weiter."
+        "text": "Kein Konto! Deine Comic-Dateien bleiben auf dem Gerät, und du liest auch offline weiter."
       }
     ]
   },
@@ -114,12 +114,12 @@
   },
   "audience": {
     "title": "Für wen ist PanelZoom?",
-    "intro": "Für alle, die Comics als PDF besitzen und sie bequem am Handy lesen wollen, zum Beispiel:",
+    "intro": "Für alle, die Comics als PDF, CBZ oder CBR besitzen und sie bequem am Handy lesen wollen, zum Beispiel:",
     "items": [
-      "DRM-freie Comics, die du bei Verlagen oder in Shops als PDF gekauft hast",
-      "PDFs aus Kickstarter- und anderen Crowdfunding-Kampagnen",
-      "Indie- und Webcomics, die es als PDF zum Download gibt",
-      "Eigene Scans aus deiner Comicsammlung"
+      "DRM-freie Comics, die du bei Verlagen oder in Shops als PDF oder CBZ gekauft hast",
+      "PDFs und CBZ-Dateien aus Kickstarter- und anderen Crowdfunding-Kampagnen",
+      "Indie- und Webcomics, die es als PDF oder CBZ zum Download gibt",
+      "Eigene Scans und Comic-Archive (CBR, CB7, CBT) aus deiner Sammlung"
     ]
   },
   "faq": {
@@ -131,7 +131,7 @@
       },
       {
         "q": "Werden meine Comics hochgeladen?",
-        "a": "Nein. Deine PDFs bleiben auf deinem Gerät, im Speicher deines Browsers. Auch die Panel-Erkennung läuft dort. PanelZoom hat keinen Server, an den Comics geschickt werden."
+        "a": "Nein. Deine Comic-Dateien bleiben auf deinem Gerät, im Speicher deines Browsers. Auch die Panel-Erkennung läuft dort. PanelZoom hat keinen Server, an den Comics geschickt werden."
       },
       {
         "q": "Funktioniert PanelZoom offline?",
@@ -143,7 +143,14 @@
       },
       {
         "q": "Welche Dateiformate werden unterstützt?",
-        "a": "Im Moment PDF. Unterstützung für CBZ ist geplant."
+        "a": [
+          "PDF und die Comic-Archive CBZ, CBR, CB7 und CBT.",
+          "Ein Comic-Archiv ist eine gepackte Datei, in der jede Seite als Bild liegt, meist als JPEG, PNG oder WebP: CBZ ist ein ZIP-Archiv, CBR ein RAR-, CB7 ein 7z- und CBT ein TAR-Archiv. PanelZoom sortiert die Seiten nach Dateinamen. CBR- und CB7-Dateien wandelt die App beim Hinzufügen einmal um, ebenfalls direkt auf deinem Gerät."
+        ]
+      },
+      {
+        "q": "Kann ich CBZ- und CBR-Dateien auf dem iPhone öffnen?",
+        "a": "Ja. Tippe in PanelZoom auf „Neuen Comic hinzufügen“ und wähle die Datei in der Dateien-App aus, zum Beispiel aus iCloud Drive oder deinen Downloads. Eine zusätzliche App zum Entpacken brauchst du nicht."
       },
       {
         "q": "Wo werden meine Comics gespeichert, und wie viel Platz habe ich?",
@@ -161,7 +168,7 @@
       },
       {
         "q": "Kann ich Manga von rechts nach links lesen?",
-        "a": "Noch nicht. Die Leserichtung von rechts nach links ist geplant."
+        "a": "Ja. Wenn du einen Comic zum ersten Mal öffnest, fragt PanelZoom nach der Leserichtung. Wählst du „Manga“, liest du Panels und Seiten von rechts nach links. Die Einstellung gilt pro Comic und lässt sich in den Einstellungen ändern."
       }
     ]
   },
@@ -187,12 +194,14 @@
     "featureList": [
       "Automatische Panel-Erkennung direkt im Browser",
       "Panel-für-Panel-Führung in Leserichtung",
+      "Öffnet PDF und Comic-Archive (CBZ, CBR, CB7, CBT)",
+      "Manga-Modus: Lesen von rechts nach links",
       "Weicher Kameraschwenk oder direkter Sprung",
       "Einstellbarer Abstand zum Bildschirmrand",
       "Lesestand pro Panel",
       "Offline nutzbar",
       "Installierbar auf dem Home-Bildschirm",
-      "Ohne Konto, PDFs bleiben auf dem Gerät"
+      "Ohne Konto, Comics bleiben auf dem Gerät"
     ]
   }
 }

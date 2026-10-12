@@ -7,12 +7,12 @@ slug: privacy
 translationKey: privacy
 noindex: true
 order: 2
-updated: 2026-10-09
+updated: 2026-10-12
 ---
 
 ## The short version
 
-- Your comics are **never uploaded**. PDFs, reading progress and settings stay in your browser’s storage on your device.
+- Your comics are **never uploaded**. Comic files, reading progress and settings stay in your browser’s storage on your device.
 - There is **no tracking**, no analytics, no advertising and no user account.
 - Fonts and all other files are served by panelzoom.com itself. **No third-party content** is loaded.
 - When you visit the website, our hosting provider processes technically necessary access data (server log files).
@@ -42,9 +42,9 @@ We have concluded a data processing agreement with netcup under Art. 28 GDPR. ne
 
 ## 3. The app: storage on your device
 
-PanelZoom runs entirely in your browser. When you add a comic, the PDF file is stored in your browser’s storage (Origin Private File System and IndexedDB), together with the cover image, the detected panels and your reading progress. Your settings are kept in your browser’s local storage (localStorage). Panel detection also runs on your device.
+PanelZoom runs entirely in your browser. When you add a comic, the file (PDF, CBZ, CBR, CB7 or CBT) is stored in your browser’s storage (Origin Private File System and IndexedDB), together with the cover image, the detected panels and your reading progress. Your settings are kept in your browser’s local storage (localStorage). Panel detection also runs on your device. CBR and CB7 files are converted to a different archive format during this step, also on your device.
 
-If you drop a PDF onto the field on the home page, the website briefly stores it in a separate IndexedDB area so the app can pick it up. Nothing is uploaded in this step either.
+If you drop a comic file onto the field on the home page, the website briefly stores it in a separate IndexedDB area so the app can pick it up. Nothing is uploaded in this step either.
 
 This data is **not transferred to us or to anyone else**, and we have no access to it. You can delete it at any time: single comics directly in the app, or everything by clearing the website data for panelzoom.com in your browser.
 

@@ -219,7 +219,17 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 // Hero: Video im Hintergrund links (Hintergrund entspricht dem dunklen --bg, geht ohne Rahmen in die Seite
 // über), Überschrift und Button unten rechts darüber. Beide liegen in derselben Rasterzelle.
-.hero__inner { display: grid; }
+.hero__inner { display: grid; container-type: inline-size; }
+
+// Überschrift höchstens so groß, dass ihre längste Zeile in die Textspalte passt, damit sie nie auf
+// eine vierte Zeile umbricht. --h1-em = Breite der längsten Zeile in em (Bangers, mit Reserve):
+// DE „auf dem Handy lesen,“ 8,2 em, EN „Read PDF comics“ 6,4 em. Bei neuen Sprachen bzw. Texten nachmessen.
+.hero h1 {
+  --h1-em: 8.5;
+  --h1-space: min(100cqi, 34rem);
+  font-size: min(clamp(2.2rem, 7vw, 3.6rem), var(--h1-space) / var(--h1-em));
+}
+:lang(en) .hero h1 { --h1-em: 6.7; }
 .hero-video, .hero__text { grid-area: 1 / 1; }
 
 .hero-video {
@@ -254,6 +264,7 @@ h2 { font-size: 1.6rem; margin: 0 0 0.5rem; }
   .hero__inner { min-height: min(36rem, 70svh); }
   .hero-video { width: min(34rem, 52%, 70svh); align-self: center; }
   .hero__text { max-width: 52%; padding-bottom: 1rem; }
+  .hero h1 { --h1-space: 52cqi; }
 }
 
 // Funktion mit Video (Panel-Erkennung): Video links, Text rechts. Der Abschnitt hat je nach

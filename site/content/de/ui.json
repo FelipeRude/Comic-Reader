@@ -3,13 +3,13 @@
   "openApp": "Comic öffnen & lesen",
   "guides": "Ratgeber",
   "languageNav": "Sprache",
-  "footerTagline": "PDF-Comics am Handy lesen, Panel für Panel. Ohne Account, offline.",
+  "footerTagline": "PDF-, CBZ- und CBR-Comics am Handy lesen, Panel für Panel. Ohne Account, offline.",
   "updated": "Aktualisiert am",
   "published": "Veröffentlicht am",
   "home": "Startseite",
   "guidesIndex": {
     "title": "Ratgeber: Comics digital lesen | PanelZoom",
-    "description": "Anleitungen rund um PDF-Comics auf dem Smartphone: Panel-Navigation, Dateiformate, Web-App installieren.",
+    "description": "Anleitungen rund um Comics auf dem Smartphone: Panel-Navigation, Dateiformate wie PDF und CBZ, Web-App installieren.",
     "h1": "Ratgeber",
     "lead": "Anleitungen rund ums Comic-Lesen auf dem Handy."
   },

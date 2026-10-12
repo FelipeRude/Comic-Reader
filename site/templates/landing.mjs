@@ -1,4 +1,4 @@
-import { esc } from './util.mjs'
+import { esc, escInline } from './util.mjs'
 import { renderVideo } from './partials/video.mjs'
 import { HIGHLIGHT_ICONS } from './partials/highlight-icons.mjs'
 import { PLATFORM_ICONS } from './partials/platform-icons.mjs'
@@ -37,7 +37,7 @@ export function renderLanding(page, ctx) {
     // (src/storage/handoff.js). Ohne Skript bleibt der Link zur App.
     intro && `<section class="intro">
         <div class="wrap">
-          <p class="intro__lead">${esc(intro.lead)}</p>
+          <p class="intro__lead">${escInline(intro.lead)}</p>
           <label class="dropzone" data-dropzone data-app="${appHref}" data-msg-busy="${esc(intro.dropzone.busy)}" data-msg-type="${esc(intro.dropzone.wrongType)}">
             <input class="visually-hidden" type="file" accept="application/pdf,.pdf,.cbz,.cbr,.cb7,.cbt,application/vnd.comicbook+zip,application/vnd.comicbook-rar">
             ${DROP_ICON}
