@@ -11,13 +11,14 @@ import zlib from 'node:zlib'
 
 const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..')
 
+const SCALE_ANY = 0.8 // Anteil des Motivs wie im Logo (1000 von 1250)
+
 const MOTIFS = {
   // Logo (Design: logo.svg, 1250er Raster mit 125 Rand). Flächige Panels ohne Kontur.
   live: {
     stroke: 0, inset: 0, radius: 0.1, fill: '#C62833',
-    // Kleinster Abstand zwischen zwei Panels; bei Favicons bleibt dort mindestens 1 px frei.
-    gap: 27,
-    favicon: {},
+    // Favicons exakt wie das Logo: gleicher Rand, keine Pixel-Rundung
+    favicon: { scale: SCALE_ANY, snap: false },
     shapes: [
       [[0, 0, 398, 386]],                                                 // links oben
       [[0, 415, 398, 1000]],                                              // links unten, hoch
@@ -45,7 +46,7 @@ const COLORS = { bg: '#FFFEF0', ink: '#1A1A1A' }
 
 // Anteil der Kantenlänge, den das Motiv einnimmt
 const SCALE = {
-  any: 0.8, // wie im Logo (1000 von 1250)
+  any: SCALE_ANY,
   // Maskable: Android schneidet bis auf einen Kreis mit 40 % Radius zu. Die Ecken des Motivs
   // liegen bei 0.56/√2 ≈ 0.396 und damit gerade noch innerhalb.
   maskable: 0.56,
@@ -57,20 +58,19 @@ const SCALE = {
  * (Anteil der Kantenlänge, außerhalb transparent); Apple-Touch und Maskable bleiben eckig,
  * dort rundet das System selbst.
  */
-function layers(motif, size, scale, { stroke = motif.stroke, inset = motif.inset, round = 0 } = {}) {
+function layers(motif, size, scale, opts = {}) {
+  const { stroke = motif.stroke, inset = motif.inset, round = 0 } = opts
   const k = (size * scale) / 1000
   const off = (size - size * scale) / 2
   // Kleine Bitmaps (Favicons): Kanten auf ganze Pixel runden, Kontur mindestens 1 px –
   // sonst verschwimmen die Linien zwischen zwei Pixeln zu Grau.
-  const snap = size <= 48
+  const snap = (opts.snap ?? true) && size <= 48
   const pos = (v) => (snap ? Math.round(off + v * k) : off + v * k)
   const px = (v) => (snap ? Math.round(v * k) : v * k)
   let out = px(stroke * (1 - inset))
   let inn = px(stroke * inset)
   if (snap && out + inn < 1) out = 1
-  // Ohne Kontur: Innenkanten so zurücknehmen, dass beim Runden mindestens 1 px Abstand bleibt
-  const end = (v) => (snap && !stroke && v < 1000 ? Math.min(pos(v), pos(v + motif.gap) - 1) : pos(v))
-  const rects = motif.shapes.flat().map(([x0, y0, x1, y1]) => [pos(x0), pos(y0), end(x1), end(y1)])
+  const rects = motif.shapes.flat().map(([x0, y0, x1, y1]) => [pos(x0), pos(y0), pos(x1), pos(y1)])
   return [
     { color: COLORS.bg, rects: [[0, 0, size, size]], radius: round * size },
     ...(stroke ? [{ color: COLORS.ink, rects: rects.map(([x0, y0, x1, y1]) => [x0 - out, y0 - out, x1 + out, y1 + out]) }] : []),
@@ -205,8 +205,8 @@ for (const [variant, dir] of [['live', 'public/img/pwa'], ['dev', 'public/img/pw
   write(`${dir}/maskable-192.png`, png(192, layers(m, 192, SCALE.maskable)))
   write(`${dir}/maskable-512.png`, png(512, layers(m, 512, SCALE.maskable)))
   write(`${dir}/apple-touch-icon.png`, png(180, layers(m, 180, SCALE.any)))
-  write(`${dir}/favicon-32.png`, png(32, layers(m, 32, SCALE.favicon, { ...m.favicon, round })))
-  write(`${dir}/favicon.svg`, svg(layers(m, 1000, SCALE.favicon, { ...m.favicon, round })))
+  write(`${dir}/favicon-32.png`, png(32, layers(m, 32, m.favicon.scale ?? SCALE.favicon, { ...m.favicon, round })))
+  write(`${dir}/favicon.svg`, svg(layers(m, 1000, m.favicon.scale ?? SCALE.favicon, { ...m.favicon, round })))
   // Logo in voller Größe für die Kopfzeile der App
   write(`${dir}/logo.svg`, svg(layers(m, 1000, SCALE.any, { round })))
 }
@@ -214,8 +214,9 @@ for (const [variant, dir] of [['live', 'public/img/pwa'], ['dev', 'public/img/pw
 // Landing Pages (site/public, landet an der Domain-Root). Browser fragen /favicon.ico und
 // iOS /apple-touch-icon.png auch ohne <link> an der Root an.
 const live = MOTIFS.live
-const fav = (s) => layers(live, s, SCALE.favicon, { ...live.favicon, round: live.radius })
-write('site/public/favicon.ico', ico([16, 32, 48], fav))
+const fav = (s) => layers(live, s, live.favicon.scale, { ...live.favicon, round: live.radius })
+// 16 px kommt als eigene, handgezeichnete Datei
+write('site/public/favicon.ico', ico([32, 48], fav))
 write('site/public/favicon.svg', svg(fav(1000)))
 write('site/public/apple-touch-icon.png', png(180, layers(live, 180, SCALE.any)))
 write('site/public/logo.svg', svg(layers(live, 1000, SCALE.any, { round: live.radius })))
