@@ -281,7 +281,8 @@ const live = MOTIFS.live
 const fav = (s) => layers(live, s, live.favicon.scale, { ...live.favicon, round: live.radius })
 // 16 px ist von Hand gezeichnet (scripts/assets/favicon-16.svg), Pixel für Pixel übernommen
 const fav16 = pixelSvg('scripts/assets/favicon-16.svg')
-write('public/img/pwa/favicon-16.png', fav16)
+// Auch im Dev-Satz, sonst zeigt der Link in index.html beim Dev-Build ins Leere
+for (const dir of ['public/img/pwa', 'public/img/pwa-dev']) write(`${dir}/favicon-16.png`, fav16)
 write('site/public/favicon.ico', ico([32, 48], fav, [{ size: 16, png: fav16 }]))
 write('site/public/apple-touch-icon.png', png(180, layers(live, 180, SCALE.any)))
 write('site/public/logo.svg', svg(layers(live, 1000, SCALE.any, { round: live.radius })))
